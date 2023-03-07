@@ -13,16 +13,34 @@ Flutter
 
 ## Description:
 
-Vědomostní kvíz pro 2 hráče, každý hraje na svém mobilu.
-Oba hráči se přihlásí (obrazovka login), poté je to přesměruje do menu, jeden vytvoří novou hru (
-obrazovka create game, možnost nastavit počet bodů pro výhru), poté ho to přesměruje do lobby, kde
-se zobrazí kód pro druhého hráče. Ten se připojí do hry na svém mobilu pomocí kódu (obrazovka join
-game). Hráčům se současně zobrazí otázka a 4 možné odpovědi (obrazovka question). Otázka se vezme z
-public API. Oba zároveň odpovídají. Za správnou odpověď dostanou 3 body, pokud oba uhádnou, tak 3 a
-2 body podle rychlosti odpovědi. Po každé otázce se obrazí obrazovka s celkovým skóre (obrazovka
-result). Pokud mají stejně bodů, následuje otázka na rozstřel. Kdo odpoví až druhý/špatně, ztratí 1
-bod. Po dosažení stanoveného počtu bodů jeden hráč vítězí (obrazovka podium).
-Propojení hráčů a autentizace se řeší přes Firebase.
+_**Qwiz**_ is a knowledge game for two players, each playing on their mobile.
+Both players log in using Google authentication (**login** screen),
+and then they are redirected to the **menu**.
+One player creates a new game (**create game** screen). Here a number of points required for winning
+is set.
+Then the player moves to the **lobby** where a code for the other player is displayed.
+The second player joins the game on their mobile using the code (**join game** screen).
+Both players are presented with a question and 4 possible answers (**question** screen).
+The question is taken from a public API and is the same for both players.
+They are both answering at the same time. There is a timeout of 10 sec for the question visualized
+by a progress bar. If they both answer, the timeout ends immediately.
+If they both answer correctly, the one who answered sooner gets 3 points,
+the other one gets 2 points.
+If only one of them answered correctly, they get 3 points. If no player answered correctly,
+no points are given. There are no negative points. They players might not answer at all.
+After each question, a screen with players' current score is displayed (**result** screen).
+If they have the same score, a shootout question follows.
+Whoever answers second/wrong loses 1 point. There are no positive points given.
+The minimal score at any time is 0.
+When one of the players reaches the set number of points, they win. The **podium** screen is shown.
+Players can see a history of games they participated in (**history** screen).
+For each such game, they cee their score, the score of their opponent and the winner.
+They can also see the questions with the options, the correct answer, their answer and the
+opponent's answer. The history is sorted by date, the most recent game is at the top.
+There will be a leaderboard of all players (**leaderboard** screen) sorted by the total number of
+points obtained in all games. The player can see their position in the leaderboard and the number of
+points they have. Each user has a profile picture and a name. These are taken from the Google
+account they've logged in with.
 
 ## Screen mockups:
 
@@ -34,7 +52,10 @@ Propojení hráčů a autentizace se řeší přes Firebase.
 - [Question]()
 - [Result]()
 - [Podium]()
+- [History]()
+- [Leaderboard]()
 
 ## Networking:
+
 - Firebase
 - [Questions API](https://the-trivia-api.com/)
