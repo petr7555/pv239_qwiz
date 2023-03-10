@@ -55,6 +55,7 @@ account they've signed in with.
 <div style="page-break-after: always;"></div>
 
 ## Screen mockups:
+[Figma](https://www.figma.com/file/iLdJoL8HLbfUiAXcNTFrjl/PV239-Qwiz?node-id=12%3A1422&t=XYDPNrb7i7xGGlsS-1)
 
 <p>
   <img src="./screen_mockups/Menu.png" alt="Menu" width="190"/>
