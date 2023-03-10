@@ -38,9 +38,11 @@ The minimal score at any time is 0.
 When one of the players reaches the set number of points, they win. The **podium** screen is shown.
 
 Players can see a history of games they participated in (**history** screen).
-For each such game, they see their score, the score of their opponent and the winner.
+The history is sorted by date; the most recent game is at the top.
+For each game in the history (**game info** screen), they see their score, the score of their
+opponent and the winner.
 They can also see the questions with the options, the correct answer, their answer and the
-opponent's answer. The history is sorted by date; the most recent game is at the top.
+opponent's answer. 
 
 There will be a leaderboard of all players (**leaderboard** screen) sorted by the total number of
 points obtained in all games. The player can see their position in the leaderboard and the number of
@@ -67,7 +69,7 @@ account they've signed in with.
 <p>
   <img src="./screen_mockups/Podium.png" alt="Podium" width="190"/>
   &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="./screen_mockups/History.png" alt="History" width="190"/>
+  <img src="./screen_mockups/Game info.png" alt="Game info" width="190"/>
   &nbsp; &nbsp; &nbsp; &nbsp;
   <img src="./screen_mockups/Leaderboard.png" alt="Leaderboard" width="190"/>
 </p>
