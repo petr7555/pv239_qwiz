@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "346168213826",
+    "project_id": "pv239-qwiz",
+    "storage_bucket": "pv239-qwiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346168213826:android:0d362c1e7f402513bac8db",
+        "android_client_info": {
+          "package_name": "com.example.pv239_qwiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346168213826-t4hrtijep3iupaegichj0altp760ljbt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfQaSuY_AGOThTw9l8-iPF53-1BIZwyGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346168213826-t4hrtijep3iupaegichj0altp760ljbt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "346168213826-766t3uf3hh1rn1bj3rv7g6k5tti3tukg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pv239Qwiz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
