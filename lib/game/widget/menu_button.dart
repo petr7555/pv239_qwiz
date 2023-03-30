@@ -18,7 +18,7 @@ class MenuButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         minimumSize: Size.fromHeight(buttonHeight), // fromHeight use double.infinity as width and 40 is the height
       ),
-      onPressed: () => context.go(route),
+      onPressed: () => context.push(route),
       child: Text(label),
     );
   }
