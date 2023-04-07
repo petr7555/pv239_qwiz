@@ -42,11 +42,6 @@ class JoinGameFormBloc extends FormBloc<String, String> {
 
   @override
   void onSubmitting() async {
-    try {
-      await get<GameService>().joinGame(gameCodeField.value);
-      emitSuccess();
-    } catch (e) {
-      emitFailure();
-    }
+    emitSuccess();
   }
 }

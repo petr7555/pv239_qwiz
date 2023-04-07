@@ -9,7 +9,7 @@ import 'package:pv239_qwiz/game/widget/menu_page.dart';
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
-  static const routeName = '/signin';
+  static const routeName = '/signIn';
 
   @override
   Widget build(BuildContext context) {

@@ -3,52 +3,34 @@ import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
-class GetReadyPage extends StatefulWidget {
+class GetReadyPage extends StatelessWidget {
   const GetReadyPage({super.key});
 
   static const routeName = '/getReady';
 
   @override
-  State<GetReadyPage> createState() => _GetReadyPageState();
-}
-
-class _GetReadyPageState extends State<GetReadyPage> {
-  var countdown = '3';
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        countdown = '2';
-      });
-    });
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        countdown = '1';
-      });
-    });
-    Future.delayed(Duration(seconds: 3), () {
-      setState(() {
-        countdown = 'Go!';
-      });
-    });
-    Future.delayed(Duration(seconds: 4), () {
-      context.push(QuestionPage.routeName);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return PageTemplate(
-      title: 'The game is about to start',
+      title: 'Get ready',
       child: Center(
         child: Column(
           children: [
-            Text('Get ready', style: Theme.of(context).textTheme.titleLarge),
+            Text('The game will start in', style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: standardGap),
-            Text(countdown, style: Theme.of(context).textTheme.titleLarge),
+            Countdown(
+              seconds: 3,
+              build: (BuildContext context, double time) {
+                int seconds = time.toInt();
+                final text = seconds == 0 ? 'Go!' : seconds.toString();
+                return Text(text, style: Theme.of(context).textTheme.titleLarge);
+              },
+              interval: Duration(seconds: 1),
+              onFinished: () {
+                context.push(QuestionPage.routeName);
+              },
+            ),
           ],
         ),
       ),
