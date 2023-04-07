@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
+import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/widget/button.dart';
@@ -26,6 +29,10 @@ class MenuPage extends StatelessWidget {
             _createMenuButton(context: context, label: 'History', route: '/history'),
             SizedBox(height: smallGap),
             _createMenuButton(context: context, label: 'Leaderboard', route: '/leaderboard'),
+            SizedBox(height: smallGap),
+            Button(
+                label: 'Sign out',
+                onPressed: () => context.read<AuthCubit>().signOut().then((_) => context.go(SignInPage.routeName))),
           ],
         ),
       ),

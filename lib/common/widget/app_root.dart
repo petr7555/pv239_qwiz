@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pv239_qwiz/common/widget/login_page.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
+import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
@@ -9,10 +11,18 @@ import 'package:pv239_qwiz/game/widget/menu_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 final _router = GoRouter(
+  redirect: (context, state) {
+    // print('signed in: ${context.watch<AuthCubit>().isSignedIn()}');
+    if (context.read<AuthCubit>().isSignedIn()) {
+      return null;
+    }
+    return SignInPage.routeName;
+  },
+  initialLocation: MenuPage.routeName,
   routes: [
     GoRoute(
-      path: LoginPage.routeName,
-      builder: (context, state) => LoginPage(),
+      path: SignInPage.routeName,
+      builder: (context, state) => SignInPage(),
     ),
     GoRoute(
       path: MenuPage.routeName,
@@ -47,12 +57,15 @@ class AppRoot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Qwiz',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (context) => AuthCubit(),
+      child: MaterialApp.router(
+        title: 'Qwiz',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routerConfig: _router,
       ),
-      routerConfig: _router,
     );
   }
 }
