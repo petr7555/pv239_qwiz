@@ -1,12 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pv239_qwiz/auth/model/auth_user.dart';
 import 'package:pv239_qwiz/main.dart';
 
-class AuthCubit extends Cubit<User?> {
-  AuthCubit() : super(null) {
+bool mockAuth = true;
+AuthUser mockedUser = AuthUser(uid: '123', displayName: 'John Doe', email: 'john@gmail.com');
+
+class AuthCubit extends Cubit<AuthUser?> {
+  AuthCubit() : super(mockAuth ? mockedUser : null) {
+    if (mockAuth) {
+      return;
+    }
+
     auth.authStateChanges().listen((user) {
-      emit(user);
+      if (user == null) {
+        emit(null);
+        return;
+      }
+
+      emit(AuthUser(
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      ));
     });
   }
 
