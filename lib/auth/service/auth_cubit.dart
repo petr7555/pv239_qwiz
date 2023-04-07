@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pv239_qwiz/main.dart';
 
 class AuthCubit extends Cubit<User?> {
@@ -13,17 +14,14 @@ class AuthCubit extends Cubit<User?> {
     return state != null;
   }
 
-  Future<void> signInWithGoogle() async {
-    await auth.signInWithProvider(GoogleAuthProvider());
-  }
-
-  // TODO remove
-  Future<void> signInAnonymously() async {
-    await auth.signInAnonymously();
-  }
-
-  Future<void> signInWithEmail() async {
-    await auth.signInWithEmailAndPassword(email: 'demo@example.com', password: 'password');
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<void> signOut() async {

@@ -38,6 +38,7 @@ dependencies:
   flutter_signin_button: ^2.0.0
   get_it: ^7.2.0
   go_router: ^6.5.1
+  google_sign_in: ^6.1.0
   http: ^0.13.5
   json_annotation: ^4.8.0
   random_string_generator: ^2.0.0

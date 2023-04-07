@@ -21,7 +21,7 @@ class SignInPage extends StatelessWidget {
           height: 50,
           child: SignInButton(Buttons.Google,
               onPressed: () =>
-                  context.read<AuthCubit>().signInWithEmail().then((value) => context.go(MenuPage.routeName))),
+                  context.read<AuthCubit>().signInWithGoogle().then((_) => context.go(MenuPage.routeName))),
         ),
       ),
     );
