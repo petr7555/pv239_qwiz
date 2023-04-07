@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pv239_qwiz/common/widget/login_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
@@ -9,6 +10,10 @@ import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 final _router = GoRouter(
   routes: [
+    GoRoute(
+      path: LoginPage.routeName,
+      builder: (context, state) => LoginPage(),
+    ),
     GoRoute(
       path: MenuPage.routeName,
       builder: (context, state) => MenuPage(),
