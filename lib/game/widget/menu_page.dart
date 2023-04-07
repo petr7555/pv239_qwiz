@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
+import 'package:pv239_qwiz/game/widget/button.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
-import 'package:pv239_qwiz/game/widget/menu_button.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -18,28 +19,27 @@ class MenuPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            MenuButton(
-              label: 'Create game',
-              route: CreateGamePage.routeName,
-            ),
+            _createMenuButton(context: context, label: 'Create game', route: CreateGamePage.routeName),
             SizedBox(height: smallGap),
-            MenuButton(
-              label: 'Join game',
-              route: JoinGamePage.routeName,
-            ),
+            _createMenuButton(context: context, label: 'Join game', route: JoinGamePage.routeName),
             SizedBox(height: smallGap),
-            MenuButton(
-              label: 'History',
-              route: '/history',
-            ),
+            _createMenuButton(context: context, label: 'History', route: '/history'),
             SizedBox(height: smallGap),
-            MenuButton(
-              label: 'Leaderboard',
-              route: '/leaderboard',
-            ),
+            _createMenuButton(context: context, label: 'Leaderboard', route: '/leaderboard'),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _createMenuButton({
+    required BuildContext context,
+    required String label,
+    required String route,
+  }) {
+    return Button(
+      label: label,
+      onPressed: () => context.push(route),
     );
   }
 }

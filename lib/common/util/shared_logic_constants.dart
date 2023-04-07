@@ -1,0 +1,1 @@
+const gameCodeLength = 4;

@@ -37,6 +37,7 @@ dependencies:
   go_router: ^6.5.1
   http: ^0.13.5
   json_annotation: ^4.8.0
+  random_string_generator: ^2.0.0
   
 
 dev_dependencies:

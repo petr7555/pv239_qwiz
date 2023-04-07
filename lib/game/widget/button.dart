@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 
-class MenuButton extends StatelessWidget {
+class Button extends StatelessWidget {
   final String label;
-  final String route;
+  final VoidCallback onPressed;
 
-  const MenuButton({
+  const Button({
     super.key,
     required this.label,
-    required this.route,
+    required this.onPressed,
   });
 
   @override
@@ -18,7 +17,7 @@ class MenuButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         minimumSize: Size.fromHeight(buttonHeight), // fromHeight use double.infinity as width and 40 is the height
       ),
-      onPressed: () => context.push(route),
+      onPressed: onPressed,
       child: Text(label),
     );
   }
