@@ -42,33 +42,34 @@ class _CreateGamePageState extends State<CreateGamePage> {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: _pointsToWinController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter number of points to win';
-                }
-                final val = int.tryParse(value);
-                if (val == null) {
-                  return 'Please enter a valid number';
-                }
-                if (val < _pointsToWinMin) {
-                  return 'Number of points to win must be at least $_pointsToWinMin';
-                }
-                if (val > _pointsToWinMax) {
-                  return 'Number of points to win must be at most $_pointsToWinMax';
-                }
-
-                return null;
-              },
+              validator: _validatePointsToWin,
             ),
           ),
           SizedBox(height: standardGap),
           Button(
-            label: 'Start game',
+            label: 'Create game',
             onPressed: () => _startGame(context: context, pointsToWinStr: _pointsToWinController.text),
           )
         ],
       ),
     );
+  }
+
+  String? _validatePointsToWin(value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter number of points to win';
+    }
+    final val = int.tryParse(value);
+    if (val == null) {
+      return 'Please enter a valid number';
+    }
+    if (val < _pointsToWinMin) {
+      return 'Number of points to win must be at least $_pointsToWinMin';
+    }
+    if (val > _pointsToWinMax) {
+      return 'Number of points to win must be at most $_pointsToWinMax';
+    }
+    return null;
   }
 
   void _startGame({required BuildContext context, required String pointsToWinStr}) {
