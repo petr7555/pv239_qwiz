@@ -7,16 +7,18 @@ class GameService {
         toFirestore: (model, _) => model.toJson()..remove('id'),
       );
 
-  // Stream<List<Note>> get notesStream => gamesCollection
-  //     .snapshots()
-  //     .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
-
   Future<void> createGame(Game game) {
     return gamesCollection.doc(game.id).set(game);
   }
 
   Future<Game?> getGame(String id) {
     return gamesCollection.doc(id).get().then((value) => value.data());
+  }
+
+  Future<void> joinGame(String id) {
+    return gamesCollection.doc(id).update({
+      'players': FieldValue.arrayUnion(['test'])
+    });
   }
 
   // Future<void> deleteGameById(String id) {

@@ -1,73 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pv239_qwiz/common/service/ioc_container.dart';
-import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
-import 'package:pv239_qwiz/game/service/game_service.dart';
+import 'package:pv239_qwiz/game/bloc/join_game_form_block.dart';
 import 'package:pv239_qwiz/game/widget/button.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 
-class JoinGamePage extends StatefulWidget {
+class JoinGamePage extends StatelessWidget {
   const JoinGamePage({super.key});
 
   static const routeName = '/joinGame';
 
   @override
-  State<JoinGamePage> createState() => _JoinGamePageState();
-}
-
-class _JoinGamePageState extends State<JoinGamePage> {
-  final _gameCodeController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
   Widget build(BuildContext context) {
     return PageTemplate(
       title: 'Join game',
-      child: Column(
-        children: [
-          Form(
-            key: _formKey,
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: 'Enter game code',
-              ),
-              controller: _gameCodeController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter game code';
-                }
-                if (value.length != gameCodeLength) {
-                  return 'Game code must be $gameCodeLength characters long';
-                }
-                // if (get<GameService>().getGame(value) == null) {
-                //   return 'Game with code $value does not exist';
-                // }
-                return null;
+      child: BlocProvider(
+        create: (context) => JoinGameFormBloc(),
+        child: Builder(
+          builder: (context) {
+            final formBloc = context.read<JoinGameFormBloc>();
+            return FormBlocListener<JoinGameFormBloc, String, String>(
+              onSuccess: (context, state) {
+                context.push(GetReadyPage.routeName);
               },
-            ),
-          ),
-          SizedBox(height: standardGap),
-          Button(label: 'Join game', onPressed: () => _joinGame(context: context))
-        ],
+              child: Column(
+                children: [
+                  SingleChildScrollView(
+                    child: TextFieldBlocBuilder(
+                      textFieldBloc: formBloc.gameCodeField,
+                      suffixButton: SuffixButton.asyncValidating,
+                      decoration: InputDecoration(
+                        labelText: 'Game code',
+                        hintText: 'Enter game code',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: standardGap),
+                  Button(label: 'Join game', onPressed: formBloc.submit)
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
-  }
-
-  Future<void> _joinGame({
-    required BuildContext context,
-  }) async {
-    if (_formKey.currentState?.validate() == false) {
-      return;
-    }
-    final game = await get<GameService>().getGame(_gameCodeController.text);
-    if (game == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Game with code ${_gameCodeController.text} does not exist')));
-      return;
-    }
-
-    context.push(GetReadyPage.routeName);
   }
 }
