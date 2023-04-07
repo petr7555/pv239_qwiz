@@ -3,8 +3,8 @@ import 'package:pv239_qwiz/game/model/game.dart';
 
 class GameService {
   final gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
-        fromFirestore: (snapshot, _) => Game.fromJson(snapshot.data()!..['id'] = snapshot.id),
-        toFirestore: (model, _) => model.toJson()..remove('id'),
+        fromFirestore: (snapshot, _) => Game.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
       );
 
   Future<void> createGame(Game game) {

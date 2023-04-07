@@ -3,7 +3,7 @@ import 'package:pv239_qwiz/game/model/player.dart';
 
 part 'game.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Game {
   final String id;
   final int pointsToWin;

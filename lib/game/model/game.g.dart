@@ -17,5 +17,5 @@ Game _$GameFromJson(Map<String, dynamic> json) => Game(
 Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
       'id': instance.id,
       'pointsToWin': instance.pointsToWin,
-      'players': instance.players,
+      'players': instance.players.map((e) => e.toJson()).toList(),
     };

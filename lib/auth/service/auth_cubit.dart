@@ -10,6 +10,8 @@ class AuthCubit extends Cubit<User?> {
     });
   }
 
+  String get userId => state!.uid;
+
   bool isSignedIn() {
     return state != null;
   }

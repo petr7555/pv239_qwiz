@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/bloc/create_game_form_bloc.dart';
+import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/button.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 
@@ -24,8 +26,13 @@ class CreateGamePage extends StatelessWidget {
           builder: (context) {
             final formBloc = context.read<CreateGameFormBloc>();
             return FormBlocListener<CreateGameFormBloc, String, String>(
-              onSuccess: (context, state) {
-                context.pushNamed(LobbyPage.routeName, params: {'gameCode': state.successResponse!});
+              onSuccess: (context, state) async {
+                final pointsToWin = int.parse(formBloc.pointsToWinField.value);
+                final userId = context.read<AuthCubit>().userId;
+                context
+                    .read<GameCubit>()
+                    .createGame(pointsToWin, userId)
+                    .then((_) => context.push(LobbyPage.routeName));
               },
               child: Column(
                 children: [
