@@ -12,6 +12,10 @@ class GameService {
     return gamesCollection.doc(game.id).set(game);
   }
 
+  Stream<Game?> gameStream(String id) {
+    return gamesCollection.doc(id).snapshots().map((event) => event.data());
+  }
+
   Future<Game?> getGame(String id) {
     return gamesCollection.doc(id).get().then((value) => value.data());
   }

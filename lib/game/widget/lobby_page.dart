@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/button.dart';
+import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 
 class LobbyPage extends StatelessWidget {
   const LobbyPage({super.key});
@@ -17,7 +20,12 @@ class LobbyPage extends StatelessWidget {
       title: 'Lobby',
       child: Column(
         children: [
-          BlocBuilder<GameCubit, Game?>(
+          BlocConsumer<GameCubit, Game?>(
+            listener: (context, state) {
+              if (state?.players.length == maxPlayers) {
+                context.push(GetReadyPage.routeName);
+              }
+            },
             builder: (context, state) => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
