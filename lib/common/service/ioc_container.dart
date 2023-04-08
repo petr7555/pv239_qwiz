@@ -13,6 +13,9 @@ class IoCContainer {
       fixedLength: gameCodeLength,
       alphaCase: AlphaCase.LOWERCASE_ONLY,
       hasSymbols: false,
+      // remove 'o' and '0' to avoid confusion
+      customLowerAlphabet: 'abcdefghijklmnpqrstuvwxyz'.split(''),
+      customDigits: '123456789'.split(''),
     ));
     get.registerSingleton(GameService());
   }

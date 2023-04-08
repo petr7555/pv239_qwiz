@@ -30,13 +30,17 @@ class AppRoot extends StatelessWidget {
         child: MaterialApp.router(
           title: 'Qwiz',
           theme: ThemeData(
-            primarySwatch: primaryColor,
+            colorScheme: ColorScheme.fromSwatch(
+              brightness: Brightness.light,
+              primarySwatch: primaryColor,
+              accentColor: secondaryColor,
+            ),
           ),
           darkTheme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
+            colorScheme: ColorScheme.fromSwatch(
               brightness: Brightness.dark,
-              seedColor: primaryColor,
-              secondary: primaryColor,
+              primarySwatch: primaryColor,
+              accentColor: secondaryColor,
             ),
           ),
           routerConfig: router,

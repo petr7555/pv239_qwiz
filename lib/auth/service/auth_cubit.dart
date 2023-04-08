@@ -41,10 +41,10 @@ class AuthCubit extends Cubit<AuthUser?> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<void> signOut() async {
-    await auth.signOut();
+  Future<void> signOut() {
+    return auth.signOut();
   }
 }

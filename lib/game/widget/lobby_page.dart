@@ -21,8 +21,8 @@ class LobbyPage extends StatelessWidget {
       child: Column(
         children: [
           BlocConsumer<GameCubit, Game?>(
-            listener: (context, state) {
-              if (state?.players.length == maxPlayers) {
+            listener: (context, game) {
+              if (game?.players.length == maxPlayers) {
                 context.push(GetReadyPage.routeName);
               }
             },
@@ -31,7 +31,13 @@ class LobbyPage extends StatelessWidget {
               children: [
                 Text('Game code: ', style: Theme.of(context).textTheme.titleLarge),
                 if (state != null)
-                  Text(state.id, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.blue)),
+                  Text(
+                    state.id,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.bold),
+                  ),
               ],
             ),
           ),

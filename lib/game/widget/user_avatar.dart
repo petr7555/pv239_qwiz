@@ -15,7 +15,8 @@ class UserAvatar extends StatelessWidget {
         CircleAvatar(
           radius: 50,
           backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-          child: photoUrl == null ? Icon(Icons.person, size: 40) : null,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          child: photoUrl == null ? Icon(Icons.person, size: 40, color: Colors.white) : null,
         ),
         SizedBox(height: standardGap),
         if (displayName != null) Text(displayName, style: Theme.of(context).textTheme.titleLarge),

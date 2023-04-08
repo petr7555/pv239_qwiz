@@ -26,15 +26,17 @@ class SignInPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               height: 50,
-              child: SignInButton(Buttons.Google, onPressed: () {
-                context.loaderOverlay.show();
-                context
-                    .read<AuthCubit>()
-                    .signInWithGoogle()
-                    .then((_) => context.go(MenuPage.routeName))
-                    .then((_) => context.loaderOverlay.hide())
-                    .catchError((_) => context.loaderOverlay.hide());
-              }),
+              child: SignInButton(
+                Buttons.Google,
+                onPressed: () {
+                  context.loaderOverlay.show();
+                  context
+                      .read<AuthCubit>()
+                      .signInWithGoogle()
+                      .then((_) => context.go(MenuPage.routeName))
+                      .whenComplete(context.loaderOverlay.hide);
+                },
+              ),
             ),
           ],
         ),

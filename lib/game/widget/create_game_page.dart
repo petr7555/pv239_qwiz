@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
@@ -26,12 +27,14 @@ class CreateGamePage extends StatelessWidget {
           builder: (context) {
             final formBloc = context.read<CreateGameFormBloc>();
             return FormBlocListener<CreateGameFormBloc, String, String>(
-              onSuccess: (context, state) async {
+              onSuccess: (context, state) {
+                context.loaderOverlay.show();
                 final pointsToWin = int.parse(formBloc.pointsToWinField.value);
                 final userId = context.read<AuthCubit>().userId;
                 context
                     .read<GameCubit>()
                     .createGame(pointsToWin, userId)
+                    .whenComplete(context.loaderOverlay.hide)
                     .then((_) => context.push(LobbyPage.routeName));
               },
               child: Column(
