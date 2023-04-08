@@ -46,6 +46,7 @@ dependencies:
   random_string_generator: ^2.0.0
   rxdart: ^0.27.7
   timer_count_down: ^2.2.2
+  tuple: ^2.0.1
   
 
 dev_dependencies:

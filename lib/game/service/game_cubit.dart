@@ -11,7 +11,10 @@ class GameCubit extends Cubit<Game?> {
   GameCubit() : super(null);
 
   void startListening(String userId) {
-    _gameService.currentGameStream(userId).listen((game) => emit(game));
+    _gameService.currentGameStream(userId).listen((game) {
+      print('GameCubit: game updated: $game');
+      emit(game);
+    });
   }
 
   String? get gameId => state?.id;

@@ -6,7 +6,6 @@ import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/auth/widget/logo.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
-import 'package:pv239_qwiz/game/service/game_cubit.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -32,7 +31,6 @@ class SignInPage extends StatelessWidget {
                   context
                       .read<AuthCubit>()
                       .signInWithGoogle()
-                      .then((userCredential) => context.read<GameCubit>().startListening(userCredential.user!.uid))
                       .catchError((_) {})
                       .whenComplete(context.loaderOverlay.hide);
                 },
