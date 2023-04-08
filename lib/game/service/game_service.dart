@@ -8,13 +8,23 @@ class GameService {
         toFirestore: (model, _) => model.toJson(),
       );
 
+  Stream<Game?> currentGameStream(String userId) {
+    final gamesUserIsPartOf = gamesCollection
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
+        .map((games) => games.where((game) => game.players.any((player) => player.id == userId)).toList());
+
+    return gamesUserIsPartOf.map((games) {
+      if (games.isEmpty) {
+        return null;
+      }
+      return games.first;
+    });
+  }
+
   Future<void> createGame(Game game) {
     return gamesCollection.doc(game.id).set(game);
   }
-
-  // Stream<Game?> gameStream(String id) {
-  //   return gamesCollection.doc(id).snapshots().map((event) => event.data());
-  // }
 
   Future<Game?> getGame(String gameId) {
     return gamesCollection.doc(gameId).get().then((value) => value.data());
@@ -44,19 +54,5 @@ class GameService {
 
   Future<void> _deleteGame(String gameId) {
     return gamesCollection.doc(gameId).delete();
-  }
-
-  Stream<Game?> currentGameStream(String userId) {
-    final gamesUserIsPartOf = gamesCollection
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
-        .map((games) => games.where((game) => game.players.any((player) => player.id == userId)).toList());
-
-    return gamesUserIsPartOf.map((games) {
-      if (games.isEmpty) {
-        return null;
-      }
-      return games.first;
-    });
   }
 }
