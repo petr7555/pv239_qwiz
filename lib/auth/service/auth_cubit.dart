@@ -50,8 +50,7 @@ class AuthCubit extends Cubit<AuthUser?> {
     return FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<void> signOut() async {
-    await auth.signOut();
-    emit(null);
+  Future<void> signOut() {
+    return auth.signOut();
   }
 }
