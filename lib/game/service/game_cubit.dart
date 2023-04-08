@@ -22,4 +22,8 @@ class GameCubit extends Cubit<Game?> {
   Future<void> joinGame(String gameCode, String userId) async {
     await get<GameService>().joinGame(gameCode, userId);
   }
+
+  Future<void> leaveGame(String gameCode, String userId) async {
+    await get<GameService>().leaveGame(gameCode, userId);
+  }
 }

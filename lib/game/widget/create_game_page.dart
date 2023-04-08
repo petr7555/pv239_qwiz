@@ -35,7 +35,7 @@ class CreateGamePage extends StatelessWidget {
                     .read<GameCubit>()
                     .createGame(pointsToWin, userId)
                     .whenComplete(context.loaderOverlay.hide)
-                    .then((_) => context.push(LobbyPage.routeName));
+                    .then((_) => context.go(LobbyPage.routeName));
               },
               child: Column(
                 children: [

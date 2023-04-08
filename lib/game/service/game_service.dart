@@ -26,7 +26,17 @@ class GameService {
     return gamesCollection.doc(id).set(updatedGame);
   }
 
-  // Future<void> deleteGameById(String id) {
-  //   return gamesCollection.doc(id).delete();
-  // }
+  Future<void> leaveGame(String id, String userId) async {
+    final game = (await getGame(id))!;
+    final newPlayers = game.players.where((element) => element.id != userId).toList();
+    if (newPlayers.isEmpty) {
+      return _deleteGame(id);
+    }
+    final updatedGame = game.copyWith(players: newPlayers);
+    return gamesCollection.doc(id).set(updatedGame);
+  }
+
+  Future<void> _deleteGame(String id) {
+    return gamesCollection.doc(id).delete();
+  }
 }
