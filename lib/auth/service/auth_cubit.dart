@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pv239_qwiz/auth/model/auth_user.dart';
 import 'package:pv239_qwiz/main.dart';
 
-bool mockAuth = true;
+const mockAuth = false;
 AuthUser mockedUser = AuthUser(uid: '123', displayName: 'John Doe', email: 'john@gmail.com');
 
 class AuthCubit extends Cubit<AuthUser?> {
@@ -28,7 +28,13 @@ class AuthCubit extends Cubit<AuthUser?> {
     });
   }
 
-  String get userId => state!.uid;
+  String get userId {
+    final uid = state?.uid;
+    if (uid == null) {
+      throw Exception('User is not signed in');
+    }
+    return uid;
+  }
 
   bool isSignedIn() {
     return state != null;

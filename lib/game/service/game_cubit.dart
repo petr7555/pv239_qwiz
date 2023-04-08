@@ -6,24 +6,34 @@ import 'package:pv239_qwiz/game/service/game_service.dart';
 import 'package:random_string_generator/random_string_generator.dart';
 
 class GameCubit extends Cubit<Game?> {
-  GameCubit() : super(null);
+  GameCubit() : super(null) {
+    get<GameService>().currentGameStream().listen((game) => emit(game));
+  }
 
-  Future<void> createGame(int pointsToWin, String userId) async {
+  String? get gameId => state?.id;
+
+  Future<void> createGame(int pointsToWin, String userId) {
     final game = Game(
       id: get<RandomStringGenerator>().generate(),
       pointsToWin: pointsToWin,
       players: [Player(id: userId)],
     );
-    await get<GameService>().createGame(game);
-    emit(game);
-    get<GameService>().gameStream(game.id).listen((game) => emit(game));
+    return get<GameService>().createGame(game);
+    // TODO remove?
+    // emit(game);
+    // TODO remove?
+    // get<GameService>().gameStream(game.id).listen((game) => emit(game));
   }
 
-  Future<void> joinGame(String gameCode, String userId) async {
-    await get<GameService>().joinGame(gameCode, userId);
+  Future<void> joinGame(String gameCode, String userId) {
+    return get<GameService>().joinGame(gameCode, userId);
+    // TODO remove?
+    // emit(await get<GameService>().getGame(gameCode));
   }
 
-  Future<void> leaveGame(String gameCode, String userId) async {
-    await get<GameService>().leaveGame(gameCode, userId);
+  Future<void> leaveGame(String gameCode, String userId) {
+    return get<GameService>().leaveGame(gameCode, userId);
+    // TODO remove?
+    // emit(null);
   }
 }

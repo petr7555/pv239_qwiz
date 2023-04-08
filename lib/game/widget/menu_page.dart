@@ -23,6 +23,15 @@ class MenuPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // HandlingStreamBuilder(
+            //   stream: get<GameService>().currentGameStream(),
+            //   builder: (context, game) {
+            //     if (game != null) {
+            //       return Text('You are currently in a game');
+            //     }
+            //     return Text('You are not currently in a game');
+            //   },
+            // ),
             UserAvatar(),
             SizedBox(height: largeGap),
             _createMenuButton(context: context, label: 'Create game', route: CreateGamePage.routeName),

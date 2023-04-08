@@ -49,10 +49,15 @@ class LobbyPage extends StatelessWidget {
                 SizedBox(height: standardGap),
                 Button(
                   label: 'Cancel',
-                  onPressed: () {
+                  onPressed: () async {
                     final userId = context.read<AuthCubit>().userId;
-                    context.read<GameCubit>().leaveGame(game!.id, userId);
-                    context.go(MenuPage.routeName);
+                    final game = context.read<GameCubit>().state;
+                    if (game != null) {
+                      context
+                          .read<GameCubit>()
+                          .leaveGame(game.id, userId)
+                          .then((value) => context.go(MenuPage.routeName));
+                    }
                   },
                 ),
               ],

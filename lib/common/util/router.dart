@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
+import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
@@ -11,10 +12,14 @@ import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 final router = GoRouter(
   redirect: (context, state) {
-    if (context.read<AuthCubit>().isSignedIn()) {
-      return null;
+    if (!context.read<AuthCubit>().isSignedIn()) {
+      return SignInPage.routeName;
     }
-    return SignInPage.routeName;
+    if (context.read<GameCubit>().state != null) {
+      // TODO later redirect to the correct page based on game state
+      return LobbyPage.routeName;
+    }
+    return null;
   },
   initialLocation: MenuPage.routeName,
   routes: [

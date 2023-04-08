@@ -14,8 +14,8 @@ class AppRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthCubit()),
-        BlocProvider(create: (context) => GameCubit()),
+        BlocProvider(lazy: false, create: (context) => AuthCubit()),
+        BlocProvider(lazy: false, create: (context) => GameCubit()),
       ],
       child: GlobalLoaderOverlay(
         useDefaultLoading: false,

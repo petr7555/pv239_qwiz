@@ -8,6 +8,7 @@ class Game {
   final String id;
   final int pointsToWin;
   final List<Player> players;
+  // TODO add game state
 
   const Game({
     required this.id,
