@@ -6,9 +6,9 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pv239_qwiz/auth/model/auth_user.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
+import 'package:pv239_qwiz/common/util/combine_any_latest_stream.dart';
 import 'package:pv239_qwiz/common/util/go_router_refresh_stream.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
-import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
@@ -43,8 +43,10 @@ class AppRoot extends StatelessWidget {
               context.read<GameCubit>().startListening(state.uid);
             }
           },
-          child: BlocBuilder<GameCubit, Game?>(builder: (context, game) {
+          child: Builder(builder: (context) {
             final authCubit = context.read<AuthCubit>();
+            final gameCubit = context.read<GameCubit>();
+            final combinedStream = CombineAnyLatestStream([authCubit.stream, gameCubit.stream], (values) => values);
 
             return MaterialApp.router(
               title: 'Qwiz',
@@ -70,13 +72,13 @@ class AppRoot extends StatelessWidget {
                   if (!loggedIn && loggingIn) return null;
                   if (!loggedIn && !loggingIn) return SignInPage.routeName;
 
-                  final gameActive = game != null;
+                  final gameActive = gameCubit.state != null;
                   if (loggedIn && loggingIn && !gameActive) return MenuPage.routeName;
                   if (loggedIn && gameActive) return LobbyPage.routeName;
 
                   return null;
                 },
-                refreshListenable: GoRouterRefreshStream(authCubit.stream),
+                refreshListenable: GoRouterRefreshStream(combinedStream),
                 initialLocation: MenuPage.routeName,
                 routes: [
                   GoRoute(
