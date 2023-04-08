@@ -41,6 +41,8 @@ dependencies:
   google_sign_in: ^6.1.0
   http: ^0.13.5
   json_annotation: ^4.8.0
+  jumping_dot: ^0.0.4
+  loader_overlay: ^2.2.0
   random_string_generator: ^2.0.0
   timer_count_down: ^2.2.2
   

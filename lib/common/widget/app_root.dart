@@ -1,55 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:jumping_dot/jumping_dot.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
-import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
+import 'package:pv239_qwiz/common/util/router.dart';
+import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
-import 'package:pv239_qwiz/game/widget/create_game_page.dart';
-import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
-import 'package:pv239_qwiz/game/widget/join_game_page.dart';
-import 'package:pv239_qwiz/game/widget/lobby_page.dart';
-import 'package:pv239_qwiz/game/widget/menu_page.dart';
-import 'package:pv239_qwiz/game/widget/question_page.dart';
-
-final _router = GoRouter(
-  redirect: (context, state) {
-    if (context.read<AuthCubit>().isSignedIn()) {
-      return null;
-    }
-    return SignInPage.routeName;
-  },
-  initialLocation: MenuPage.routeName,
-  routes: [
-    GoRoute(
-      path: SignInPage.routeName,
-      builder: (context, state) => SignInPage(),
-    ),
-    GoRoute(
-      path: MenuPage.routeName,
-      builder: (context, state) => MenuPage(),
-    ),
-    GoRoute(
-      path: CreateGamePage.routeName,
-      builder: (context, state) => CreateGamePage(),
-    ),
-    GoRoute(
-      path: JoinGamePage.routeName,
-      builder: (context, state) => JoinGamePage(),
-    ),
-    GoRoute(
-      path: LobbyPage.routeName,
-      builder: (context, state) => LobbyPage(),
-    ),
-    GoRoute(
-      path: GetReadyPage.routeName,
-      builder: (context, state) => GetReadyPage(),
-    ),
-    GoRoute(
-      path: QuestionPage.routeName,
-      builder: (context, state) => QuestionPage(),
-    ),
-  ],
-);
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
@@ -61,12 +17,30 @@ class AppRoot extends StatelessWidget {
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => GameCubit()),
       ],
-      child: MaterialApp.router(
-        title: 'Qwiz',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: GlobalLoaderOverlay(
+        useDefaultLoading: false,
+        overlayWidget: Center(
+          child: JumpingDots(
+            color: primaryColor,
+            radius: 10,
+            numberOfDots: 3,
+            animationDuration: Duration(milliseconds: 200),
+          ),
         ),
-        routerConfig: _router,
+        child: MaterialApp.router(
+          title: 'Qwiz',
+          theme: ThemeData(
+            primarySwatch: primaryColor,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              brightness: Brightness.dark,
+              seedColor: primaryColor,
+              secondary: primaryColor,
+            ),
+          ),
+          routerConfig: router,
+        ),
       ),
     );
   }

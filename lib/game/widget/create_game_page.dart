@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
+import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
-import 'package:pv239_qwiz/game/bloc/create_game_form_bloc.dart';
+import 'package:pv239_qwiz/game/service/form_bloc/create_game_form_bloc.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
-import 'package:pv239_qwiz/game/widget/button.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 
 class CreateGamePage extends StatelessWidget {

@@ -3,8 +3,8 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 
-class UserProfile extends StatelessWidget {
-  const UserProfile({super.key});
+class UserAvatar extends StatelessWidget {
+  const UserAvatar({super.key});
 
   @override
   Widget build(BuildContext context) {

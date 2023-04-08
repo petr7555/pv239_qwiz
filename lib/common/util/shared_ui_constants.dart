@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+
+const primaryColor = Colors.lime;
+
 const smallGap = 8.0;
 const standardGap = 24.0;
 const largeGap = 48.0;

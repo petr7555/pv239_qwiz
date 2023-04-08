@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
+import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
-import 'package:pv239_qwiz/game/widget/button.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 
 class LobbyPage extends StatelessWidget {
@@ -36,7 +36,7 @@ class LobbyPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: standardGap),
-          Text('Waiting for other player to join...', style: Theme.of(context).textTheme.titleLarge),
+          Text('Waiting for the second player to join...', style: Theme.of(context).textTheme.titleLarge),
           SizedBox(height: standardGap),
           Button(label: 'Cancel', onPressed: () {})
         ],
