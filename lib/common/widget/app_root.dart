@@ -36,6 +36,10 @@ class AppRoot extends StatelessWidget {
           ),
         ),
         child: Builder(builder: (context) {
+          // final gameCubit = context.read<GameCubit>();
+          final authCubit = context.read<AuthCubit>();
+          // final combinedStream = Rx.combineLatest2(gameStream, authStream, (game, auth) => game);
+
           return MaterialApp.router(
             title: 'Qwiz',
             theme: ThemeData(
@@ -54,16 +58,21 @@ class AppRoot extends StatelessWidget {
             ),
             routerConfig: GoRouter(
               redirect: (context, state) {
-                if (!context.read<AuthCubit>().isSignedIn()) {
-                  return SignInPage.routeName;
-                }
-                if (context.read<GameCubit>().state != null) {
-                  // TODO later redirect to the correct page based on game state
-                  return LobbyPage.routeName;
-                }
+                // if the user is not logged in, they need to login
+                final loggedIn = authCubit.isSignedIn();
+
+                final loggingIn = state.subloc == SignInPage.routeName;
+
+                if (!loggedIn) return loggingIn ? null : SignInPage.routeName;
+
+                // if the user is logged in but still on the login page, send them to
+                // the home page
+                if (loggingIn) return MenuPage.routeName;
+
+                // no need to redirect at all
                 return null;
               },
-              refreshListenable: GoRouterRefreshStream(context.read<GameCubit>().stream),
+              refreshListenable: GoRouterRefreshStream(authCubit.stream),
               initialLocation: MenuPage.routeName,
               routes: [
                 GoRoute(
