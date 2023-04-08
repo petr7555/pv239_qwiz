@@ -74,7 +74,8 @@ class AppRoot extends StatelessWidget {
 
                   final gameActive = gameCubit.state != null;
                   if (loggedIn && loggingIn && !gameActive) return MenuPage.routeName;
-                  if (loggedIn && gameActive) return LobbyPage.routeName;
+                  final inMenu = state.subloc == MenuPage.routeName;
+                  if (loggedIn && inMenu && gameActive) return LobbyPage.routeName;
 
                   return null;
                 },

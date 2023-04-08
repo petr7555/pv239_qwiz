@@ -25,7 +25,7 @@ class LobbyPage extends StatelessWidget {
           BlocConsumer<GameCubit, Game?>(
             listener: (context, game) {
               if (game?.players.length == maxPlayers) {
-                context.push(GetReadyPage.routeName);
+                context.go(GetReadyPage.routeName);
               }
             },
             builder: (context, game) => Column(

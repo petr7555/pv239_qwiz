@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
+import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 
 class GameService {
@@ -35,7 +36,7 @@ class GameService {
     if (game == null) {
       throw Exception('Cannot join game $gameId because it does not exist');
     }
-    final updatedGame = game.copyWith(players: game.players + [Player(id: userId)]);
+    final updatedGame = game.copyWith(players: game.players + [Player(id: userId)], gameStatus: GameStatus.inProgress);
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 

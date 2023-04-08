@@ -28,7 +28,7 @@ class GetReadyPage extends StatelessWidget {
               },
               interval: Duration(seconds: 1),
               onFinished: () {
-                context.push(QuestionPage.routeName);
+                context.go(QuestionPage.routeName);
               },
             ),
           ],

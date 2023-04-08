@@ -27,7 +27,7 @@ class JoinGamePage extends StatelessWidget {
               onSuccess: (context, state) {
                 final userId = context.read<AuthCubit>().userId;
                 context.read<GameCubit>().joinGame(formBloc.gameCodeField.value, userId).then((_) {
-                  context.push(GetReadyPage.routeName);
+                  context.go(GetReadyPage.routeName);
                 });
               },
               child: Column(

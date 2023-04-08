@@ -12,10 +12,20 @@ Game _$GameFromJson(Map<String, dynamic> json) => Game(
       players: (json['players'] as List<dynamic>)
           .map((e) => Player.fromJson(e as Map<String, dynamic>))
           .toList(),
+      gameStatus:
+          $enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']) ??
+              GameStatus.notStarted,
     );
 
 Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
       'id': instance.id,
       'pointsToWin': instance.pointsToWin,
       'players': instance.players.map((e) => e.toJson()).toList(),
+      'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
     };
+
+const _$GameStatusEnumMap = {
+  GameStatus.notStarted: 'notStarted',
+  GameStatus.inProgress: 'inProgress',
+  GameStatus.finished: 'finished',
+};
