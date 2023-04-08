@@ -8,8 +8,8 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photoUrl = context.read<AuthCubit>().state!.photoURL;
-    final displayName = context.read<AuthCubit>().state!.displayName;
+    final photoUrl = context.read<AuthCubit>().state?.photoURL;
+    final displayName = context.read<AuthCubit>().state?.displayName;
     return Column(
       children: [
         CircleAvatar(

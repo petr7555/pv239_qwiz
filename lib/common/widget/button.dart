@@ -15,7 +15,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        minimumSize: Size.fromHeight(buttonHeight), // fromHeight use double.infinity as width and 40 is the height
+        minimumSize: Size.fromHeight(buttonHeight),
       ),
       onPressed: onPressed,
       child: Text(label),

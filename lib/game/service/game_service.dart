@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
-import 'package:pv239_qwiz/main.dart';
 
 class GameService {
   final gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
@@ -47,9 +46,7 @@ class GameService {
     return gamesCollection.doc(gameId).delete();
   }
 
-  Stream<Game?> currentGameStream() {
-    final userId = auth.currentUser!.uid;
-
+  Stream<Game?> currentGameStream(String userId) {
     final gamesUserIsPartOf = gamesCollection
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
