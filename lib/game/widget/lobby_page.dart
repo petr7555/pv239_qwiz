@@ -30,7 +30,8 @@ class LobbyPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Game code: ', style: Theme.of(context).textTheme.titleLarge),
-                Text(state!.id, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.blue)),
+                if (state != null)
+                  Text(state.id, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.blue)),
               ],
             ),
           ),

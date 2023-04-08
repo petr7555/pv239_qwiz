@@ -15,6 +15,7 @@ class GameCubit extends Cubit<Game?> {
       players: [Player(id: userId)],
     );
     await get<GameService>().createGame(game);
+    emit(game);
     get<GameService>().gameStream(game.id).listen((game) => emit(game));
   }
 
