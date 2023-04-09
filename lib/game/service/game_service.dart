@@ -17,8 +17,11 @@ class GameService {
     final gamesUserIsPartOf = gamesCollection
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
-        .map((games) =>
-            games.where((game) => game.firstPlayer.id == userId || game.secondPlayer?.id == userId).toList());
+        .map((games) => games
+            .where((game) =>
+                (game.firstPlayer.id == userId && game.firstPlayer.complete == false) ||
+                (game.secondPlayer?.id == userId && game.secondPlayer?.complete == false))
+            .toList());
 
     return gamesUserIsPartOf.map((games) {
       if (games.isEmpty) {
@@ -72,11 +75,13 @@ class GameService {
       throw Exception('Cannot abort game $gameId because it does not exist');
     }
     final isFirstPlayer = game.firstPlayer.id == userId;
-    final redirectOfFirstPlayer = isFirstPlayer ? MenuPage.routeName : AbortedGamePage.routeName;
-    final redirectOfSecondPlayer = isFirstPlayer ? AbortedGamePage.routeName : MenuPage.routeName;
     final updatedGame = game.copyWith(
-      firstPlayer: game.firstPlayer.copyWith(route: redirectOfFirstPlayer),
-      secondPlayer: game.secondPlayer?.copyWith(route: redirectOfSecondPlayer),
+      firstPlayer: isFirstPlayer
+          ? game.firstPlayer.copyWith(route: MenuPage.routeName, complete: true)
+          : game.firstPlayer.copyWith(route: AbortedGamePage.routeName),
+      secondPlayer: isFirstPlayer
+          ? game.secondPlayer?.copyWith(route: AbortedGamePage.routeName)
+          : game.secondPlayer?.copyWith(route: MenuPage.routeName, complete: true),
     );
     return gamesCollection.doc(gameId).set(updatedGame);
   }
@@ -88,8 +93,10 @@ class GameService {
     }
     final isFirstPlayer = game.firstPlayer.id == userId;
     final updatedGame = game.copyWith(
-      firstPlayer: isFirstPlayer ? game.firstPlayer.copyWith(route: MenuPage.routeName) : game.firstPlayer,
-      secondPlayer: isFirstPlayer ? game.secondPlayer : game.secondPlayer?.copyWith(route: MenuPage.routeName),
+      firstPlayer:
+          isFirstPlayer ? game.firstPlayer.copyWith(route: MenuPage.routeName, complete: true) : game.firstPlayer,
+      secondPlayer:
+          isFirstPlayer ? game.secondPlayer : game.secondPlayer?.copyWith(route: MenuPage.routeName, complete: true),
     );
     return gamesCollection.doc(gameId).set(updatedGame);
   }

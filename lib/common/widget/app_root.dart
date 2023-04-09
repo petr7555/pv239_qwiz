@@ -91,7 +91,11 @@ class AppRoot extends StatelessWidget {
                     return redirectIfNotThere(state, thisPlayer.route);
                   }
 
-                  if (!gameActive && state.subloc == LobbyPage.routeName) {
+                  if (!gameActive &&
+                      (state.subloc == LobbyPage.routeName ||
+                          state.subloc == QuestionPage.routeName ||
+                          state.subloc == PodiumPage.routeName ||
+                          state.subloc == AbortedGamePage.routeName)) {
                     return MenuPage.routeName;
                   }
 
