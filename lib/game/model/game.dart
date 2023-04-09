@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
+import 'package:pv239_qwiz/game/model/question.dart';
 
 part 'game.g.dart';
 
@@ -10,6 +11,9 @@ class Game {
   final Player firstPlayer;
   final Player? secondPlayer;
   final String? winnerId;
+  final List<Question> questions;
+
+  Question get currentQuestion => questions.last;
 
   Player? thisPlayer(String userId) {
     if (firstPlayer.id == userId) {
@@ -31,6 +35,7 @@ class Game {
     required this.firstPlayer,
     this.secondPlayer,
     this.winnerId,
+    this.questions = const [],
   });
 
   Game copyWith({
@@ -39,6 +44,7 @@ class Game {
     Player? firstPlayer,
     Player? secondPlayer,
     String? winnerId,
+    List<Question>? questions,
   }) {
     return Game(
       id: id ?? this.id,
@@ -46,6 +52,7 @@ class Game {
       firstPlayer: firstPlayer ?? this.firstPlayer,
       secondPlayer: secondPlayer ?? this.secondPlayer,
       winnerId: winnerId ?? this.winnerId,
+      questions: questions ?? this.questions,
     );
   }
 

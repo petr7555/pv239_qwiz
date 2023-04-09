@@ -9,7 +9,7 @@ class QuestionApiService {
     final response = await http.get(Uri.parse(questionsApiEndpoint));
 
     if (response.statusCode == 200) {
-      return Question.fromJson(jsonDecode(response.body)[0]);
+      return Question.fromApiJson(jsonDecode(response.body)[0]);
     } else {
       throw Exception('Failed to get question');
     }

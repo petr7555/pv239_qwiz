@@ -100,4 +100,26 @@ class GameService {
     );
     return gamesCollection.doc(gameId).set(updatedGame);
   }
+
+  Future<void> answerQuestion(String gameId, String userId, String questionId, int answerIdx) async {
+    final game = await getGame(gameId);
+    if (game == null) {
+      throw Exception('Cannot answer question of game $gameId because it does not exist');
+    }
+
+    final isFirstPlayer = game.firstPlayer.id == userId;
+    final question = game.questions.firstWhere((question) => question.id == questionId);
+    final updatedQuestion = question.copyWith(
+      firstPlayerAnswerIdx: isFirstPlayer ? answerIdx : question.firstPlayerAnswerIdx,
+      secondPlayerAnswerIdx: isFirstPlayer ? question.secondPlayerAnswerIdx : answerIdx,
+    );
+    final updatedQuestions = game.questions.map((question) {
+      if (question.id == questionId) {
+        return updatedQuestion;
+      }
+      return question;
+    }).toList();
+    final updatedGame = game.copyWith(questions: updatedQuestions);
+    return gamesCollection.doc(gameId).set(updatedGame);
+  }
 }

@@ -3,33 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_timer/linear_timer.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
-import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/button.dart';
-import 'package:pv239_qwiz/common/widget/handling_future_builder.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
-import 'package:pv239_qwiz/game/model/question.dart';
+import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
-import 'package:pv239_qwiz/game/service/question_api_service.dart';
 
-class QuestionPage extends StatefulWidget {
+class QuestionPage extends StatelessWidget {
   const QuestionPage({super.key});
 
   static const routeName = '/question';
-
-  @override
-  State<QuestionPage> createState() => _QuestionPageState();
-}
-
-class _QuestionPageState extends State<QuestionPage> {
-  late Future<Question> futureQuestion;
-
-  @override
-  void initState() {
-    super.initState();
-    futureQuestion = get<QuestionApiService>().getQuestion();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +49,13 @@ class _QuestionPageState extends State<QuestionPage> {
           },
         ),
       ],
-      child: HandlingFutureBuilder<Question>(
-        future: futureQuestion,
-        builder: (context, question) {
+      child: BlocBuilder<GameCubit, Game?>(
+        builder: (context, game) {
+          if (game == null) {
+            return Center(child: Text('No game in progress'));
+          }
+          final question = game.currentQuestion;
+
           return Center(
             child: Column(
               children: [
@@ -94,10 +82,13 @@ class _QuestionPageState extends State<QuestionPage> {
                 SizedBox(height: standardGap),
                 Column(
                   children: [
-                    for (final answer in question.allAnswers)
+                    for (var i = 0; i < question.allAnswers.length; i++)
                       Button(
-                        label: answer,
-                        onPressed: () {},
+                        label: question.allAnswers[i],
+                        onPressed: () {
+                          final userId = context.read<AuthCubit>().userId;
+                          context.read<GameCubit>().answerQuestion(userId, question.id, i);
+                        },
                       ),
                   ],
                 )
