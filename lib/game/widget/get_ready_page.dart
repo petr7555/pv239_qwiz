@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
@@ -20,7 +21,7 @@ class GetReadyPage extends StatelessWidget {
             Text('The game will start in', style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: standardGap),
             Countdown(
-              seconds: 3,
+              seconds: secondsToStartGame,
               build: (BuildContext context, double time) {
                 int seconds = time.toInt();
                 final text = seconds == 0 ? 'Go!' : seconds.toString();

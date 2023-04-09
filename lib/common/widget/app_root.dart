@@ -9,6 +9,7 @@ import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
 import 'package:pv239_qwiz/common/util/combine_any_latest_stream.dart';
 import 'package:pv239_qwiz/common/util/go_router_refresh_stream.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
+import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
@@ -75,7 +76,9 @@ class AppRoot extends StatelessWidget {
                   final gameActive = gameCubit.state != null;
                   if (loggedIn && loggingIn && !gameActive) return MenuPage.routeName;
                   final inMenu = state.subloc == MenuPage.routeName;
-                  if (loggedIn && inMenu && gameActive) return LobbyPage.routeName;
+                  final gameInProgress = gameCubit.state?.gameStatus == GameStatus.inProgress;
+                  if (loggedIn && inMenu && gameActive && !gameInProgress) return LobbyPage.routeName;
+                  if (loggedIn && inMenu && gameActive && gameInProgress) return QuestionPage.routeName;
 
                   return null;
                 },
