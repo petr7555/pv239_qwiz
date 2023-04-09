@@ -91,7 +91,6 @@ class GameService {
 
   Future<void> answerQuestion(String gameId, String userId, String questionId, int answerIdx) async {
     final game = await _getGame(gameId);
-
     final questionIdx = game.questions.indexWhere((question) => question.id == questionId);
     final question = game.questions[questionIdx];
     question.playerAnswers[userId] = answerIdx;
@@ -100,6 +99,12 @@ class GameService {
     );
     game.questions[questionIdx] = updatedQuestion;
     final updatedGame = game.copyWith(questions: game.questions);
+    return gamesCollection.doc(gameId).set(updatedGame);
+  }
+
+  Future<void> nextQuestion(String gameId) async {
+    final game = await _getGame(gameId);
+    final updatedGame = game.copyWith(currentQuestionIdx: game.currentQuestionIdx + 1);
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 }

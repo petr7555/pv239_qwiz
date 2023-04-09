@@ -36,8 +36,8 @@ class GameCubit extends Cubit<Game?> {
       players: {
         userId: Player(id: userId, route: LobbyPage.routeName),
       },
-      // TODO: initialize game with one question for now
-      questions: [await get<QuestionApiService>().getQuestion()],
+      // TODO: initialize game with questions for now
+      questions: [for (var i = 0; i < 10; i++) await get<QuestionApiService>().getQuestion()],
     );
     return _gameService.createGame(game);
   }
@@ -64,5 +64,9 @@ class GameCubit extends Cubit<Game?> {
 
   Future<void> answerQuestion(String userId, String questionId, int answerIdx) {
     return _gameService.answerQuestion(gameId!, userId, questionId, answerIdx);
+  }
+
+  Future<void> nextQuestion() {
+    return _gameService.nextQuestion(gameId!);
   }
 }

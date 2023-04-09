@@ -49,12 +49,22 @@ class QuestionPage extends StatelessWidget {
           },
         ),
       ],
-      child: BlocBuilder<GameCubit, Game?>(
+      child: BlocConsumer<GameCubit, Game?>(
+        listener: (context, game) {
+          if (game != null) {
+            if (game.currentQuestion.playerAnswers.length == maxPlayers) {
+              context.read<GameCubit>().nextQuestion();
+            }
+          }
+        },
         builder: (context, game) {
           if (game == null) {
             return Center(child: Text('No game in progress'));
           }
           final question = game.currentQuestion;
+          final userId = context.read<AuthCubit>().userId;
+          final thisPlayer = game.thisPlayer(userId);
+          final opponent = game.opponent(userId);
 
           return Center(
             child: Column(
@@ -62,8 +72,8 @@ class QuestionPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('You: 12', style: Theme.of(context).textTheme.titleMedium),
-                    Text('Opponent: 15', style: Theme.of(context).textTheme.titleMedium),
+                    Text('You: ${thisPlayer.points}', style: Theme.of(context).textTheme.titleMedium),
+                    Text('Opponent: ${opponent.points}', style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
                 SizedBox(height: standardGap),
@@ -83,12 +93,15 @@ class QuestionPage extends StatelessWidget {
                 Column(
                   children: [
                     for (var i = 0; i < question.allAnswers.length; i++)
-                      Button(
-                        label: question.allAnswers[i],
-                        onPressed: () {
-                          final userId = context.read<AuthCubit>().userId;
-                          context.read<GameCubit>().answerQuestion(userId, question.id, i);
-                        },
+                      Padding(
+                        padding: EdgeInsets.only(bottom: standardGap),
+                        child: Button(
+                          label: question.allAnswers[i],
+                          onPressed: () {
+                            final userId = context.read<AuthCubit>().userId;
+                            context.read<GameCubit>().answerQuestion(userId, question.id, i);
+                          },
+                        ),
                       ),
                   ],
                 )

@@ -11,8 +11,9 @@ class Game {
   final Map<String, Player> players;
   final String? winnerId;
   final List<Question> questions;
+  final int currentQuestionIdx;
 
-  Question get currentQuestion => questions.last;
+  Question get currentQuestion => questions[currentQuestionIdx];
 
   String opponentId(String userId) => players.values.firstWhere((element) => element.id != userId).id;
 
@@ -30,6 +31,7 @@ class Game {
     required this.players,
     this.winnerId,
     this.questions = const [],
+    this.currentQuestionIdx = 0,
   });
 
   Game copyWith({
@@ -38,6 +40,7 @@ class Game {
     Map<String, Player>? players,
     String? winnerId,
     List<Question>? questions,
+    int? currentQuestionIdx,
   }) {
     return Game(
       id: id ?? this.id,
@@ -45,6 +48,7 @@ class Game {
       players: players ?? this.players,
       winnerId: winnerId ?? this.winnerId,
       questions: questions ?? this.questions,
+      currentQuestionIdx: currentQuestionIdx ?? this.currentQuestionIdx,
     );
   }
 
