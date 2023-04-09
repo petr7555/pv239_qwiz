@@ -1,20 +1,17 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
-import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/game/service/game_service.dart';
+import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:random_string_generator/random_string_generator.dart';
 
 const mockGame = false;
 const mockedGame = Game(
   id: 'game123',
   pointsToWin: 100,
-  players: [
-    Player(id: 'user123', points: 100),
-    Player(id: '2', points: 65),
-  ],
-  gameStatus: GameStatus.inProgress,
+  firstPlayer: Player(id: 'user123', points: 100),
+  secondPlayer: Player(id: '2', points: 65),
   winnerId: 'user123',
 );
 
@@ -33,7 +30,7 @@ class GameCubit extends Cubit<Game?> {
     final game = Game(
       id: get<RandomStringGenerator>().generate(),
       pointsToWin: pointsToWin,
-      players: [Player(id: userId)],
+      firstPlayer: Player(id: userId, route: LobbyPage.routeName),
     );
     return _gameService.createGame(game);
   }
@@ -42,15 +39,19 @@ class GameCubit extends Cubit<Game?> {
     return _gameService.joinGame(gameCode, userId);
   }
 
-  Future<void> leaveGame(String gameCode, String userId) {
-    return _gameService.leaveGame(gameCode, userId);
+  Future<void> deleteGame() {
+    return _gameService.deleteGame(gameId!);
   }
 
-  Future<void> abortGame(String gameId) {
-    return _gameService.abortGame(gameId);
+  Future<void> abortGame() {
+    return _gameService.abortGame(gameId!);
   }
 
   Future<void> startGame() {
     return _gameService.startGame(gameId!);
+  }
+
+  Future<void> resetGame() {
+    return _gameService.resetGame(gameId!);
   }
 }

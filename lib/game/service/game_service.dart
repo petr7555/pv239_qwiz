@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
-import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
+import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
+import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
+import 'package:pv239_qwiz/game/widget/menu_page.dart';
+import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 class GameService {
   final gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
@@ -10,10 +13,12 @@ class GameService {
       );
 
   Stream<Game?> currentGameStream(String userId) {
+    // TODO filter in Firebase
     final gamesUserIsPartOf = gamesCollection
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
-        .map((games) => games.where((game) => game.players.any((player) => player.id == userId)).toList());
+        .map((games) =>
+            games.where((game) => game.firstPlayer.id == userId || game.secondPlayer?.id == userId).toList());
 
     return gamesUserIsPartOf.map((games) {
       if (games.isEmpty) {
@@ -23,12 +28,12 @@ class GameService {
     });
   }
 
-  Future<void> createGame(Game game) {
-    return gamesCollection.doc(game.id).set(game);
-  }
-
   Future<Game?> getGame(String gameId) {
     return gamesCollection.doc(gameId).get().then((value) => value.data());
+  }
+
+  Future<void> createGame(Game game) {
+    return gamesCollection.doc(game.id).set(game);
   }
 
   Future<void> joinGame(String gameId, String userId) async {
@@ -36,34 +41,17 @@ class GameService {
     if (game == null) {
       throw Exception('Cannot join game $gameId because it does not exist');
     }
-    final updatedGame = game.copyWith(players: game.players + [Player(id: userId)], gameStatus: GameStatus.starting);
+    final firstPlayer = game.firstPlayer.copyWith(route: GetReadyPage.routeName);
+    final secondPlayer = Player(id: userId, route: GetReadyPage.routeName);
+    final updatedGame = game.copyWith(
+      firstPlayer: firstPlayer,
+      secondPlayer: secondPlayer,
+    );
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 
-  Future<void> leaveGame(String gameId, String userId) async {
-    final game = await getGame(gameId);
-    if (game == null) {
-      throw Exception('Cannot leave game $gameId because it does not exist');
-    }
-    final newPlayers = game.players.where((element) => element.id != userId).toList();
-    if (newPlayers.isEmpty) {
-      return _deleteGame(gameId);
-    }
-    final updatedGame = game.copyWith(players: newPlayers);
-    return gamesCollection.doc(gameId).set(updatedGame);
-  }
-
-  Future<void> _deleteGame(String gameId) {
+  Future<void> deleteGame(String gameId) {
     return gamesCollection.doc(gameId).delete();
-  }
-
-  Future<void> abortGame(String gameId) async {
-    final game = await getGame(gameId);
-    if (game == null) {
-      throw Exception('Cannot abort game $gameId because it does not exist');
-    }
-    final updatedGame = game.copyWith(gameStatus: GameStatus.aborted);
-    return gamesCollection.doc(gameId).set(updatedGame);
   }
 
   Future<void> startGame(String gameId) async {
@@ -71,7 +59,35 @@ class GameService {
     if (game == null) {
       throw Exception('Cannot start game $gameId because it does not exist');
     }
-    final updatedGame = game.copyWith(gameStatus: GameStatus.inProgress);
+    final updatedGame = game.copyWith(
+      firstPlayer: game.firstPlayer.copyWith(route: QuestionPage.routeName),
+      secondPlayer: game.secondPlayer?.copyWith(route: QuestionPage.routeName),
+    );
+    return gamesCollection.doc(gameId).set(updatedGame);
+  }
+
+  Future<void> abortGame(String gameId) async {
+    final game = await getGame(gameId);
+    if (game == null) {
+      throw Exception('Cannot abort game $gameId because it does not exist');
+    }
+    final updatedGame = game.copyWith(
+      firstPlayer: game.firstPlayer.copyWith(route: AbortedGamePage.routeName),
+      secondPlayer: game.secondPlayer?.copyWith(route: AbortedGamePage.routeName),
+    );
+    return gamesCollection.doc(gameId).set(updatedGame);
+  }
+
+  Future<void> resetGame(String gameId) async {
+    final game = await getGame(gameId);
+    if (game == null) {
+      throw Exception('Cannot reset game $gameId because it does not exist');
+    }
+    // TODO redirect only the person who reset the game
+    final updatedGame = game.copyWith(
+      firstPlayer: game.firstPlayer.copyWith(route: MenuPage.routeName),
+      secondPlayer: game.secondPlayer?.copyWith(route: MenuPage.routeName),
+    );
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 }

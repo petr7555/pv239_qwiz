@@ -52,11 +52,8 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(foregroundColor: Colors.green),
+                    onPressed: context.read<GameCubit>().abortGame,
                     child: Text('Yes'),
-                    onPressed: () {
-                      final gameId = context.read<GameCubit>().state!.id;
-                      context.read<GameCubit>().abortGame(gameId);
-                    },
                   ),
                 ],
               ),

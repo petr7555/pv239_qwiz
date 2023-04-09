@@ -28,7 +28,7 @@ class GetReadyPage extends StatelessWidget {
                 return Text(text, style: Theme.of(context).textTheme.titleLarge);
               },
               interval: Duration(seconds: 1),
-              onFinished: () => context.read<GameCubit>().startGame(),
+              onFinished: context.read<GameCubit>().startGame,
             ),
           ],
         ),

@@ -9,27 +9,17 @@ part of 'game.dart';
 Game _$GameFromJson(Map<String, dynamic> json) => Game(
       id: json['id'] as String,
       pointsToWin: json['pointsToWin'] as int,
-      players: (json['players'] as List<dynamic>)
-          .map((e) => Player.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      gameStatus:
-          $enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']) ??
-              GameStatus.waitingForPlayers,
+      firstPlayer: Player.fromJson(json['firstPlayer'] as Map<String, dynamic>),
+      secondPlayer: json['secondPlayer'] == null
+          ? null
+          : Player.fromJson(json['secondPlayer'] as Map<String, dynamic>),
       winnerId: json['winnerId'] as String?,
     );
 
 Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
       'id': instance.id,
       'pointsToWin': instance.pointsToWin,
-      'players': instance.players.map((e) => e.toJson()).toList(),
-      'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
+      'firstPlayer': instance.firstPlayer.toJson(),
+      'secondPlayer': instance.secondPlayer?.toJson(),
       'winnerId': instance.winnerId,
     };
-
-const _$GameStatusEnumMap = {
-  GameStatus.waitingForPlayers: 'waitingForPlayers',
-  GameStatus.starting: 'starting',
-  GameStatus.inProgress: 'inProgress',
-  GameStatus.finished: 'finished',
-  GameStatus.aborted: 'aborted',
-};

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
@@ -40,13 +39,7 @@ class LobbyPage extends StatelessWidget {
                 SizedBox(height: standardGap),
                 Button(
                   label: 'Cancel',
-                  onPressed: () async {
-                    final userId = context.read<AuthCubit>().userId;
-                    final game = context.read<GameCubit>().state;
-                    if (game != null) {
-                      context.read<GameCubit>().leaveGame(game.id, userId);
-                    }
-                  },
+                  onPressed: context.read<GameCubit>().deleteGame,
                 ),
               ],
             ),

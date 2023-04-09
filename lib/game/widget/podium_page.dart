@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/auth/model/auth_user.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
@@ -8,7 +7,6 @@ import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
-import 'package:pv239_qwiz/game/widget/menu_page.dart';
 
 class PodiumPage extends StatelessWidget {
   const PodiumPage({super.key});
@@ -24,9 +22,11 @@ class PodiumPage extends StatelessWidget {
           if (game == null) {
             return Container();
           }
-          final isWinner = game.winnerId == authUser?.uid;
-          final thisPlayer = game.players.firstWhere((player) => player.id == authUser?.uid);
-          final opponent = game.players.firstWhere((player) => player.id != authUser?.uid);
+          final userId = authUser!.uid;
+          final isWinner = game.winnerId == userId;
+          final thisPlayer = game.thisPlayer(userId)!;
+          final otherPlayer = game.otherPlayer(userId)!;
+
           return Column(
             children: [
               SizedBox(height: standardGap),
@@ -37,13 +37,13 @@ class PodiumPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _buildBar(context, 'You', thisPlayer.points, isWinner),
-                  _buildBar(context, 'Opponent', opponent.points, !isWinner),
+                  _buildBar(context, 'Opponent', otherPlayer.points, !isWinner),
                 ],
               ),
               SizedBox(height: largeGap),
               Button(
                 label: 'Back to menu',
-                onPressed: () => context.go(MenuPage.routeName),
+                onPressed: () => context.read<GameCubit>().resetGame(),
               ),
             ],
           );

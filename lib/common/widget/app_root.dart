@@ -86,30 +86,14 @@ class AppRoot extends StatelessWidget {
 
                   final gameActive = gameCubit.state != null;
                   if (gameActive) {
-                    final gameWaitingForPlayers = gameCubit.state?.gameStatus == GameStatus.waitingForPlayers;
-                    if (gameWaitingForPlayers) {
-                      return redirectIfNotThere(state, LobbyPage.routeName);
-                    }
+                    final userId = authCubit.state!.uid;
+                    final game = gameCubit.state!;
+                    final thisPlayer = game.thisPlayer(userId)!;
+                    return redirectIfNotThere(state, thisPlayer.route);
+                  }
 
-                    final gameStarting = gameCubit.state?.gameStatus == GameStatus.starting;
-                    if (gameStarting) {
-                      return redirectIfNotThere(state, GetReadyPage.routeName);
-                    }
-
-                    final gameInProgress = gameCubit.state?.gameStatus == GameStatus.inProgress;
-                    if (gameInProgress) {
-                      return redirectIfNotThere(state, QuestionPage.routeName);
-                    }
-
-                    final gameFinished = gameCubit.state?.gameStatus == GameStatus.finished;
-                    if (gameFinished) {
-                      return redirectIfNotThere(state, PodiumPage.routeName);
-                    }
-
-                    final gameAborted = gameCubit.state?.gameStatus == GameStatus.aborted;
-                    if (gameAborted) {
-                      return redirectIfNotThere(state, AbortedGamePage.routeName);
-                    }
+                  if (!gameActive && state.subloc == LobbyPage.routeName) {
+                    return MenuPage.routeName;
                   }
 
                   return null;

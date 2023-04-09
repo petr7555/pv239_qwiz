@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
-import 'package:pv239_qwiz/game/widget/menu_page.dart';
+import 'package:pv239_qwiz/game/service/game_cubit.dart';
 
 class AbortedGamePage extends StatelessWidget {
   const AbortedGamePage({super.key});
@@ -21,7 +21,7 @@ class AbortedGamePage extends StatelessWidget {
             SizedBox(height: standardGap),
             Button(
               label: 'Back to menu',
-              onPressed: () => context.go(MenuPage.routeName),
+              onPressed: context.read<GameCubit>().resetGame,
             )
           ],
         ),

@@ -34,7 +34,7 @@ class JoinGameFormBloc extends FormBloc<String, String> {
     if (game == null) {
       return 'Game with code $gameCode does not exist';
     }
-    if (game.players.length >= maxPlayers) {
+    if (game.secondPlayer != null) {
       return 'Game with code $gameCode is full';
     }
     return null;

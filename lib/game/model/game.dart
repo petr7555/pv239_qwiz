@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 
 part 'game.g.dart';
@@ -8,30 +7,44 @@ part 'game.g.dart';
 class Game {
   final String id;
   final int pointsToWin;
-  final List<Player> players;
-  final GameStatus gameStatus;
+  final Player firstPlayer;
+  final Player? secondPlayer;
   final String? winnerId;
+
+  Player? thisPlayer(String userId) {
+    if (firstPlayer.id == userId) {
+      return firstPlayer;
+    }
+    return secondPlayer;
+  }
+
+  Player? otherPlayer(String userId) {
+    if (firstPlayer.id == userId) {
+      return secondPlayer;
+    }
+    return firstPlayer;
+  }
 
   const Game({
     required this.id,
     required this.pointsToWin,
-    required this.players,
-    this.gameStatus = GameStatus.waitingForPlayers,
+    required this.firstPlayer,
+    this.secondPlayer,
     this.winnerId,
   });
 
   Game copyWith({
     String? id,
     int? pointsToWin,
-    List<Player>? players,
-    GameStatus? gameStatus,
+    Player? firstPlayer,
+    Player? secondPlayer,
     String? winnerId,
   }) {
     return Game(
       id: id ?? this.id,
       pointsToWin: pointsToWin ?? this.pointsToWin,
-      players: players ?? this.players,
-      gameStatus: gameStatus ?? this.gameStatus,
+      firstPlayer: firstPlayer ?? this.firstPlayer,
+      secondPlayer: secondPlayer ?? this.secondPlayer,
       winnerId: winnerId ?? this.winnerId,
     );
   }
