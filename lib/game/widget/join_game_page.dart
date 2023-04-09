@@ -34,6 +34,7 @@ class JoinGamePage extends StatelessWidget {
                 children: [
                   SingleChildScrollView(
                     child: TextFieldBlocBuilder(
+                      autofocus: true,
                       textFieldBloc: formBloc.gameCodeField,
                       suffixButton: SuffixButton.asyncValidating,
                       decoration: InputDecoration(
