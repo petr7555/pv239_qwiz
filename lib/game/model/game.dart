@@ -8,32 +8,26 @@ part 'game.g.dart';
 class Game {
   final String id;
   final int pointsToWin;
-  final Player firstPlayer;
-  final Player? secondPlayer;
+  final Map<String, Player> players;
   final String? winnerId;
   final List<Question> questions;
 
   Question get currentQuestion => questions.last;
 
-  Player? thisPlayer(String userId) {
-    if (firstPlayer.id == userId) {
-      return firstPlayer;
-    }
-    return secondPlayer;
+  String opponentId(String userId) => players.values.firstWhere((element) => element.id != userId).id;
+
+  Player thisPlayer(String userId) {
+    return players[userId]!;
   }
 
-  Player? otherPlayer(String userId) {
-    if (firstPlayer.id == userId) {
-      return secondPlayer;
-    }
-    return firstPlayer;
+  Player opponent(String userId) {
+    return players[opponentId(userId)]!;
   }
 
   const Game({
     required this.id,
     required this.pointsToWin,
-    required this.firstPlayer,
-    this.secondPlayer,
+    required this.players,
     this.winnerId,
     this.questions = const [],
   });
@@ -41,16 +35,14 @@ class Game {
   Game copyWith({
     String? id,
     int? pointsToWin,
-    Player? firstPlayer,
-    Player? secondPlayer,
+    Map<String, Player>? players,
     String? winnerId,
     List<Question>? questions,
   }) {
     return Game(
       id: id ?? this.id,
       pointsToWin: pointsToWin ?? this.pointsToWin,
-      firstPlayer: firstPlayer ?? this.firstPlayer,
-      secondPlayer: secondPlayer ?? this.secondPlayer,
+      players: players ?? this.players,
       winnerId: winnerId ?? this.winnerId,
       questions: questions ?? this.questions,
     );

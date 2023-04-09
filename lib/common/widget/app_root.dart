@@ -87,7 +87,7 @@ class AppRoot extends StatelessWidget {
                   if (gameActive) {
                     final userId = authCubit.state!.uid;
                     final game = gameCubit.state!;
-                    final thisPlayer = game.thisPlayer(userId)!;
+                    final thisPlayer = game.thisPlayer(userId);
                     return redirectIfNotThere(state, thisPlayer.route);
                   }
 

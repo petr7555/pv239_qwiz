@@ -24,8 +24,8 @@ class PodiumPage extends StatelessWidget {
           }
           final userId = authUser!.uid;
           final isWinner = game.winnerId == userId;
-          final thisPlayer = game.thisPlayer(userId)!;
-          final otherPlayer = game.otherPlayer(userId)!;
+          final thisPlayer = game.thisPlayer(userId);
+          final opponent = game.opponent(userId);
 
           return Column(
             children: [
@@ -37,7 +37,7 @@ class PodiumPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _buildBar(context, 'You', thisPlayer.points, isWinner),
-                  _buildBar(context, 'Opponent', otherPlayer.points, !isWinner),
+                  _buildBar(context, 'Opponent', opponent.points, !isWinner),
                 ],
               ),
               SizedBox(height: largeGap),

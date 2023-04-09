@@ -30,11 +30,10 @@ class JoinGameFormBloc extends FormBloc<String, String> {
   }
 
   Future<String?> _checkGameExistsAndNotFull(String gameCode) async {
-    final game = await get<GameService>().getGame(gameCode);
-    if (game == null) {
+    if (!(await get<GameService>().gameExists(gameCode))) {
       return 'Game with code $gameCode does not exist';
     }
-    if (game.secondPlayer != null) {
+    if (await get<GameService>().gameIsFull(gameCode)) {
       return 'Game with code $gameCode is full';
     }
     return null;

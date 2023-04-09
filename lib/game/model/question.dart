@@ -8,33 +8,29 @@ class Question {
   final String question;
   final int correctAnswerIdx;
   final List<String> allAnswers;
-  final int? firstPlayerAnswerIdx;
-  final int? secondPlayerAnswerIdx;
+  final Map<String, int> playerAnswers;
 
   const Question({
     required this.id,
     required this.question,
     required this.correctAnswerIdx,
     required this.allAnswers,
-    this.firstPlayerAnswerIdx,
-    this.secondPlayerAnswerIdx,
+    this.playerAnswers = const {},
   });
-  
+
   Question copyWith({
     String? id,
     String? question,
     int? correctAnswerIdx,
     List<String>? allAnswers,
-    int? firstPlayerAnswerIdx,
-    int? secondPlayerAnswerIdx,
+    Map<String, int>? playerAnswers,
   }) {
     return Question(
       id: id ?? this.id,
       question: question ?? this.question,
       correctAnswerIdx: correctAnswerIdx ?? this.correctAnswerIdx,
       allAnswers: allAnswers ?? this.allAnswers,
-      firstPlayerAnswerIdx: firstPlayerAnswerIdx ?? this.firstPlayerAnswerIdx,
-      secondPlayerAnswerIdx: secondPlayerAnswerIdx ?? this.secondPlayerAnswerIdx,
+      playerAnswers: playerAnswers ?? this.playerAnswers,
     );
   }
 

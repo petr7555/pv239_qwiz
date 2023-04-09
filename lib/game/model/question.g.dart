@@ -13,8 +13,10 @@ Question _$QuestionFromJson(Map<String, dynamic> json) => Question(
       allAnswers: (json['allAnswers'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      firstPlayerAnswerIdx: json['firstPlayerAnswerIdx'] as int?,
-      secondPlayerAnswerIdx: json['secondPlayerAnswerIdx'] as int?,
+      playerAnswers: (json['playerAnswers'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as int),
+          ) ??
+          const {},
     );
 
 Map<String, dynamic> _$QuestionToJson(Question instance) => <String, dynamic>{
@@ -22,6 +24,5 @@ Map<String, dynamic> _$QuestionToJson(Question instance) => <String, dynamic>{
       'question': instance.question,
       'correctAnswerIdx': instance.correctAnswerIdx,
       'allAnswers': instance.allAnswers,
-      'firstPlayerAnswerIdx': instance.firstPlayerAnswerIdx,
-      'secondPlayerAnswerIdx': instance.secondPlayerAnswerIdx,
+      'playerAnswers': instance.playerAnswers,
     };

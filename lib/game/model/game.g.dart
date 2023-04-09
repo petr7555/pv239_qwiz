@@ -9,17 +9,20 @@ part of 'game.dart';
 Game _$GameFromJson(Map<String, dynamic> json) => Game(
       id: json['id'] as String,
       pointsToWin: json['pointsToWin'] as int,
-      firstPlayer: Player.fromJson(json['firstPlayer'] as Map<String, dynamic>),
-      secondPlayer: json['secondPlayer'] == null
-          ? null
-          : Player.fromJson(json['secondPlayer'] as Map<String, dynamic>),
+      players: (json['players'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, Player.fromJson(e as Map<String, dynamic>)),
+      ),
       winnerId: json['winnerId'] as String?,
+      questions: (json['questions'] as List<dynamic>?)
+              ?.map((e) => Question.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
       'id': instance.id,
       'pointsToWin': instance.pointsToWin,
-      'firstPlayer': instance.firstPlayer.toJson(),
-      'secondPlayer': instance.secondPlayer?.toJson(),
+      'players': instance.players.map((k, e) => MapEntry(k, e.toJson())),
       'winnerId': instance.winnerId,
+      'questions': instance.questions.map((e) => e.toJson()).toList(),
     };
