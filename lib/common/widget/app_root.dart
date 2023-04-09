@@ -16,6 +16,7 @@ import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:pv239_qwiz/game/widget/menu_page.dart';
+import 'package:pv239_qwiz/game/widget/podium_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 class AppRoot extends StatelessWidget {
@@ -112,6 +113,10 @@ class AppRoot extends StatelessWidget {
                   GoRoute(
                     path: QuestionPage.routeName,
                     builder: (context, state) => QuestionPage(),
+                  ),
+                  GoRoute(
+                    path: PodiumPage.routeName,
+                    builder: (context, state) => PodiumPage(),
                   ),
                 ],
               ),

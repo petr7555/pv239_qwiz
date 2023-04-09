@@ -4,7 +4,7 @@ class AuthUser {
   final String? displayName;
   final String? photoURL;
 
-  AuthUser({
+  const AuthUser({
     required this.uid,
     this.email,
     this.displayName,

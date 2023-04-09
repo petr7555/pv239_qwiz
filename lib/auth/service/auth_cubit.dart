@@ -4,8 +4,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pv239_qwiz/auth/model/auth_user.dart';
 import 'package:pv239_qwiz/main.dart';
 
-const mockAuth = false;
-AuthUser mockedUser = AuthUser(uid: '123', displayName: 'John Doe', email: 'john@gmail.com');
+const mockAuth = true;
+const mockedUser = AuthUser(
+  uid: 'user123',
+  displayName: 'John Doe',
+  email: 'john@gmail.com',
+);
 
 class AuthCubit extends Cubit<AuthUser?> {
   AuthCubit() : super(mockAuth ? mockedUser : null) {

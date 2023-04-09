@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:linear_timer/linear_timer.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
@@ -7,6 +10,7 @@ import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/handling_future_builder.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
+import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/service/question_api_service.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -31,6 +35,39 @@ class _QuestionPageState extends State<QuestionPage> {
   Widget build(BuildContext context) {
     return PageTemplate(
       title: 'Question',
+      actions: [
+        IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Are you sure you want to quit?'),
+                actions: [
+                  TextButton(
+                    style: TextButton.styleFrom(foregroundColor: Colors.red),
+                    child: Text('No'),
+                    onPressed: () {
+                      context.pop();
+                    },
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(foregroundColor: Colors.green),
+                    child: Text('Yes'),
+                    onPressed: () {
+                      final userId = context.read<AuthCubit>().userId;
+                      final gameId = context.read<GameCubit>().state!.id;
+                      context.read<GameCubit>().leaveGame(gameId, userId);
+                      // context.pop();
+                      // context.go(MenuPage.routeName);
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
       child: HandlingFutureBuilder<Question>(
         future: futureQuestion,
         builder: (context, question) {

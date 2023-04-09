@@ -1,14 +1,27 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
+import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/game/service/game_service.dart';
 import 'package:random_string_generator/random_string_generator.dart';
 
+const mockGame = true;
+const mockedGame = Game(
+  id: 'game123',
+  pointsToWin: 100,
+  players: [
+    Player(id: 'user123', points: 100),
+    Player(id: '2', points: 65),
+  ],
+  gameStatus: GameStatus.inProgress,
+  winnerId: 'user123',
+);
+
 class GameCubit extends Cubit<Game?> {
   final _gameService = get<GameService>();
 
-  GameCubit() : super(null);
+  GameCubit() : super(mockGame ? mockedGame : null);
 
   void startListening(String userId) {
     _gameService.currentGameStream(userId).listen((game) => emit(game));

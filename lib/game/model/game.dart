@@ -10,12 +10,14 @@ class Game {
   final int pointsToWin;
   final List<Player> players;
   final GameStatus gameStatus;
+  final String? winnerId;
 
   const Game({
     required this.id,
     required this.pointsToWin,
     required this.players,
     this.gameStatus = GameStatus.notStarted,
+    this.winnerId,
   });
 
   Game copyWith({
@@ -23,12 +25,14 @@ class Game {
     int? pointsToWin,
     List<Player>? players,
     GameStatus? gameStatus,
+    String? winnerId,
   }) {
     return Game(
       id: id ?? this.id,
       pointsToWin: pointsToWin ?? this.pointsToWin,
       players: players ?? this.players,
       gameStatus: gameStatus ?? this.gameStatus,
+      winnerId: winnerId ?? this.winnerId,
     );
   }
 
