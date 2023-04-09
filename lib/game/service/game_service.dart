@@ -66,27 +66,30 @@ class GameService {
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 
-  Future<void> abortGame(String gameId) async {
+  Future<void> abortGame(String gameId, String userId) async {
     final game = await getGame(gameId);
     if (game == null) {
       throw Exception('Cannot abort game $gameId because it does not exist');
     }
+    final isFirstPlayer = game.firstPlayer.id == userId;
+    final redirectOfFirstPlayer = isFirstPlayer ? MenuPage.routeName : AbortedGamePage.routeName;
+    final redirectOfSecondPlayer = isFirstPlayer ? AbortedGamePage.routeName : MenuPage.routeName;
     final updatedGame = game.copyWith(
-      firstPlayer: game.firstPlayer.copyWith(route: AbortedGamePage.routeName),
-      secondPlayer: game.secondPlayer?.copyWith(route: AbortedGamePage.routeName),
+      firstPlayer: game.firstPlayer.copyWith(route: redirectOfFirstPlayer),
+      secondPlayer: game.secondPlayer?.copyWith(route: redirectOfSecondPlayer),
     );
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 
-  Future<void> resetGame(String gameId) async {
+  Future<void> resetGame(String gameId, String userId) async {
     final game = await getGame(gameId);
     if (game == null) {
       throw Exception('Cannot reset game $gameId because it does not exist');
     }
-    // TODO redirect only the person who reset the game
+    final isFirstPlayer = game.firstPlayer.id == userId;
     final updatedGame = game.copyWith(
-      firstPlayer: game.firstPlayer.copyWith(route: MenuPage.routeName),
-      secondPlayer: game.secondPlayer?.copyWith(route: MenuPage.routeName),
+      firstPlayer: isFirstPlayer ? game.firstPlayer.copyWith(route: MenuPage.routeName) : game.firstPlayer,
+      secondPlayer: isFirstPlayer ? game.secondPlayer : game.secondPlayer?.copyWith(route: MenuPage.routeName),
     );
     return gamesCollection.doc(gameId).set(updatedGame);
   }

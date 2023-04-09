@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_timer/linear_timer.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
@@ -52,7 +53,10 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(foregroundColor: Colors.green),
-                    onPressed: context.read<GameCubit>().abortGame,
+                    onPressed: () {
+                      final userId = context.read<AuthCubit>().userId;
+                      context.read<GameCubit>().abortGame(userId);
+                    },
                     child: Text('Yes'),
                   ),
                 ],

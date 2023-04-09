@@ -43,15 +43,15 @@ class GameCubit extends Cubit<Game?> {
     return _gameService.deleteGame(gameId!);
   }
 
-  Future<void> abortGame() {
-    return _gameService.abortGame(gameId!);
+  Future<void> abortGame(String userId) {
+    return _gameService.abortGame(gameId!, userId);
   }
 
   Future<void> startGame() {
     return _gameService.startGame(gameId!);
   }
 
-  Future<void> resetGame() {
-    return _gameService.resetGame(gameId!);
+  Future<void> resetGame(String userId) {
+    return _gameService.resetGame(gameId!, userId);
   }
 }

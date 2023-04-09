@@ -43,7 +43,10 @@ class PodiumPage extends StatelessWidget {
               SizedBox(height: largeGap),
               Button(
                 label: 'Back to menu',
-                onPressed: () => context.read<GameCubit>().resetGame(),
+                onPressed: () {
+                  final userId = context.read<AuthCubit>().userId;
+                  context.read<GameCubit>().resetGame(userId);
+                },
               ),
             ],
           );
