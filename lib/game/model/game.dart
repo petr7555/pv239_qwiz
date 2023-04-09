@@ -16,7 +16,7 @@ class Game {
     required this.id,
     required this.pointsToWin,
     required this.players,
-    this.gameStatus = GameStatus.notStarted,
+    this.gameStatus = GameStatus.waitingForPlayers,
     this.winnerId,
   });
 

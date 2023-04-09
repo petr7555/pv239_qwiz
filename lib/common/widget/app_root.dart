@@ -11,6 +11,7 @@ import 'package:pv239_qwiz/common/util/go_router_refresh_stream.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/game/model/game_status.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
+import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
@@ -18,6 +19,13 @@ import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:pv239_qwiz/game/widget/menu_page.dart';
 import 'package:pv239_qwiz/game/widget/podium_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
+
+String? redirectIfNotThere(GoRouterState state, String routeName) {
+  if (state.subloc != routeName) {
+    return routeName;
+  }
+  return null;
+}
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
@@ -68,18 +76,41 @@ class AppRoot extends StatelessWidget {
               ),
               routerConfig: GoRouter(
                 redirect: (context, state) {
-                  final loggedIn = authCubit.isSignedIn();
-                  final loggingIn = state.subloc == SignInPage.routeName;
-
-                  if (!loggedIn && loggingIn) return null;
-                  if (!loggedIn && !loggingIn) return SignInPage.routeName;
+                  final signedIn = authCubit.isSignedIn();
+                  if (!signedIn) {
+                    return redirectIfNotThere(state, SignInPage.routeName);
+                  }
+                  if (state.subloc == SignInPage.routeName) {
+                    return MenuPage.routeName;
+                  }
 
                   final gameActive = gameCubit.state != null;
-                  if (loggedIn && loggingIn && !gameActive) return MenuPage.routeName;
-                  final inMenu = state.subloc == MenuPage.routeName;
-                  final gameInProgress = gameCubit.state?.gameStatus == GameStatus.inProgress;
-                  if (loggedIn && inMenu && gameActive && !gameInProgress) return LobbyPage.routeName;
-                  if (loggedIn && inMenu && gameActive && gameInProgress) return QuestionPage.routeName;
+                  if (gameActive) {
+                    final gameWaitingForPlayers = gameCubit.state?.gameStatus == GameStatus.waitingForPlayers;
+                    if (gameWaitingForPlayers) {
+                      return redirectIfNotThere(state, LobbyPage.routeName);
+                    }
+
+                    final gameStarting = gameCubit.state?.gameStatus == GameStatus.starting;
+                    if (gameStarting) {
+                      return redirectIfNotThere(state, GetReadyPage.routeName);
+                    }
+
+                    final gameInProgress = gameCubit.state?.gameStatus == GameStatus.inProgress;
+                    if (gameInProgress) {
+                      return redirectIfNotThere(state, QuestionPage.routeName);
+                    }
+
+                    final gameFinished = gameCubit.state?.gameStatus == GameStatus.finished;
+                    if (gameFinished) {
+                      return redirectIfNotThere(state, PodiumPage.routeName);
+                    }
+
+                    final gameAborted = gameCubit.state?.gameStatus == GameStatus.aborted;
+                    if (gameAborted) {
+                      return redirectIfNotThere(state, AbortedGamePage.routeName);
+                    }
+                  }
 
                   return null;
                 },
@@ -117,6 +148,10 @@ class AppRoot extends StatelessWidget {
                   GoRoute(
                     path: PodiumPage.routeName,
                     builder: (context, state) => PodiumPage(),
+                  ),
+                  GoRoute(
+                    path: AbortedGamePage.routeName,
+                    builder: (context, state) => AbortedGamePage(),
                   ),
                 ],
               ),

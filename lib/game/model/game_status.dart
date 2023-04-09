@@ -1,5 +1,7 @@
 enum GameStatus {
-  notStarted,
+  waitingForPlayers,
+  starting,
   inProgress,
   finished,
+  aborted,
 }

@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pv239_qwiz/auth/model/auth_user.dart';
 import 'package:pv239_qwiz/main.dart';
 
-const mockAuth = true;
+const mockAuth = false;
 const mockedUser = AuthUser(
   uid: 'user123',
   displayName: 'John Doe',

@@ -36,7 +36,7 @@ class GameService {
     if (game == null) {
       throw Exception('Cannot join game $gameId because it does not exist');
     }
-    final updatedGame = game.copyWith(players: game.players + [Player(id: userId)], gameStatus: GameStatus.inProgress);
+    final updatedGame = game.copyWith(players: game.players + [Player(id: userId)], gameStatus: GameStatus.starting);
     return gamesCollection.doc(gameId).set(updatedGame);
   }
 
@@ -55,5 +55,23 @@ class GameService {
 
   Future<void> _deleteGame(String gameId) {
     return gamesCollection.doc(gameId).delete();
+  }
+
+  Future<void> abortGame(String gameId) async {
+    final game = await getGame(gameId);
+    if (game == null) {
+      throw Exception('Cannot abort game $gameId because it does not exist');
+    }
+    final updatedGame = game.copyWith(gameStatus: GameStatus.aborted);
+    return gamesCollection.doc(gameId).set(updatedGame);
+  }
+
+  Future<void> startGame(String gameId) async {
+    final game = await getGame(gameId);
+    if (game == null) {
+      throw Exception('Cannot start game $gameId because it does not exist');
+    }
+    final updatedGame = game.copyWith(gameStatus: GameStatus.inProgress);
+    return gamesCollection.doc(gameId).set(updatedGame);
   }
 }

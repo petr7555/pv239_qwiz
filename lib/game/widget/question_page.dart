@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_timer/linear_timer.dart';
-import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
@@ -55,11 +54,8 @@ class _QuestionPageState extends State<QuestionPage> {
                     style: TextButton.styleFrom(foregroundColor: Colors.green),
                     child: Text('Yes'),
                     onPressed: () {
-                      final userId = context.read<AuthCubit>().userId;
                       final gameId = context.read<GameCubit>().state!.id;
-                      context.read<GameCubit>().leaveGame(gameId, userId);
-                      // context.pop();
-                      // context.go(MenuPage.routeName);
+                      context.read<GameCubit>().abortGame(gameId);
                     },
                   ),
                 ],

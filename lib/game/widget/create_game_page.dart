@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
@@ -10,7 +9,6 @@ import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/service/form_bloc/create_game_form_bloc.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
-import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 
 class CreateGamePage extends StatelessWidget {
   const CreateGamePage({super.key});
@@ -31,11 +29,7 @@ class CreateGamePage extends StatelessWidget {
                 context.loaderOverlay.show();
                 final pointsToWin = int.parse(formBloc.pointsToWinField.value);
                 final userId = context.read<AuthCubit>().userId;
-                context
-                    .read<GameCubit>()
-                    .createGame(pointsToWin, userId)
-                    .whenComplete(context.loaderOverlay.hide)
-                    .then((_) => context.go(LobbyPage.routeName));
+                context.read<GameCubit>().createGame(pointsToWin, userId).whenComplete(context.loaderOverlay.hide);
               },
               child: Column(
                 children: [

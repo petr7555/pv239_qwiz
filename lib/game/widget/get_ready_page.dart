@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
-import 'package:pv239_qwiz/game/widget/question_page.dart';
+import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 class GetReadyPage extends StatelessWidget {
@@ -28,9 +28,7 @@ class GetReadyPage extends StatelessWidget {
                 return Text(text, style: Theme.of(context).textTheme.titleLarge);
               },
               interval: Duration(seconds: 1),
-              onFinished: () {
-                context.go(QuestionPage.routeName);
-              },
+              onFinished: () => context.read<GameCubit>().startGame(),
             ),
           ],
         ),
