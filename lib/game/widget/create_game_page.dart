@@ -39,6 +39,8 @@ class CreateGamePage extends StatelessWidget {
                       decoration: InputDecoration(
                         label: Text('Number of points to win (min: $pointsToWinMin, max: $pointsToWinMax)'),
                       ),
+                      autofocus: true,
+                      onSubmitted: (_) => formBloc.submit(),
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
