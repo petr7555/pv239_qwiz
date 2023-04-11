@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/button.dart';
@@ -23,8 +24,12 @@ class JoinGamePage extends StatelessWidget {
             final formBloc = context.read<JoinGameFormBloc>();
             return FormBlocListener<JoinGameFormBloc, String, String>(
               onSuccess: (context, state) {
+                context.loaderOverlay.show();
                 final userId = context.read<AuthCubit>().userId;
-                context.read<GameCubit>().joinGame(formBloc.gameCodeField.value, userId);
+                context
+                    .read<GameCubit>()
+                    .joinGame(formBloc.gameCodeField.value, userId)
+                    .whenComplete(context.loaderOverlay.hide);
               },
               child: Column(
                 children: [
