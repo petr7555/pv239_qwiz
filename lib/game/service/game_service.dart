@@ -109,37 +109,50 @@ class GameService {
   }
 
   Future<void> setAnswerTimerEnded(String gameId, String userId, String questionId) async {
-    final game = await _getGame(gameId);
-    final questionIdx = game.questions.indexWhere((question) => question.id == questionId);
-    final question = game.questions[questionIdx];
-    final interaction = question.interactions[userId]!;
-    question.interactions[userId] = interaction.copyWith(answerTimerEnded: true);
-    game.questions[questionIdx] = question;
-    var updatedGame = game.copyWith(questions: game.questions);
+    // runTransaction
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      final game = await transaction.get(gamesCollection.doc(gameId)).then((value) => value.data()!);
+      final questionIdx = game.questions.indexWhere((question) => question.id == questionId);
+      final question = game.questions[questionIdx];
+      final interaction = question.interactions[userId]!;
+      question.interactions[userId] = interaction.copyWith(answerTimerEnded: true);
+      game.questions[questionIdx] = question;
+      var updatedGame = game.copyWith(questions: game.questions);
 
-    if (question.answerTimersEnded) {
-      for (final key in game.players.keys) {
-        game.players[key] = game.players[key]!.copyWith(viewResults: true);
+      if (question.answerTimersEnded) {
+        print('SERVICE: Both answer timers ended');
+        for (final key in game.players.keys) {
+          game.players[key] = game.players[key]!.copyWith(viewResults: true);
+        }
       }
-    }
 
-    return gamesCollection.doc(gameId).set(updatedGame);
+      return transaction.set(gamesCollection.doc(gameId), updatedGame);
+    }).then(
+      (value) => print('setAnswerTimerEnded DocumentSnapshot successfully updated!'),
+      onError: (e) => print('setAnswerTimerEnded Error updating document $e'),
+    );
   }
 
   Future<void> setResultTimerEnded(String gameId, String userId, String questionId) async {
-    final game = await _getGame(gameId);
-    final questionIdx = game.questions.indexWhere((question) => question.id == questionId);
-    final question = game.questions[questionIdx];
-    final interaction = question.interactions[userId]!;
-    question.interactions[userId] = interaction.copyWith(resultTimerEnded: true);
-    game.questions[questionIdx] = question;
-    var updatedGame = game.copyWith(questions: game.questions);
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      final game = await transaction.get(gamesCollection.doc(gameId)).then((value) => value.data()!);
+      final questionIdx = game.questions.indexWhere((question) => question.id == questionId);
+      final question = game.questions[questionIdx];
+      final interaction = question.interactions[userId]!;
+      question.interactions[userId] = interaction.copyWith(resultTimerEnded: true);
+      game.questions[questionIdx] = question;
+      var updatedGame = game.copyWith(questions: game.questions);
 
-    if (question.resultTimersEnded) {
-      updatedGame = await _addNextQuestion(updatedGame);
-    }
+      if (question.resultTimersEnded) {
+        print('SERVICE: Both result timers ended, getting next question');
+        updatedGame = await _addNextQuestion(updatedGame);
+      }
 
-    return gamesCollection.doc(gameId).set(updatedGame);
+      return transaction.set(gamesCollection.doc(gameId), updatedGame);
+    }).then(
+      (value) => print('setResultTimerEnded DocumentSnapshot successfully updated!'),
+      onError: (e) => print('setResultTimerEnded Error updating document $e'),
+    );
   }
 
   Future<Game> _addNextQuestion(Game game) async {

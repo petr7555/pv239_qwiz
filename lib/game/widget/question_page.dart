@@ -20,12 +20,30 @@ class QuestionPage extends StatefulWidget {
   State<QuestionPage> createState() => _QuestionPageState();
 }
 
+enum StateOfQuestion { initial, answering, showingResult }
+
 class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMixin {
-  late LinearTimerController timerController = LinearTimerController(this);
+  late LinearTimerController answerTimerController = LinearTimerController(this);
+  var stateOfQuestion = StateOfQuestion.initial;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () {
+      if (stateOfQuestion == StateOfQuestion.initial) {
+        setState(() {
+          print('INIT: Starting answer timer');
+          stateOfQuestion = StateOfQuestion.answering;
+          answerTimerController.start(restart: true);
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
-    timerController.dispose();
+    answerTimerController.dispose();
     super.dispose();
   }
 
@@ -64,22 +82,30 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
         ),
       ],
       child: BlocConsumer<GameCubit, Game?>(
-        listener: (context, game) {
+        listener: (context, game) async {
           final userId = context.read<AuthCubit>().userId;
 
           if (game != null) {
-            if (game.players[userId]!.nextQuestion) {
-              context.read<GameCubit>().setNextQuestionFalse(userId);
-              timerController.start(restart: true);
+            if (!game.currentQuestion.resultTimersEnded &&
+                !game.currentQuestion.answerTimersEnded &&
+                stateOfQuestion == StateOfQuestion.showingResult) {
+              print('LISTENER: Result timers ended, StateOfQuestion.showingResult');
+              setState(() {
+                print('LISTENER: Starting answer timer');
+                stateOfQuestion = StateOfQuestion.answering;
+                answerTimerController.start(restart: true);
+              });
             }
 
-            if (game.players[userId]!.viewResults) {
-              context.read<GameCubit>().setViewResultsFalse(userId);
-              final questionId = game.currentQuestion.id;
-              print('You have 5 seconds to view the result');
-              Future.delayed(Duration(seconds: 5), () {
-                print('Time to view results is over');
-                context.read<GameCubit>().setResultTimerEnded(userId, questionId);
+            if (game.currentQuestion.answerTimersEnded && stateOfQuestion == StateOfQuestion.answering) {
+              print('LISTENER: Answer timers ended, StateOfQuestion.answering');
+              setState(() {
+                stateOfQuestion = StateOfQuestion.showingResult;
+              });
+              print('LISTENER: Starting result timer');
+              Future.delayed(Duration(seconds: 10), () {
+                print('LISTENER: Result timer ended');
+                context.read<GameCubit>().setResultTimerEnded(userId, game.currentQuestion.id);
               });
             }
           }
@@ -108,12 +134,15 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   child: LinearTimer(
-                    controller: timerController,
+                    controller: answerTimerController,
                     duration: Duration(seconds: secondsForQuestion),
                     forward: false,
                     minHeight: 20,
                     color: secondaryColor,
-                    onTimerEnd: () => context.read<GameCubit>().setAnswerTimerEnded(userId, question.id),
+                    onTimerEnd: () {
+                      print('BUILDER: Answer timer ended');
+                      context.read<GameCubit>().setAnswerTimerEnded(userId, question.id);
+                    },
                   ),
                 ),
                 SizedBox(height: standardGap),
@@ -131,9 +160,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                             isSelected: isSelected, isCorrect: isCorrect, answerTimersEnded: answerTimersEnded),
                         label: answer,
                         onPressed: () {
-                          setState(() {
-                            timerController.start();
-                          });
                           final userId = context.read<AuthCubit>().userId;
                           context.read<GameCubit>().answerQuestion(userId, question.id, index);
                         },
