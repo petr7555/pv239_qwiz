@@ -11,14 +11,16 @@ import 'package:pv239_qwiz/game/widget/menu_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 class GameService {
-  final gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
+  final _db = FirebaseFirestore.instance;
+
+  final _gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
         fromFirestore: (snapshot, _) => Game.fromJson(snapshot.data()!),
         toFirestore: (model, _) => model.toJson(),
       );
 
   Stream<Game?> currentGameStream(String userId) {
     // TODO filter in Firebase
-    final gamesUserIsPartOf = gamesCollection
+    final gamesUserIsPartOf = _gamesCollection
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
         .map((games) => games.where((game) {
@@ -35,7 +37,7 @@ class GameService {
   }
 
   Future<bool> gameExists(String gameId) {
-    return gamesCollection.doc(gameId).get().then((value) => value.exists);
+    return _gameDocRef(gameId).get().then((value) => value.exists);
   }
 
   Future<bool> gameIsFull(String gameId) async {
@@ -43,92 +45,106 @@ class GameService {
     return game.players.length == maxPlayers;
   }
 
-  Future<Game> _getGame(String gameId) {
-    return gamesCollection.doc(gameId).get().then((value) => value.data()!);
-  }
-
   Future<void> createGame(Game game) {
-    return gamesCollection.doc(game.id).set(game);
+    return _gameDocRef(game.id).set(game);
   }
 
-  Future<void> joinGame(String gameId, String userId) async {
-    final game = await _getGame(gameId);
-    game.players[userId] = Player(id: userId);
-    var updatedGame = game.copyWith(
-      players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
-    );
-    updatedGame = await _addNextQuestion(updatedGame);
-    return gamesCollection.doc(gameId).set(updatedGame);
-  }
-
-  Future<void> deleteGame(String gameId) {
-    return gamesCollection.doc(gameId).delete();
-  }
-
-  Future<void> startGame(String gameId) async {
-    final game = await _getGame(gameId);
-    final updatedGame = game.copyWith(
-      players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: QuestionPage.routeName))),
-    );
-    return gamesCollection.doc(gameId).set(updatedGame);
-  }
-
-  Future<void> abortGame(String gameId, String userId) async {
-    final game = await _getGame(gameId);
-    game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
-    final opponentId = game.opponentId(userId);
-    game.players[opponentId] = game.players[opponentId]!.copyWith(route: AbortedGamePage.routeName);
-    final updatedGame = game.copyWith(
-      players: game.players,
-    );
-    return gamesCollection.doc(gameId).set(updatedGame);
-  }
-
-  Future<void> resetGame(String gameId, String userId) async {
-    final game = await _getGame(gameId);
-    game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
-    final updatedGame = game.copyWith(
-      players: game.players,
-    );
-    return gamesCollection.doc(gameId).set(updatedGame);
-  }
-
-  Future<void> answerQuestion(String gameId, String userId, String questionId, int answerIdx) async {
-    final game = await _getGame(gameId);
-    final questionIdx = game.questions.indexWhere((question) => question.id == questionId);
-    final question = game.questions[questionIdx];
-    final interaction = question.interactions[userId]!;
-    if (interaction.answerIdx != null || game.players[userId]!.answerTimerEnded) {
-      return;
-    }
-    final updatedInteraction = interaction.copyWith(answerIdx: answerIdx);
-    question.interactions[userId] = updatedInteraction;
-    game.questions[questionIdx] = question;
-    final updatedGame = game.copyWith(questions: game.questions);
-    return gamesCollection.doc(gameId).set(updatedGame);
-  }
-
-  Future<void> setAnswerTimerEnded(String gameId, String userId) async {
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      final game = await transaction.get(gamesCollection.doc(gameId)).then((value) => value.data()!);
-      game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: true, resultTimerEnded: false);
-      var updatedGame = game.copyWith(players: game.players);
-      return transaction.set(gamesCollection.doc(gameId), updatedGame);
+  Future<void> joinGame(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
+      game.players[userId] = Player(id: userId);
+      var updatedGame = game.copyWith(
+        players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
+      );
+      updatedGame = await _addNextQuestion(updatedGame);
+      return updatedGame;
     });
   }
 
-  Future<void> setResultTimerEnded(String gameId, String userId) async {
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      final game = await transaction.get(gamesCollection.doc(gameId)).then((value) => value.data()!);
+  Future<void> deleteGame(String gameId) {
+    return _gameDocRef(gameId).delete();
+  }
+
+  Future<void> startGame(String gameId) {
+    return _withTransactGame(gameId, (game) async {
+      final updatedGame = game.copyWith(
+        players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: QuestionPage.routeName))),
+      );
+      return updatedGame;
+    });
+  }
+
+  Future<void> abortGame(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
+      game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
+      final opponentId = game.opponentId(userId);
+      game.players[opponentId] = game.players[opponentId]!.copyWith(route: AbortedGamePage.routeName);
+      final updatedGame = game.copyWith(
+        players: game.players,
+      );
+      return updatedGame;
+    });
+  }
+
+  Future<void> resetGame(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
+      game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
+      final updatedGame = game.copyWith(
+        players: game.players,
+      );
+      return updatedGame;
+    });
+  }
+
+  Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx) {
+    return _withTransactGame(gameId, (game) async {
+      final question = game.currentQuestion;
+      final interaction = question.interactions[userId]!;
+      if (interaction.answerIdx != null || game.players[userId]!.answerTimerEnded) {
+        return null;
+      }
+      final updatedInteraction = interaction.copyWith(answerIdx: answerIdx);
+      question.interactions[userId] = updatedInteraction;
+      game.currentQuestion = question;
+      return game;
+    });
+  }
+
+  Future<void> setAnswerTimerEnded(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
+      game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: true, resultTimerEnded: false);
+      return game.copyWith(players: game.players);
+    });
+  }
+
+  Future<void> setResultTimerEnded(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
       game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: false, resultTimerEnded: true);
       var updatedGame = game.copyWith(players: game.players);
-
       if (game.resultTimersEnded) {
         print('SERVICE: Both result timers ended, getting next question');
         updatedGame = await _addNextQuestion(updatedGame);
       }
+      return updatedGame;
+    });
+  }
 
-      return transaction.set(gamesCollection.doc(gameId), updatedGame);
+  DocumentReference<Game> _gameDocRef(String gameId) => _gamesCollection.doc(gameId);
+
+  Future<Game> _getGame(String gameId, [Transaction? transaction]) {
+    if (transaction != null) {
+      return transaction.get(_gameDocRef(gameId)).then((value) => value.data()!);
+    }
+    return _gameDocRef(gameId).get().then((value) => value.data()!);
+  }
+
+  Future<void> _withTransactGame(String gameId, Future<Game?> Function(Game) gameModifier) {
+    return _db.runTransaction((transaction) async {
+      final game = await _getGame(gameId, transaction);
+      final updatedGame = await gameModifier(game);
+      if (updatedGame == null) {
+        return;
+      }
+      transaction.set(_gameDocRef(gameId), updatedGame);
     });
   }
 

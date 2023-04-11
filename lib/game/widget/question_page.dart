@@ -160,7 +160,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                         label: answer,
                         onPressed: () {
                           final userId = context.read<AuthCubit>().userId;
-                          context.read<GameCubit>().answerQuestion(userId, question.id, index);
+                          context.read<GameCubit>().answerCurrentQuestion(userId, index);
                         },
                       ),
                     );

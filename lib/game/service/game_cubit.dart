@@ -59,8 +59,8 @@ class GameCubit extends Cubit<Game?> {
     return _gameService.resetGame(gameId!, userId);
   }
 
-  Future<void> answerQuestion(String userId, String questionId, int answerIdx) {
-    return _gameService.answerQuestion(gameId!, userId, questionId, answerIdx);
+  Future<void> answerCurrentQuestion(String userId, int answerIdx) {
+    return _gameService.answerCurrentQuestion(gameId!, userId, answerIdx);
   }
 
   Future<void> setAnswerTimerEnded(String userId) {
