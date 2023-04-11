@@ -110,7 +110,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
         },
         builder: (context, game) {
           if (game == null) {
-            return Center(child: Text('No game in progress'));
+            return SizedBox.shrink();
           }
           final question = game.currentQuestion;
           final userId = context.read<AuthCubit>().userId;

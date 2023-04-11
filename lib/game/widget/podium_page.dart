@@ -20,7 +20,7 @@ class PodiumPage extends StatelessWidget {
       child: BlocBuilder<AuthCubit, AuthUser?>(builder: (context, authUser) {
         return BlocBuilder<GameCubit, Game?>(builder: (context, game) {
           if (game == null) {
-            return Container();
+            return SizedBox.shrink();
           }
           final userId = authUser!.uid;
           final isWinner = game.winnerId == userId;

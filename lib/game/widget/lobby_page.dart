@@ -18,31 +18,31 @@ class LobbyPage extends StatelessWidget {
       child: Column(
         children: [
           BlocBuilder<GameCubit, Game?>(
-            builder: (context, game) => Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Game code: ', style: Theme.of(context).textTheme.titleLarge),
-                    if (game != null)
-                      Text(
-                        game.id,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.bold),
-                      ),
-                  ],
-                ),
-                SizedBox(height: standardGap),
-                Text('Waiting for the second player to join...', style: Theme.of(context).textTheme.titleLarge),
-                SizedBox(height: standardGap),
-                Button(
-                  label: 'Cancel',
-                  onPressed: context.read<GameCubit>().deleteGame,
-                ),
-              ],
-            ),
+            builder: (context, game) {
+              if (game == null) {
+                return SizedBox.shrink();
+              }
+              final theme = Theme.of(context);
+              final gameCodeStyle = theme.textTheme.headlineMedium?.copyWith(
+                color: theme.colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              );
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Game code: ', style: theme.textTheme.titleLarge),
+                      Text(game.id, style: gameCodeStyle),
+                    ],
+                  ),
+                  SizedBox(height: standardGap),
+                  Text('Waiting for the second player to join...', style: theme.textTheme.titleLarge),
+                  SizedBox(height: standardGap),
+                  Button(label: 'Cancel', onPressed: context.read<GameCubit>().deleteGame),
+                ],
+              );
+            },
           ),
         ],
       ),

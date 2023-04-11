@@ -13,19 +13,21 @@ class GetReadyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.titleLarge;
+
     return PageTemplate(
       title: 'Get ready',
       child: Center(
         child: Column(
           children: [
-            Text('The game will start in', style: Theme.of(context).textTheme.titleLarge),
+            Text('The game will start in', style: textStyle),
             SizedBox(height: standardGap),
             Countdown(
               seconds: secondsToStartGame,
               build: (BuildContext context, double time) {
                 int seconds = time.toInt();
                 final text = seconds == 0 ? 'Go!' : seconds.toString();
-                return Text(text, style: Theme.of(context).textTheme.titleLarge);
+                return Text(text, style: textStyle);
               },
               interval: Duration(seconds: 1),
               onFinished: context.read<GameCubit>().startGame,

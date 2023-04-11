@@ -44,10 +44,7 @@ class CreateGamePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: standardGap),
-                  Button(
-                    label: 'Create game',
-                    onPressed: formBloc.submit,
-                  )
+                  Button(label: 'Create game', onPressed: formBloc.submit)
                 ],
               ),
             );
