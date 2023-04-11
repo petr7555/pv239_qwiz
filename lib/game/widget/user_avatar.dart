@@ -10,16 +10,18 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final photoUrl = context.read<AuthCubit>().state?.photoURL;
     final displayName = context.read<AuthCubit>().state?.displayName;
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         CircleAvatar(
           radius: 50,
           backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: theme.colorScheme.secondary,
           child: photoUrl == null ? Icon(Icons.person, size: 40, color: Colors.white) : null,
         ),
         SizedBox(height: standardGap),
-        if (displayName != null) Text(displayName, style: Theme.of(context).textTheme.titleLarge),
+        if (displayName != null) Text(displayName, style: theme.textTheme.titleLarge),
       ],
     );
   }

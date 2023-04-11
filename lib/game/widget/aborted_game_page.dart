@@ -18,7 +18,10 @@ class AbortedGamePage extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            Text('Game was aborted because the second player left.', style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Game was aborted because the second player left.',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             SizedBox(height: standardGap),
             Button(
               label: 'Back to menu',

@@ -112,6 +112,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           if (game == null) {
             return SizedBox.shrink();
           }
+
           final question = game.currentQuestion;
           final userId = context.read<AuthCubit>().userId;
           final thisPlayer = game.thisPlayer(userId);

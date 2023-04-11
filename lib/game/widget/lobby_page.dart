@@ -22,6 +22,7 @@ class LobbyPage extends StatelessWidget {
               if (game == null) {
                 return SizedBox.shrink();
               }
+
               final theme = Theme.of(context);
               final gameCodeStyle = theme.textTheme.headlineMedium?.copyWith(
                 color: theme.colorScheme.secondary,
