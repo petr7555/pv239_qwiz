@@ -21,7 +21,7 @@ class PageTemplate extends StatelessWidget {
         actions: actions ?? [],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(standardGap),
+        padding: EdgeInsets.all(standardGap),
         child: child,
       ),
     );

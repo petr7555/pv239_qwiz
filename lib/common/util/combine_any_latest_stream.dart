@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:rxdart/src/utils/collection_extensions.dart';
 import 'package:rxdart/src/utils/subscription.dart';
 
+/// From: https://stackoverflow.com/a/71482535/9290771
 class CombineAnyLatestStream<T, R> extends StreamView<R> {
   CombineAnyLatestStream(List<Stream<T>> streams, R Function(List<T?>) combiner)
       : super(_buildController(streams, combiner).stream);
