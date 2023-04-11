@@ -11,7 +11,6 @@ class Game {
   final Map<String, Player> players;
   final String? winnerId;
   final List<Question> questions;
-  final int currentQuestionIdx;
 
   Question get currentQuestion => questions.last;
 
@@ -25,13 +24,15 @@ class Game {
     return players[opponentId(userId)]!;
   }
 
+  bool get answerTimersEnded => players.values.every((player) => player.answerTimerEnded);
+  bool get resultTimersEnded => players.values.every((player) => player.resultTimerEnded);
+
   const Game({
     required this.id,
     required this.pointsToWin,
     required this.players,
     this.winnerId,
     this.questions = const [],
-    this.currentQuestionIdx = 0,
   });
 
   Game copyWith({
@@ -40,7 +41,6 @@ class Game {
     Map<String, Player>? players,
     String? winnerId,
     List<Question>? questions,
-    int? currentQuestionIdx,
   }) {
     return Game(
       id: id ?? this.id,
@@ -48,7 +48,6 @@ class Game {
       players: players ?? this.players,
       winnerId: winnerId ?? this.winnerId,
       questions: questions ?? this.questions,
-      currentQuestionIdx: currentQuestionIdx ?? this.currentQuestionIdx,
     );
   }
 

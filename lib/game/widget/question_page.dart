@@ -86,9 +86,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           final userId = context.read<AuthCubit>().userId;
 
           if (game != null) {
-            if (!game.currentQuestion.resultTimersEnded &&
-                !game.currentQuestion.answerTimersEnded &&
-                stateOfQuestion == StateOfQuestion.showingResult) {
+            if (game.resultTimersEnded && stateOfQuestion == StateOfQuestion.showingResult) {
               print('LISTENER: Result timers ended, StateOfQuestion.showingResult');
               setState(() {
                 print('LISTENER: Starting answer timer');
@@ -97,15 +95,15 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
               });
             }
 
-            if (game.currentQuestion.answerTimersEnded && stateOfQuestion == StateOfQuestion.answering) {
+            if (game.answerTimersEnded && stateOfQuestion == StateOfQuestion.answering) {
               print('LISTENER: Answer timers ended, StateOfQuestion.answering');
               setState(() {
                 stateOfQuestion = StateOfQuestion.showingResult;
               });
               print('LISTENER: Starting result timer');
-              Future.delayed(Duration(seconds: 10), () {
+              Future.delayed(Duration(seconds: secondsForResults), () {
                 print('LISTENER: Result timer ended');
-                context.read<GameCubit>().setResultTimerEnded(userId, game.currentQuestion.id);
+                context.read<GameCubit>().setResultTimerEnded(userId);
               });
             }
           }
@@ -118,7 +116,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           final userId = context.read<AuthCubit>().userId;
           final thisPlayer = game.thisPlayer(userId);
           final opponent = game.opponent(userId);
-          final answerTimersEnded = question.answerTimersEnded;
+          final answerTimersEnded = game.answerTimersEnded;
 
           return Center(
             child: Column(
@@ -141,7 +139,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                     color: secondaryColor,
                     onTimerEnd: () {
                       print('BUILDER: Answer timer ended');
-                      context.read<GameCubit>().setAnswerTimerEnded(userId, question.id);
+                      context.read<GameCubit>().setAnswerTimerEnded(userId);
                     },
                   ),
                 ),

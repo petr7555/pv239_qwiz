@@ -18,9 +18,6 @@ class Question {
     required this.interactions,
   });
 
-  bool get answerTimersEnded => interactions.values.every((interaction) => interaction.answerTimerEnded);
-  bool get resultTimersEnded => interactions.values.every((interaction) => interaction.resultTimerEnded);
-
   Question copyWith({
     String? id,
     String? question,
