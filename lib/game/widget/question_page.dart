@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,10 +11,23 @@ import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 
-class QuestionPage extends StatelessWidget {
+class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
 
   static const routeName = '/question';
+
+  @override
+  State<QuestionPage> createState() => _QuestionPageState();
+}
+
+class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMixin {
+  late LinearTimerController timerController = LinearTimerController(this);
+
+  @override
+  void dispose() {
+    timerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +65,22 @@ class QuestionPage extends StatelessWidget {
       ],
       child: BlocConsumer<GameCubit, Game?>(
         listener: (context, game) {
+          final userId = context.read<AuthCubit>().userId;
+
           if (game != null) {
-            if (game.currentQuestion.playerAnswers.length == maxPlayers) {
-              context.read<GameCubit>().nextQuestion();
+            if (game.players[userId]!.nextQuestion) {
+              context.read<GameCubit>().setNextQuestionFalse(userId);
+              timerController.start(restart: true);
+            }
+
+            if (game.players[userId]!.viewResults) {
+              context.read<GameCubit>().setViewResultsFalse(userId);
+              final questionId = game.currentQuestion.id;
+              print('You have 5 seconds to view the result');
+              Future.delayed(Duration(seconds: 5), () {
+                print('Time to view results is over');
+                context.read<GameCubit>().setResultTimerEnded(userId, questionId);
+              });
             }
           }
         },
@@ -65,6 +92,7 @@ class QuestionPage extends StatelessWidget {
           final userId = context.read<AuthCubit>().userId;
           final thisPlayer = game.thisPlayer(userId);
           final opponent = game.opponent(userId);
+          final answerTimersEnded = question.answerTimersEnded;
 
           return Center(
             child: Column(
@@ -80,30 +108,38 @@ class QuestionPage extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   child: LinearTimer(
-                    duration: const Duration(seconds: secondsForQuestion),
+                    controller: timerController,
+                    duration: Duration(seconds: secondsForQuestion),
                     forward: false,
                     minHeight: 20,
                     color: secondaryColor,
-                    onTimerEnd: () {},
+                    onTimerEnd: () => context.read<GameCubit>().setAnswerTimerEnded(userId, question.id),
                   ),
                 ),
                 SizedBox(height: standardGap),
                 Text(question.question, style: Theme.of(context).textTheme.titleLarge),
                 SizedBox(height: standardGap),
                 Column(
-                  children: [
-                    for (var i = 0; i < question.allAnswers.length; i++)
-                      Padding(
-                        padding: EdgeInsets.only(bottom: standardGap),
-                        child: Button(
-                          label: question.allAnswers[i],
-                          onPressed: () {
-                            final userId = context.read<AuthCubit>().userId;
-                            context.read<GameCubit>().answerQuestion(userId, question.id, i);
-                          },
-                        ),
+                  children: question.allAnswers.mapIndexed((index, answer) {
+                    final isSelected = question.interactions[userId]!.answerIdx == index;
+                    final isCorrect = question.correctAnswerIdx == index;
+
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: standardGap),
+                      child: Button(
+                        color: _getQuestionColor(
+                            isSelected: isSelected, isCorrect: isCorrect, answerTimersEnded: answerTimersEnded),
+                        label: answer,
+                        onPressed: () {
+                          setState(() {
+                            timerController.start();
+                          });
+                          final userId = context.read<AuthCubit>().userId;
+                          context.read<GameCubit>().answerQuestion(userId, question.id, index);
+                        },
                       ),
-                  ],
+                    );
+                  }).toList(),
                 )
               ],
             ),
@@ -111,5 +147,17 @@ class QuestionPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Color? _getQuestionColor({required bool isSelected, required bool isCorrect, required bool answerTimersEnded}) {
+    if (answerTimersEnded) {
+      if (isCorrect) {
+        return Colors.green;
+      }
+    }
+    if (isSelected) {
+      return Colors.orange;
+    }
+    return null;
   }
 }

@@ -13,7 +13,7 @@ class Game {
   final List<Question> questions;
   final int currentQuestionIdx;
 
-  Question get currentQuestion => questions[currentQuestionIdx];
+  Question get currentQuestion => questions.last;
 
   String opponentId(String userId) => players.values.firstWhere((element) => element.id != userId).id;
 

@@ -3,7 +3,6 @@ import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/game/service/game_service.dart';
-import 'package:pv239_qwiz/game/service/question_api_service.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:random_string_generator/random_string_generator.dart';
 
@@ -36,8 +35,6 @@ class GameCubit extends Cubit<Game?> {
       players: {
         userId: Player(id: userId, route: LobbyPage.routeName),
       },
-      // TODO: initialize game with questions for now
-      questions: [for (var i = 0; i < 10; i++) await get<QuestionApiService>().getQuestion()],
     );
     return _gameService.createGame(game);
   }
@@ -66,7 +63,23 @@ class GameCubit extends Cubit<Game?> {
     return _gameService.answerQuestion(gameId!, userId, questionId, answerIdx);
   }
 
-  Future<void> nextQuestion() {
-    return _gameService.nextQuestion(gameId!);
+  Future<void> setAnswerTimerEnded(String userId, String questionId) {
+    return _gameService.setAnswerTimerEnded(gameId!, userId, questionId);
   }
+
+  Future<void> setResultTimerEnded(String userId, String questionId) {
+    return _gameService.setResultTimerEnded(gameId!, userId, questionId);
+  }
+
+  Future<void> setNextQuestionFalse(String userId) {
+    return _gameService.setNextQuestionFalse(gameId!, userId);
+  }
+
+  Future<void> setViewResultsFalse(String userId) {
+    return _gameService.setViewResultsFalse(gameId!, userId);
+  }
+
+  // Future<void> nextQuestion() {
+  //   return _gameService.nextQuestion(gameId!);
+  // }
 }

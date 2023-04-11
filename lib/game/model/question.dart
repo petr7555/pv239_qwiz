@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pv239_qwiz/game/model/interaction.dart';
 
 part 'question.g.dart';
 
@@ -8,29 +9,31 @@ class Question {
   final String question;
   final int correctAnswerIdx;
   final List<String> allAnswers;
-  final Map<String, int> playerAnswers;
-
-  const Question({
+  final Map<String, Interaction> interactions;
+  Question({
     required this.id,
     required this.question,
     required this.correctAnswerIdx,
     required this.allAnswers,
-    this.playerAnswers = const {},
+    required this.interactions,
   });
+
+  bool get answerTimersEnded => interactions.values.every((interaction) => interaction.answerTimerEnded);
+  bool get resultTimersEnded => interactions.values.every((interaction) => interaction.resultTimerEnded);
 
   Question copyWith({
     String? id,
     String? question,
     int? correctAnswerIdx,
     List<String>? allAnswers,
-    Map<String, int>? playerAnswers,
+    Map<String, Interaction>? interactions,
   }) {
     return Question(
       id: id ?? this.id,
       question: question ?? this.question,
       correctAnswerIdx: correctAnswerIdx ?? this.correctAnswerIdx,
       allAnswers: allAnswers ?? this.allAnswers,
-      playerAnswers: playerAnswers ?? this.playerAnswers,
+      interactions: interactions ?? this.interactions,
     );
   }
 
@@ -46,6 +49,7 @@ class Question {
       question: json['question'] as String,
       correctAnswerIdx: correctAnswerIdx,
       allAnswers: allAnswers,
+      interactions: {},
     );
   }
 

@@ -11,6 +11,8 @@ Player _$PlayerFromJson(Map<String, dynamic> json) => Player(
       route: json['route'] as String? ?? MenuPage.routeName,
       points: json['points'] as int? ?? 0,
       complete: json['complete'] as bool? ?? false,
+      viewResults: json['viewResults'] as bool? ?? false,
+      nextQuestion: json['nextQuestion'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
@@ -18,4 +20,6 @@ Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
       'route': instance.route,
       'points': instance.points,
       'complete': instance.complete,
+      'viewResults': instance.viewResults,
+      'nextQuestion': instance.nextQuestion,
     };
