@@ -44,14 +44,14 @@ class AuthCubit extends Cubit<AuthUser?> {
     return state != null;
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    return FirebaseAuth.instance.signInWithCredential(credential);
+    FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<void> signOut() {
