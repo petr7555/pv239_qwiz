@@ -13,10 +13,9 @@ Game _$GameFromJson(Map<String, dynamic> json) => Game(
         (k, e) => MapEntry(k, Player.fromJson(e as Map<String, dynamic>)),
       ),
       winnerId: json['winnerId'] as String?,
-      questions: (json['questions'] as List<dynamic>?)
-              ?.map((e) => Question.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      questions:
+          (json['questions'] as List<dynamic>?)?.map((e) => Question.fromJson(e as Map<String, dynamic>)).toList() ??
+              const [],
     );
 
 Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
