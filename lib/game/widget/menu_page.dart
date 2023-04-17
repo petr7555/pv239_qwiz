@@ -6,6 +6,7 @@ import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
+import 'package:pv239_qwiz/game/widget/history_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
 import 'package:pv239_qwiz/game/widget/user_avatar.dart';
 
@@ -28,8 +29,7 @@ class MenuPage extends StatelessWidget {
             SizedBox(height: smallGap),
             _createMenuButton(context: context, label: 'Join game', route: JoinGamePage.routeName),
             SizedBox(height: smallGap),
-            // TODO change route
-            _createMenuButton(context: context, label: 'History', route: '/history'),
+            _createMenuButton(context: context, label: 'History', route: GameHistoryPage.routeName),
             SizedBox(height: smallGap),
             // TODO change route
             _createMenuButton(context: context, label: 'Leaderboard', route: '/leaderboard'),

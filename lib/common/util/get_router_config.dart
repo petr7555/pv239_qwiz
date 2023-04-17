@@ -9,6 +9,7 @@ import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
+import 'package:pv239_qwiz/game/widget/history_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:pv239_qwiz/game/widget/menu_page.dart';
@@ -85,6 +86,10 @@ RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object
       GoRoute(
         path: AbortedGamePage.routeName,
         builder: (context, state) => AbortedGamePage(),
+      ),
+      GoRoute(
+        path: GameHistoryPage.routeName,
+        builder: (context, state) => GameHistoryPage(),
       ),
     ],
   );
