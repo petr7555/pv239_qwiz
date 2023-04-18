@@ -10,7 +10,7 @@ import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
-import 'package:pv239_qwiz/game/widget/leaderboard_page.dart';
+import 'package:pv239_qwiz/leaderboard/widget/leaderboard_page.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:pv239_qwiz/game/widget/menu_page.dart';
 import 'package:pv239_qwiz/game/widget/podium_page.dart';

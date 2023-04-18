@@ -1,30 +1,26 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../common/widget/page_template.dart';
 import '../model/player_score_record.dart';
+import '../service/leaderboard_service.dart';
 
 class LeaderboardPage extends StatelessWidget {
-
   static const routeName = '/leaderboard';
 
   @override
   Widget build(BuildContext context) {
     return PageTemplate(
       title: "Leaderboard",
-      child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('player_scores')
-            .orderBy('score', descending: true)
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      child: StreamBuilder<List<PlayerScoreRecord>>(
+        stream: LeaderboardService.getLeaderboardStream(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<PlayerScoreRecord>> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          final playerScores = snapshot.data!.docs.map((doc) => PlayerScoreRecord.fromJson(doc.data() as Map<String, dynamic>)).toList();
+          final playerScores = snapshot.data!;
 
           return ListView.builder(
             itemCount: playerScores.length,
@@ -36,12 +32,13 @@ class LeaderboardPage extends StatelessWidget {
                   '${index + 1}. ${playerScore.playerName}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                subtitle: Text(playerScore.totalScore.toString(), style: Theme.of(context).textTheme.bodyMedium),
+                subtitle:
+                Text(playerScore.totalScore.toString(), style: Theme.of(context).textTheme.bodyMedium),
               );
             },
           );
         },
       ),
-      );
+    );
   }
 }
