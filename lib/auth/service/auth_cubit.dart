@@ -40,6 +40,22 @@ class AuthCubit extends Cubit<AuthUser?> {
     return uid;
   }
 
+  String get userName {
+    final displayName = state?.displayName;
+    if (displayName == null) {
+      throw Exception('User is not signed in');
+    }
+    return displayName;
+  }
+
+  String get photoURL {
+    final photoURL = state?.photoURL;
+    if (photoURL == null) {
+      throw Exception('User is not signed in');
+    }
+    return photoURL;
+  }
+
   bool isSignedIn() {
     return state != null;
   }

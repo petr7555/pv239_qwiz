@@ -29,7 +29,9 @@ class CreateGamePage extends StatelessWidget {
                 context.loaderOverlay.show();
                 final pointsToWin = int.parse(formBloc.pointsToWinField.value);
                 final userId = context.read<AuthCubit>().userId;
-                context.read<GameCubit>().createGame(pointsToWin, userId).whenComplete(context.loaderOverlay.hide);
+                final userName = context.read<AuthCubit>().userName;
+                final photoURL = context.read<AuthCubit>().photoURL;
+                context.read<GameCubit>().createGame(pointsToWin, userId, userName, photoURL).whenComplete(context.loaderOverlay.hide);
               },
               child: Column(
                 children: [

@@ -14,9 +14,9 @@ class GameService {
   final _db = FirebaseFirestore.instance;
 
   final _gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
-        fromFirestore: (snapshot, _) => Game.fromJson(snapshot.data()!),
-        toFirestore: (model, _) => model.toJson(),
-      );
+    fromFirestore: (snapshot, _) => Game.fromJson(snapshot.data()!),
+    toFirestore: (model, _) => model.toJson(),
+  );
 
   Stream<Game?> currentGameStream(String userId) {
     // TODO filter in Firebase
@@ -24,9 +24,9 @@ class GameService {
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
         .map((games) => games.where((game) {
-              final player = game.players[userId];
-              return player != null && player.complete == false;
-            }).toList());
+      final player = game.players[userId];
+      return player != null && player.complete == false;
+    }).toList());
 
     return gamesUserIsPartOf.map((games) {
       if (games.isEmpty) {
@@ -35,6 +35,21 @@ class GameService {
       return games.first;
     });
   }
+
+  Stream<List<Game>>? finishedGameStream(String userId) {
+    // TODO filter in Firebase
+    return _gamesCollection
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
+        .map((games) => games.where((game) {
+      final player = game.players[userId];
+      return player != null && player.complete == true;
+    }).toList())
+        .map((games) {
+      return games;
+    });
+  }
+
 
   Future<bool> gameExists(String gameId) {
     return _gameDocRef(gameId).get().then((value) => value.exists);
@@ -49,9 +64,9 @@ class GameService {
     return _gameDocRef(game.id).set(game);
   }
 
-  Future<void> joinGame(String gameId, String userId) {
+  Future<void> joinGame(String gameId, String userId, String userName, String photoURL) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = Player(id: userId);
+      game.players[userId] = Player(id: userId, name: userName, photoURL : photoURL);
       var updatedGame = game.copyWith(
         players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
       );

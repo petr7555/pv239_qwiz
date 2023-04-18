@@ -6,6 +6,8 @@ import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
+import 'package:pv239_qwiz/leaderboard/model/player_score_record.dart';
+import 'package:pv239_qwiz/leaderboard/service/leaderboard_service.dart';
 
 class PodiumPage extends StatelessWidget {
   const PodiumPage({super.key});
@@ -19,6 +21,11 @@ class PodiumPage extends StatelessWidget {
       child: BlocBuilder<GameCubit, Game?>(builder: (context, game) {
         if (game == null) {
           return SizedBox.shrink();
+        }
+
+        for (final player in game.players.values) {
+          final record = PlayerScoreRecord(playerId: player.id, playerName: player.name, totalScore:player.points);
+          LeaderboardService.updatePlayerScore(record);
         }
 
         final theme = Theme.of(context);
