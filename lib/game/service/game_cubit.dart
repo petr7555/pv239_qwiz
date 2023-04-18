@@ -7,14 +7,15 @@ import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:random_string_generator/random_string_generator.dart';
 
 const mockGame = false;
-const mockedGame = Game(
+final mockedGame = Game(
   id: 'game123',
   pointsToWin: 100,
   players: {
-    'user123': Player(id: 'user123', points: 100),
-    '2': Player(id: '2', points: 65),
+    'user123': Player(id: 'user123', name: 'Player1', photoURL: '', points: 100),
+    '2': Player(id: '2', name: 'Player2', photoURL : '', points: 65),
   },
   winnerId: 'user123',
+  date: null,
 );
 
 class GameCubit extends Cubit<Game?> {
@@ -28,19 +29,20 @@ class GameCubit extends Cubit<Game?> {
 
   String? get gameId => state?.id;
 
-  Future<void> createGame(int pointsToWin, String userId) async {
+  Future<void> createGame(int pointsToWin, String userId, String userName, String photoURL) async {
     final game = Game(
       id: get<RandomStringGenerator>().generate(),
       pointsToWin: pointsToWin,
       players: {
-        userId: Player(id: userId, route: LobbyPage.routeName),
+        userId: Player(id: userId, name: userName, photoURL : photoURL, route: LobbyPage.routeName),
       },
     );
+    game.setDate(DateTime.now());
     return _gameService.createGame(game);
   }
 
-  Future<void> joinGame(String gameId, String userId) {
-    return _gameService.joinGame(gameId, userId);
+  Future<void> joinGame(String gameId, String userId, String userName, String photoURL) {
+    return _gameService.joinGame(gameId, userId, userName, photoURL);
   }
 
   Future<void> deleteGame() {

@@ -36,6 +36,21 @@ class GameService {
     });
   }
 
+  Stream<List<Game>>? finishedGameStream(String userId) {
+    // TODO filter in Firebase
+    return _gamesCollection
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
+        .map((games) => games.where((game) {
+      final player = game.players[userId];
+      return player != null && player.complete == true;
+    }).toList())
+        .map((games) {
+      return games;
+    });
+  }
+
+
   Future<bool> gameExists(String gameId) {
     return _gameDocRef(gameId).get().then((value) => value.exists);
   }
@@ -49,9 +64,9 @@ class GameService {
     return _gameDocRef(game.id).set(game);
   }
 
-  Future<void> joinGame(String gameId, String userId) {
+  Future<void> joinGame(String gameId, String userId, String userName, String photoURL) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = Player(id: userId);
+      game.players[userId] = Player(id: userId, name: userName, photoURL : photoURL);
       var updatedGame = game.copyWith(
         players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
       );
