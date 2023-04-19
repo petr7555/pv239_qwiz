@@ -18,17 +18,21 @@ class GameService {
         toFirestore: (model, _) => model.toJson(),
       );
 
-  Stream<Game?> currentGameStream(String userId) {
+  Stream<List<Game>> _getGamesOfUser(String userId, {required bool complete}) {
     // TODO filter in Firebase
-    final gamesUserIsPartOf = _gamesCollection
+    return _gamesCollection
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
         .map((games) => games.where((game) {
               final player = game.players[userId];
               return player != null && player.complete == false;
             }).toList());
+  }
 
-    return gamesUserIsPartOf.map((games) {
+  Stream<Game?> currentGameStream(String userId) {
+    final incompleteGamesOfUser = _getGamesOfUser(userId, complete: false);
+
+    return incompleteGamesOfUser.map((games) {
       if (games.isEmpty) {
         return null;
       }
@@ -36,19 +40,7 @@ class GameService {
     });
   }
 
-  Stream<List<Game>>? finishedGameStream(String userId) {
-    // TODO filter in Firebase
-    return _gamesCollection
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
-        .map((games) => games.where((game) {
-              final player = game.players[userId];
-              return player != null && player.complete == true;
-            }).toList())
-        .map((games) {
-      return games;
-    });
-  }
+  Stream<List<Game>> finishedGameStream(String userId) => _getGamesOfUser(userId, complete: true);
 
   Future<bool> gameExists(String gameId) {
     return _gameDocRef(gameId).get().then((value) => value.exists);
