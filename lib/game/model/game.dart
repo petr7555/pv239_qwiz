@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
 
-
 part 'game.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -13,7 +12,6 @@ class Game {
   final DateTime createdAt;
   final String? winnerId;
   final List<Question> questions;
-  DateTime? date;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   Question get currentQuestion => questions.last;
@@ -33,14 +31,13 @@ class Game {
   bool get answerTimersEnded => players.values.every((player) => player.answerTimerEnded);
   bool get resultTimersEnded => players.values.every((player) => player.resultTimerEnded);
 
-  Game({
+  const Game({
     required this.id,
     required this.pointsToWin,
     required this.players,
     required this.createdAt,
     this.winnerId,
     this.questions = const [],
-    this.date,
   });
 
   Game copyWith({
@@ -50,7 +47,6 @@ class Game {
     DateTime? createdAt,
     String? winnerId,
     List<Question>? questions,
-    DateTime? date,
   }) {
     return Game(
       id: id ?? this.id,
@@ -59,12 +55,7 @@ class Game {
       createdAt: createdAt ?? this.createdAt,
       winnerId: winnerId ?? this.winnerId,
       questions: questions ?? this.questions,
-      date: date ?? this.date,
     );
-  }
-
-  void setDate(DateTime date) {
-    this.date = date;
   }
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
