@@ -25,7 +25,7 @@ class GameService {
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
         .map((games) => games.where((game) {
               final player = game.players[userId];
-              return player != null && player.complete == false;
+              return player != null && player.complete == complete;
             }).toList());
   }
 
