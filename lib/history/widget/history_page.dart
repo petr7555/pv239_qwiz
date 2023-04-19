@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
@@ -45,12 +46,7 @@ class HistoryPage extends StatelessWidget {
                 title: Text('Game with ${opponent.displayName}', style: theme.textTheme.titleLarge),
                 subtitle: Text(game.createdAt.toString(), style: theme.textTheme.bodyMedium),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    GameInfoPage.routeName,
-                  );
-                },
+                onTap: () => context.push(GameInfoPage.routeName),
               );
             },
           );
