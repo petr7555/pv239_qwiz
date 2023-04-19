@@ -10,11 +10,13 @@ import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
-import 'package:pv239_qwiz/leaderboard/widget/leaderboard_page.dart';
 import 'package:pv239_qwiz/game/widget/lobby_page.dart';
 import 'package:pv239_qwiz/game/widget/menu_page.dart';
 import 'package:pv239_qwiz/game/widget/podium_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
+import 'package:pv239_qwiz/history/widget/game_info_page.dart';
+import 'package:pv239_qwiz/history/widget/history_page.dart';
+import 'package:pv239_qwiz/leaderboard/widget/leaderboard_page.dart';
 
 RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object?>> combinedStream) {
   return GoRouter(
@@ -86,6 +88,14 @@ RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object
       GoRoute(
         path: AbortedGamePage.routeName,
         builder: (context, state) => AbortedGamePage(),
+      ),
+      GoRoute(
+        path: HistoryPage.routeName,
+        builder: (context, state) => HistoryPage(),
+      ),
+      GoRoute(
+        path: GameInfoPage.routeName,
+        builder: (context, state) => GameInfoPage(),
       ),
       GoRoute(
         path: LeaderboardPage.routeName,
