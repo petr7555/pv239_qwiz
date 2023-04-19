@@ -5,8 +5,10 @@ import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 
-class GameResultPage extends StatelessWidget {
-  static const routeName = '/game-result';
+class GameInfoPage extends StatelessWidget {
+  const GameInfoPage({super.key});
+
+  static const routeName = '/gameInfo';
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class GameResultPage extends StatelessWidget {
     final gamesRef = FirebaseFirestore.instance.collection('games');
 
     return PageTemplate(
-      title: 'Game History',
+      title: 'Game info',
       child: StreamBuilder<QuerySnapshot>(
         stream: gamesRef.where('players', arrayContains: userId).orderBy('createdAt', descending: true).snapshots(),
         builder: (context, snapshot) {

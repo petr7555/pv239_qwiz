@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
+import 'package:pv239_qwiz/game/model/game.dart';
+import 'package:pv239_qwiz/game/service/game_service.dart';
+import 'package:pv239_qwiz/history/widget/game_info_page.dart';
 
-import '../../game/model/game.dart';
-import '../../game/service/game_service.dart';
-import 'game_result_page.dart';
+class HistoryPage extends StatelessWidget {
+  const HistoryPage({super.key});
 
-class GameHistoryPage extends StatelessWidget {
   static const routeName = '/history';
 
   @override
@@ -17,7 +18,7 @@ class GameHistoryPage extends StatelessWidget {
     final gameService = GameService();
 
     return PageTemplate(
-      title: 'Game History',
+      title: 'History',
       child: StreamBuilder<List<Game>>(
         stream: gameService.finishedGameStream(userId),
         builder: (context, snapshot) {
@@ -41,13 +42,13 @@ class GameHistoryPage extends StatelessWidget {
               final opponent = game.players.values.where((element) => element.id != userId).first;
 
               return ListTile(
-                title: Text('Game with ${opponent.name}', style: theme.textTheme.titleLarge),
-                subtitle: Text(game.date.toString(), style: theme.textTheme.bodyMedium),
+                title: Text('Game with ${opponent.displayName}', style: theme.textTheme.titleLarge),
+                subtitle: Text(game.createdAt.toString(), style: theme.textTheme.bodyMedium),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    GameResultPage.routeName,
+                    GameInfoPage.routeName,
                   );
                 },
               );

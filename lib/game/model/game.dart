@@ -9,9 +9,9 @@ class Game {
   final String id;
   final int pointsToWin;
   final Map<String, Player> players;
+  final DateTime createdAt;
   final String? winnerId;
   final List<Question> questions;
-  DateTime? date; // New parameter
 
   Question get currentQuestion => questions.last;
   set currentQuestion(Question question) => questions[questions.length - 1] = question;
@@ -29,36 +29,31 @@ class Game {
   bool get answerTimersEnded => players.values.every((player) => player.answerTimerEnded);
   bool get resultTimersEnded => players.values.every((player) => player.resultTimerEnded);
 
-  Game({
+  const Game({
     required this.id,
     required this.pointsToWin,
     required this.players,
+    required this.createdAt,
     this.winnerId,
     this.questions = const [],
-    this.date, // Initialize it as null
   });
 
   Game copyWith({
     String? id,
     int? pointsToWin,
     Map<String, Player>? players,
+    DateTime? createdAt,
     String? winnerId,
     List<Question>? questions,
-    DateTime? date, // Add it as a parameter to the copyWith method
   }) {
     return Game(
       id: id ?? this.id,
       pointsToWin: pointsToWin ?? this.pointsToWin,
       players: players ?? this.players,
+      createdAt: createdAt ?? this.createdAt,
       winnerId: winnerId ?? this.winnerId,
       questions: questions ?? this.questions,
-      date: date ?? this.date, // Add it to the constructor call
     );
-  }
-
-  // New method to set the date after the game finishes
-  void setDate(DateTime date) {
-    this.date = date;
   }
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);

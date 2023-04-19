@@ -63,9 +63,9 @@ class GameService {
     return _gameDocRef(game.id).set(game);
   }
 
-  Future<void> joinGame(String gameId, String userId, String userName, String photoURL) {
+  Future<void> joinGame(String gameId, String userId, String? userName, String? photoURL) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = Player(id: userId, name: userName, photoURL: photoURL);
+      game.players[userId] = Player(id: userId, displayName: userName, photoURL: photoURL);
       var updatedGame = game.copyWith(
         players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
       );

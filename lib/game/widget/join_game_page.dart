@@ -26,8 +26,8 @@ class JoinGamePage extends StatelessWidget {
               onSuccess: (context, state) {
                 context.loaderOverlay.show();
                 final userId = context.read<AuthCubit>().userId;
-                final userName = context.read<AuthCubit>().userName;
-                final photoURL = context.read<AuthCubit>().photoURL;
+                final userName = context.read<AuthCubit>().state?.displayName;
+                final photoURL = context.read<AuthCubit>().state?.photoURL;
                 context
                     .read<GameCubit>()
                     .joinGame(formBloc.gameCodeField.value, userId, userName, photoURL)
