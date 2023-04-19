@@ -20,7 +20,7 @@ class HistoryPage extends StatelessWidget {
     return PageTemplate(
       title: 'History',
       child: StreamBuilder<List<Game>>(
-        stream: gameService.finishedGameStream(userId),
+        stream: gameService.finishedGamesStream(userId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(

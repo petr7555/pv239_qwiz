@@ -40,7 +40,7 @@ class GameService {
     });
   }
 
-  Stream<List<Game>> finishedGameStream(String userId) => _getGamesOfUser(userId, complete: true);
+  Stream<List<Game>> finishedGamesStream(String userId) => _getGamesOfUser(userId, complete: true);
 
   Future<bool> gameExists(String gameId) {
     return _gameDocRef(gameId).get().then((value) => value.exists);
