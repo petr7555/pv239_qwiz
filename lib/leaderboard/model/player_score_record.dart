@@ -13,8 +13,7 @@ class PlayerScoreRecord {
     required this.totalScore,
   });
 
-  factory PlayerScoreRecord.fromJson(Map<String, dynamic> json) =>
-      _$PlayerScoreRecordFromJson(json);
+  factory PlayerScoreRecord.fromJson(Map<String, dynamic> json) => _$PlayerScoreRecordFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlayerScoreRecordToJson(this);
 }

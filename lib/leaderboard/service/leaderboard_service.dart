@@ -7,8 +7,7 @@ class LeaderboardService {
         .collection('player_scores')
         .orderBy('score', descending: true)
         .snapshots()
-        .map((snapshot) =>
-        snapshot.docs.map((doc) => PlayerScoreRecord.fromJson(doc.data())).toList());
+        .map((snapshot) => snapshot.docs.map((doc) => PlayerScoreRecord.fromJson(doc.data())).toList());
   }
 
   static Future<void> updatePlayerScore(PlayerScoreRecord playerScoreRecord) async {
@@ -26,5 +25,4 @@ class LeaderboardService {
       await playerScoreRef.set({'name': playerName, 'score': score});
     }
   }
-
 }

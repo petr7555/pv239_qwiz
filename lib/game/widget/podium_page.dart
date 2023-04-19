@@ -24,7 +24,7 @@ class PodiumPage extends StatelessWidget {
         }
 
         for (final player in game.players.values) {
-          final record = PlayerScoreRecord(playerId: player.id, playerName: player.name, totalScore:player.points);
+          final record = PlayerScoreRecord(playerId: player.id, playerName: player.name, totalScore: player.points);
           LeaderboardService.updatePlayerScore(record);
         }
 

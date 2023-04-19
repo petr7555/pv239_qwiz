@@ -12,8 +12,7 @@ class LeaderboardPage extends StatelessWidget {
       title: "Leaderboard",
       child: StreamBuilder<List<PlayerScoreRecord>>(
         stream: LeaderboardService.getLeaderboardStream(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<PlayerScoreRecord>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<PlayerScoreRecord>> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
@@ -32,8 +31,7 @@ class LeaderboardPage extends StatelessWidget {
                   '${index + 1}. ${playerScore.playerName}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                subtitle:
-                Text(playerScore.totalScore.toString(), style: Theme.of(context).textTheme.bodyMedium),
+                subtitle: Text(playerScore.totalScore.toString(), style: Theme.of(context).textTheme.bodyMedium),
               );
             },
           );
