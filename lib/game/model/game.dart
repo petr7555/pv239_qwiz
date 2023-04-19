@@ -13,7 +13,9 @@ class Game {
   final String? winnerId;
   final List<Question> questions;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Question get currentQuestion => questions.last;
+
   set currentQuestion(Question question) => questions[questions.length - 1] = question;
 
   String opponentId(String userId) => players.values.firstWhere((element) => element.id != userId).id;
