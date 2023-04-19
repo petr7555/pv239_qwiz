@@ -18,23 +18,29 @@ class GameService {
         toFirestore: (model, _) => model.toJson(),
       );
 
-  Stream<Game?> currentGameStream(String userId) {
+  Stream<List<Game>> _getGamesOfUser(String userId, {required bool complete}) {
     // TODO filter in Firebase
-    final gamesUserIsPartOf = _gamesCollection
+    return _gamesCollection
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
         .map((games) => games.where((game) {
               final player = game.players[userId];
-              return player != null && player.complete == false;
+              return player != null && player.complete == complete;
             }).toList());
+  }
 
-    return gamesUserIsPartOf.map((games) {
+  Stream<Game?> currentGameStream(String userId) {
+    final incompleteGamesOfUser = _getGamesOfUser(userId, complete: false);
+
+    return incompleteGamesOfUser.map((games) {
       if (games.isEmpty) {
         return null;
       }
       return games.first;
     });
   }
+
+  Stream<List<Game>> finishedGamesStream(String userId) => _getGamesOfUser(userId, complete: true);
 
   Future<bool> gameExists(String gameId) {
     return _gameDocRef(gameId).get().then((value) => value.exists);
@@ -49,9 +55,9 @@ class GameService {
     return _gameDocRef(game.id).set(game);
   }
 
-  Future<void> joinGame(String gameId, String userId) {
+  Future<void> joinGame(String gameId, String userId, String? userName, String? photoURL) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = Player(id: userId);
+      game.players[userId] = Player(id: userId, displayName: userName, photoURL: photoURL);
       var updatedGame = game.copyWith(
         players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
       );

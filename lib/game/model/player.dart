@@ -6,6 +6,8 @@ part 'player.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Player {
   final String id;
+  final String? displayName;
+  final String? photoURL;
   final String route;
   final int points;
   final bool complete;
@@ -14,6 +16,8 @@ class Player {
 
   const Player({
     required this.id,
+    this.displayName,
+    this.photoURL,
     this.route = MenuPage.routeName,
     this.points = 0,
     this.complete = false,
@@ -23,6 +27,8 @@ class Player {
 
   Player copyWith({
     String? id,
+    String? displayName,
+    String? photoURL,
     String? route,
     int? points,
     bool? complete,
@@ -31,6 +37,8 @@ class Player {
   }) {
     return Player(
       id: id ?? this.id,
+      displayName: displayName ?? this.displayName,
+      photoURL: photoURL ?? this.photoURL,
       route: route ?? this.route,
       points: points ?? this.points,
       complete: complete ?? this.complete,
