@@ -30,7 +30,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (stateOfQuestion == StateOfQuestion.initial) {
         setState(() {
           print('INIT: Starting answer timer');
