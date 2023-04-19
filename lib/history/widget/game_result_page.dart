@@ -17,10 +17,7 @@ class GameResultPage extends StatelessWidget {
     return PageTemplate(
       title: 'Game History',
       child: StreamBuilder<QuerySnapshot>(
-        stream: gamesRef
-            .where('players', arrayContains: userId)
-            .orderBy('createdAt', descending: true)
-            .snapshots(),
+        stream: gamesRef.where('players', arrayContains: userId).orderBy('createdAt', descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(

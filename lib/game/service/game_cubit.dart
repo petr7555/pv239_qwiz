@@ -12,7 +12,7 @@ final mockedGame = Game(
   pointsToWin: 100,
   players: {
     'user123': Player(id: 'user123', name: 'Player1', photoURL: '', points: 100),
-    '2': Player(id: '2', name: 'Player2', photoURL : '', points: 65),
+    '2': Player(id: '2', name: 'Player2', photoURL: '', points: 65),
   },
   winnerId: 'user123',
   date: null,
@@ -34,7 +34,7 @@ class GameCubit extends Cubit<Game?> {
       id: get<RandomStringGenerator>().generate(),
       pointsToWin: pointsToWin,
       players: {
-        userId: Player(id: userId, name: userName, photoURL : photoURL, route: LobbyPage.routeName),
+        userId: Player(id: userId, name: userName, photoURL: photoURL, route: LobbyPage.routeName),
       },
     );
     game.setDate(DateTime.now());

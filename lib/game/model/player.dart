@@ -38,7 +38,7 @@ class Player {
     return Player(
       id: id ?? this.id,
       name: name ?? this.name,
-      photoURL : photoURL ?? this.photoURL,
+      photoURL: photoURL ?? this.photoURL,
       route: route ?? this.route,
       points: points ?? this.points,
       complete: complete ?? this.complete,

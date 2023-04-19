@@ -31,7 +31,10 @@ class CreateGamePage extends StatelessWidget {
                 final userId = context.read<AuthCubit>().userId;
                 final userName = context.read<AuthCubit>().userName;
                 final photoURL = context.read<AuthCubit>().photoURL;
-                context.read<GameCubit>().createGame(pointsToWin, userId, userName, photoURL).whenComplete(context.loaderOverlay.hide);
+                context
+                    .read<GameCubit>()
+                    .createGame(pointsToWin, userId, userName, photoURL)
+                    .whenComplete(context.loaderOverlay.hide);
               },
               child: Column(
                 children: [

@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
 
-
 part 'game.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -66,4 +65,3 @@ class Game {
 
   Map<String, dynamic> toJson() => _$GameToJson(this);
 }
-

@@ -7,8 +7,6 @@ import '../../game/model/game.dart';
 import '../../game/service/game_service.dart';
 import 'game_result_page.dart';
 
-
-
 class GameHistoryPage extends StatelessWidget {
   static const routeName = '/history';
 
