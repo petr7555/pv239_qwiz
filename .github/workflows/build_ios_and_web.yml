@@ -1,4 +1,4 @@
-name: Flutter iOS and web
+name: Build iOS and web
 
 on:
   push:
