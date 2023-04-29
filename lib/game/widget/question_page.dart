@@ -117,14 +117,34 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           final thisPlayer = game.thisPlayer(userId);
           final opponent = game.opponent(userId);
 
+          final youDeltaScore = 3;
+          final opponentDeltaScore = -1;
+
+          final youTime = 5.4;
+          final opponentTime = 4.6;
+
+          final isWinner = youDeltaScore > opponentDeltaScore;
+
           return Center(
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('You: ${thisPlayer.points}', style: Theme.of(context).textTheme.titleMedium),
-                    Text('Opponent: ${opponent.points}', style: Theme.of(context).textTheme.titleMedium),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('You: ${thisPlayer.points}', style: Theme.of(context).textTheme.titleMedium),
+                        _getDeltaText(deltaScore: youDeltaScore, time: youTime, isWinner: isWinner),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('Opponent: ${opponent.points}', style: Theme.of(context).textTheme.titleMedium),
+                        _getDeltaText(deltaScore: opponentDeltaScore, time: opponentTime, isWinner: !isWinner),
+                      ],
+                    ),
                   ],
                 ),
                 SizedBox(height: standardGap),
@@ -259,5 +279,10 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
       return youColor;
     }
     return Colors.transparent;
+  }
+
+  Widget _getDeltaText({required int deltaScore, required double time, required bool isWinner}) {
+    return Text('${deltaScore > 0 ? '+' : ''}$deltaScore ($time sec)',
+        style: TextStyle(color: isWinner ? Colors.green : Colors.red));
   }
 }
