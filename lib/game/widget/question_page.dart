@@ -6,7 +6,6 @@ import 'package:linear_timer/linear_timer.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
-import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
@@ -117,7 +116,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           final userId = context.read<AuthCubit>().userId;
           final thisPlayer = game.thisPlayer(userId);
           final opponent = game.opponent(userId);
-          final answerTimersEnded = game.answerTimersEnded;
 
           return Center(
             child: Column(
@@ -149,19 +147,58 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                 SizedBox(height: standardGap),
                 Column(
                   children: question.allAnswers.mapIndexed((index, answer) {
-                    final isSelected = question.interactions[userId]!.answerIdx == index;
+                    final isYourAnswer = question.interactions[userId]!.answerIdx == index;
+                    final isOpponentsAnswer = question.interactions[opponent.id]!.answerIdx == index;
                     final isCorrect = question.correctAnswerIdx == index;
 
+                    // final isYourAnswer = true;
+                    // final isOpponentsAnswer = true;
+                    // final isCorrect = question.correctAnswerIdx == index;
+
+                    final borderText = _getBorderText(
+                      stateOfQuestion: stateOfQuestion,
+                      isYourAnswer: isYourAnswer,
+                      isOpponentsAnswer: isOpponentsAnswer,
+                    );
+
                     return Padding(
-                      padding: EdgeInsets.only(bottom: standardGap),
-                      child: Button(
-                        color: _getQuestionColor(
-                            isSelected: isSelected, isCorrect: isCorrect, answerTimersEnded: answerTimersEnded),
-                        label: answer,
-                        onPressed: () {
-                          final userId = context.read<AuthCubit>().userId;
-                          context.read<GameCubit>().answerCurrentQuestion(userId, index);
-                        },
+                      padding: EdgeInsets.only(bottom: smallGap),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(borderText),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                              border: Border.all(
+                                color: _getBorderColor(
+                                  stateOfQuestion: stateOfQuestion,
+                                  isYourAnswer: isYourAnswer,
+                                  isOpponentsAnswer: isOpponentsAnswer,
+                                ),
+                                width: 5,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size.fromHeight(buttonHeight),
+                                  backgroundColor: _getQuestionColor(
+                                    stateOfQuestion: stateOfQuestion,
+                                    isCorrect: isCorrect,
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                ),
+                                child: Text(answer),
+                                onPressed: () {
+                                  final userId = context.read<AuthCubit>().userId;
+                                  context.read<GameCubit>().answerCurrentQuestion(userId, index);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   }).toList(),
@@ -174,15 +211,53 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
     );
   }
 
-  Color? _getQuestionColor({required bool isSelected, required bool isCorrect, required bool answerTimersEnded}) {
-    if (answerTimersEnded) {
+  Color? _getQuestionColor({
+    required StateOfQuestion stateOfQuestion,
+    required bool isCorrect,
+  }) {
+    if (stateOfQuestion == StateOfQuestion.showingResult) {
       if (isCorrect) {
-        return Colors.green;
+        return correctColor;
       }
     }
-    if (isSelected) {
-      return Colors.orange;
-    }
     return null;
+  }
+
+  String _getBorderText({
+    required StateOfQuestion stateOfQuestion,
+    required bool isYourAnswer,
+    required bool isOpponentsAnswer,
+  }) {
+    if (stateOfQuestion == StateOfQuestion.showingResult) {
+      if (isYourAnswer && isOpponentsAnswer) {
+        return 'Both answered';
+      }
+      if (isOpponentsAnswer) {
+        return 'Opponent\'s answer';
+      }
+    }
+    if (isYourAnswer) {
+      return 'Your answer';
+    }
+    return '';
+  }
+
+  Color _getBorderColor({
+    required StateOfQuestion stateOfQuestion,
+    required bool isYourAnswer,
+    required bool isOpponentsAnswer,
+  }) {
+    if (stateOfQuestion == StateOfQuestion.showingResult) {
+      if (isYourAnswer && isOpponentsAnswer) {
+        return bothColor;
+      }
+      if (isOpponentsAnswer) {
+        return opponentColor;
+      }
+    }
+    if (isYourAnswer) {
+      return youColor;
+    }
+    return Colors.transparent;
   }
 }
