@@ -9,6 +9,7 @@ import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/players_points_display.dart';
+import 'package:pv239_qwiz/game/widget/question_timer.dart';
 import 'package:pv239_qwiz/game/widget/quit_game_button.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -95,20 +96,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
               children: [
                 PlayersPointsDisplay(stateOfQuestion: stateOfQuestion, game: game),
                 SizedBox(height: standardGap),
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  child: LinearTimer(
-                    controller: answerTimerController,
-                    duration: Duration(seconds: secondsForQuestion),
-                    forward: false,
-                    minHeight: 20,
-                    color: secondaryColor,
-                    onTimerEnd: () {
-                      print('BUILDER: Answer timer ended');
-                      context.read<GameCubit>().setAnswerTimerEnded(userId);
-                    },
-                  ),
-                ),
+                QuestionTimer(timerController: answerTimerController),
                 SizedBox(height: standardGap),
                 Text(question.question, style: Theme.of(context).textTheme.titleLarge),
                 SizedBox(height: standardGap),
