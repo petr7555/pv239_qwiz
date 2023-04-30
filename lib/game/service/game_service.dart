@@ -102,6 +102,49 @@ class GameService {
     });
   }
 
+  Game _addPoints(Game game, String userId) {
+    print('SERVICE: Both answer timers ended, getting results');
+    final correctAnswer = game.currentQuestion.correctAnswerIdx;
+    final youCorrect = game.currentQuestion.interactions[userId]!.answerIdx == correctAnswer;
+    final opponentId = game.opponentId(userId);
+    final opponentCorrect = game.currentQuestion.interactions[opponentId]!.answerIdx == correctAnswer;
+
+    var youDeltaPoints = 0;
+    var opponentDeltaPoints = 0;
+
+    if (youCorrect && opponentCorrect) {
+      final yourTime = game.currentQuestion.interactions[userId]!.secondsToAnswer!;
+      final opponentsTime = game.currentQuestion.interactions[opponentId]!.secondsToAnswer!;
+      if (yourTime < opponentsTime) {
+        youDeltaPoints = bigPoints;
+        opponentDeltaPoints = mediumPoints;
+      } else if (yourTime > opponentsTime) {
+        opponentDeltaPoints = bigPoints;
+        youDeltaPoints = mediumPoints;
+      } else {
+        youDeltaPoints = mediumPoints;
+        opponentDeltaPoints = mediumPoints;
+      }
+    } else if (youCorrect) {
+      youDeltaPoints = bigPoints;
+    } else if (opponentCorrect) {
+      opponentDeltaPoints = bigPoints;
+    }
+
+    game.players[userId] = game.players[userId]!.copyWith(
+      points: game.players[userId]!.points + youDeltaPoints,
+    );
+    game.players[opponentId] = game.players[opponentId]!.copyWith(
+      points: game.players[opponentId]!.points + opponentDeltaPoints,
+    );
+    game.currentQuestion.interactions[userId] =
+        game.currentQuestion.interactions[userId]!.copyWith(deltaPoints: youDeltaPoints);
+    game.currentQuestion.interactions[opponentId] =
+        game.currentQuestion.interactions[opponentId]!.copyWith(deltaPoints: opponentDeltaPoints);
+
+    return game;
+  }
+
   Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx, double secondsToAnswer) {
     return _withTransactGame(gameId, (game) async {
       final question = game.currentQuestion;
@@ -112,6 +155,10 @@ class GameService {
       final updatedInteraction = interaction.copyWith(answerIdx: answerIdx, secondsToAnswer: secondsToAnswer);
       question.interactions[userId] = updatedInteraction;
       game.currentQuestion = question;
+
+      if (game.allPlayersAnswered) {
+        game = _addPoints(game, userId);
+      }
       return game;
     });
   }
@@ -121,44 +168,7 @@ class GameService {
       game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: true, resultTimerEnded: false);
       var updatedGame = game.copyWith(players: game.players);
       if (updatedGame.answerTimersEnded) {
-        print('SERVICE: Both answer timers ended, getting results');
-        final correctAnswer = updatedGame.currentQuestion.correctAnswerIdx;
-        final youCorrect = updatedGame.currentQuestion.interactions[userId]!.answerIdx == correctAnswer;
-        final opponentId = updatedGame.opponentId(userId);
-        final opponentCorrect = updatedGame.currentQuestion.interactions[opponentId]!.answerIdx == correctAnswer;
-
-        var youDeltaPoints = 0;
-        var opponentDeltaPoints = 0;
-
-        if (youCorrect && opponentCorrect) {
-          final yourTime = updatedGame.currentQuestion.interactions[userId]!.secondsToAnswer!;
-          final opponentsTime = updatedGame.currentQuestion.interactions[opponentId]!.secondsToAnswer!;
-          if (yourTime < opponentsTime) {
-            youDeltaPoints = bigPoints;
-            opponentDeltaPoints = mediumPoints;
-          } else if (yourTime > opponentsTime) {
-            opponentDeltaPoints = bigPoints;
-            youDeltaPoints = mediumPoints;
-          } else {
-            youDeltaPoints = mediumPoints;
-            opponentDeltaPoints = mediumPoints;
-          }
-        } else if (youCorrect) {
-          youDeltaPoints = bigPoints;
-        } else if (opponentCorrect) {
-          opponentDeltaPoints = bigPoints;
-        }
-
-        updatedGame.players[userId] = updatedGame.players[userId]!.copyWith(
-          points: updatedGame.players[userId]!.points + youDeltaPoints,
-        );
-        updatedGame.players[opponentId] = updatedGame.players[opponentId]!.copyWith(
-          points: updatedGame.players[opponentId]!.points + opponentDeltaPoints,
-        );
-        updatedGame.currentQuestion.interactions[userId] =
-            updatedGame.currentQuestion.interactions[userId]!.copyWith(deltaPoints: youDeltaPoints);
-        updatedGame.currentQuestion.interactions[opponentId] =
-            updatedGame.currentQuestion.interactions[opponentId]!.copyWith(deltaPoints: opponentDeltaPoints);
+        updatedGame = _addPoints(updatedGame, userId);
       }
       return updatedGame;
     });

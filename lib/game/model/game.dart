@@ -30,6 +30,8 @@ class Game {
 
   bool get answerTimersEnded => players.values.every((player) => player.answerTimerEnded);
   bool get resultTimersEnded => players.values.every((player) => player.resultTimerEnded);
+  bool get allPlayersAnswered =>
+      currentQuestion.interactions.values.every((interaction) => interaction.answerIdx != null);
 
   const Game({
     required this.id,

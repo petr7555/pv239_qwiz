@@ -94,7 +94,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
               });
             }
 
-            if (game.answerTimersEnded && stateOfQuestion == StateOfQuestion.answering) {
+            if (stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
+              answerTimerController.stop();
+
               print('LISTENER: Answer timers ended, StateOfQuestion.answering');
               setState(() {
                 stateOfQuestion = StateOfQuestion.showingResult;
