@@ -83,7 +83,7 @@ class GameService {
   Future<void> abortGame(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
       game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
-      final opponentId = game.opponentId(userId);
+      final opponentId = game.opponent(userId).id;
       game.players[opponentId] = game.players[opponentId]!.copyWith(route: AbortedGamePage.routeName);
       final updatedGame = game.copyWith(
         players: game.players,
@@ -106,7 +106,7 @@ class GameService {
     print('SERVICE: Both answer timers ended, getting results');
     final correctAnswer = game.currentQuestion.correctAnswerIdx;
     final youCorrect = game.currentQuestion.interactions[userId]!.answerIdx == correctAnswer;
-    final opponentId = game.opponentId(userId);
+    final opponentId = game.opponent(userId).id;
     final opponentCorrect = game.currentQuestion.interactions[opponentId]!.answerIdx == correctAnswer;
 
     var youDeltaPoints = 0;
@@ -181,7 +181,7 @@ class GameService {
       if (updatedGame.resultTimersEnded) {
         print('SERVICE: Both result timers ended, checking winner');
 
-        final opponentId = updatedGame.opponentId(userId);
+        final opponentId = updatedGame.opponent(userId).id;
         final youPoints = updatedGame.players[userId]!.points;
         final opponentPoints = updatedGame.players[opponentId]!.points;
 

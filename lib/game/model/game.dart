@@ -18,14 +18,12 @@ class Game {
 
   set currentQuestion(Question question) => questions[questions.length - 1] = question;
 
-  String opponentId(String userId) => players.values.firstWhere((element) => element.id != userId).id;
-
   Player you(String userId) {
     return players[userId]!;
   }
 
   Player opponent(String userId) {
-    return players[opponentId(userId)]!;
+    return players.values.firstWhere((element) => element.id != userId);
   }
 
   bool get answerTimersEnded => players.values.every((player) => player.answerTimerEnded);

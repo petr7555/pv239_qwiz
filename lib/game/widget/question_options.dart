@@ -26,7 +26,7 @@ class QuestionOptions extends StatelessWidget {
     return Column(
       children: question.allAnswers.mapIndexed((answerIdx, answer) {
         final isYourAnswer = question.interactions[userId]?.answerIdx == answerIdx;
-        final isOpponentsAnswer = question.interactions[game.opponentId(userId)]?.answerIdx == answerIdx;
+        final isOpponentsAnswer = question.interactions[game.opponent(userId).id]?.answerIdx == answerIdx;
 
         final borderText = _getBorderText(
           stateOfQuestion: stateOfQuestion,
