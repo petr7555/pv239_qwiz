@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
 
-const mockQuestionApiService = true;
+const shouldMockQuestion = true;
 final mockQuestion = Question(
   id: '1',
   question: 'What is the capital of the Czech Republic?',
@@ -15,7 +15,7 @@ final mockQuestion = Question(
 
 class QuestionApiService {
   Future<Question> getQuestion() async {
-    if (mockQuestionApiService) {
+    if (shouldMockQuestion) {
       return mockQuestion;
     }
     final response = await http.get(Uri.parse(questionsApiEndpoint));
