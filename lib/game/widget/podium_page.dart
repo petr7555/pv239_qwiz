@@ -28,6 +28,7 @@ class PodiumPage extends StatelessWidget {
           final you = game.you(userId);
           final opponent = game.opponent(userId);
           final isWinner = game.winnerId == userId;
+          final winnerPoints = isWinner ? you.points : opponent.points;
 
           return Column(
             children: [
@@ -38,8 +39,20 @@ class PodiumPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _buildBar(theme: theme, playerName: 'You', points: you.points, isWinner: isWinner),
-                  _buildBar(theme: theme, playerName: 'Opponent', points: opponent.points, isWinner: !isWinner),
+                  _buildBar(
+                    theme: theme,
+                    playerName: 'You',
+                    points: you.points,
+                    winnerPoints: winnerPoints,
+                    isWinner: isWinner,
+                  ),
+                  _buildBar(
+                    theme: theme,
+                    playerName: 'Opponent',
+                    points: opponent.points,
+                    winnerPoints: winnerPoints,
+                    isWinner: !isWinner,
+                  ),
                 ],
               ),
               SizedBox(height: largeGap),
@@ -61,10 +74,11 @@ class PodiumPage extends StatelessWidget {
     required ThemeData theme,
     required String playerName,
     required int points,
+    required int winnerPoints,
     required bool isWinner,
   }) {
     const winnerHeight = 200.0;
-    final height = isWinner ? winnerHeight : (winnerHeight * points / 100);
+    final height = isWinner ? winnerHeight : (winnerHeight * points / winnerPoints);
     final color = isWinner ? goldColor : silverColor;
 
     return Column(

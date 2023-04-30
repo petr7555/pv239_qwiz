@@ -28,14 +28,14 @@ class PlayersPointsDisplay extends StatelessWidget {
       children: [
         _getPlayerPointsDisplay(
           context: context,
-          label: 'You',
+          playerName: 'You',
           points: you.points,
           deltaPoints: youInteraction?.deltaPoints,
           time: youInteraction?.secondsToAnswer,
         ),
         _getPlayerPointsDisplay(
           context: context,
-          label: 'Opponent',
+          playerName: 'Opponent',
           points: opponent.points,
           deltaPoints: opponentInteraction?.deltaPoints,
           time: opponentInteraction?.secondsToAnswer,
@@ -46,7 +46,7 @@ class PlayersPointsDisplay extends StatelessWidget {
 
   Widget _getPlayerPointsDisplay({
     required BuildContext context,
-    required String label,
+    required String playerName,
     required int points,
     int? deltaPoints,
     double? time,
@@ -61,7 +61,7 @@ class PlayersPointsDisplay extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text('$label: $points', style: textStyle),
+            Text('$playerName: $points', style: textStyle),
             if (showDeltaPoints)
               Text(
                 ' (${deltaPoints > 0 ? '+' : ''}$deltaPoints)',
