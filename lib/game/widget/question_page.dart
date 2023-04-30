@@ -131,23 +131,19 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('You: ${you.points}', style: Theme.of(context).textTheme.titleMedium),
-                        stateOfQuestion == StateOfQuestion.showingResult && youTime != null
-                            ? _getDeltaText(deltaPoints: youDeltaPoints, time: youTime, isWinner: isWinner)
-                            : SizedBox.shrink(),
-                      ],
+                    _getPointsDisplay(
+                      stateOfQuestion: stateOfQuestion,
+                      label: 'You',
+                      points: you.points,
+                      deltaPoints: youDeltaPoints,
+                      time: youTime,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('Opponent: ${opponent.points}', style: Theme.of(context).textTheme.titleMedium),
-                        stateOfQuestion == StateOfQuestion.showingResult && opponentTime != null
-                            ? _getDeltaText(deltaPoints: opponentDeltaPoints, time: opponentTime, isWinner: !isWinner)
-                            : SizedBox.shrink(),
-                      ],
+                    _getPointsDisplay(
+                      stateOfQuestion: stateOfQuestion,
+                      label: 'Opponent',
+                      points: opponent.points,
+                      deltaPoints: opponentDeltaPoints,
+                      time: opponentTime,
                     ),
                   ],
                 ),
@@ -286,9 +282,40 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
     return Colors.transparent;
   }
 
-  Widget _getDeltaText({required int deltaPoints, required double time, required bool isWinner}) {
-    final roundedTime = time.toStringAsFixed(1);
-    return Text('${deltaPoints > 0 ? '+' : ''}$deltaPoints ($roundedTime sec)',
-        style: TextStyle(color: isWinner ? Colors.green : Colors.red));
+  Widget _getPointsDisplay({
+    required StateOfQuestion stateOfQuestion,
+    required String label,
+    required int points,
+    int? deltaPoints,
+    double? time,
+  }) {
+    final textStyle = Theme.of(context).textTheme.titleMedium;
+
+    final showDeltaPoints = stateOfQuestion == StateOfQuestion.showingResult && deltaPoints != null;
+    final showTime = stateOfQuestion == StateOfQuestion.showingResult && time != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('$label: $points', style: textStyle),
+            if (showDeltaPoints)
+              Text(
+                ' (${deltaPoints > 0 ? '+' : ''}$deltaPoints)',
+                style: textStyle?.copyWith(color: deltaPoints > 0 ? Colors.green : Colors.red),
+              ),
+          ],
+        ),
+        SizedBox(height: 4.0),
+        Row(
+          children: [
+            if (showTime) Icon(Icons.timer_outlined, size: 16.0),
+            SizedBox(width: 2.0),
+            Text(showTime ? '${time.toStringAsFixed(1)} sec' : '', style: textStyle),
+          ],
+        )
+      ],
+    );
   }
 }
