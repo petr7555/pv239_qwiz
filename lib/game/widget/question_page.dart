@@ -8,6 +8,7 @@ import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
+import 'package:pv239_qwiz/game/widget/players_points_display.dart';
 import 'package:pv239_qwiz/game/widget/quit_game_button.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -87,37 +88,12 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
           final question = game.currentQuestion;
           final userId = context.read<AuthCubit>().userId;
-          final you = game.you(userId);
           final opponent = game.opponent(userId);
-
-          final youDeltaPoints = question.interactions[userId]!.deltaPoints;
-          final opponentDeltaPoints = question.interactions[opponent.id]!.deltaPoints;
-
-          final youTime = question.interactions[userId]!.secondsToAnswer;
-          final opponentTime = question.interactions[opponent.id]!.secondsToAnswer;
 
           return Center(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _getPointsDisplay(
-                      stateOfQuestion: stateOfQuestion,
-                      label: 'You',
-                      points: you.points,
-                      deltaPoints: youDeltaPoints,
-                      time: youTime,
-                    ),
-                    _getPointsDisplay(
-                      stateOfQuestion: stateOfQuestion,
-                      label: 'Opponent',
-                      points: opponent.points,
-                      deltaPoints: opponentDeltaPoints,
-                      time: opponentTime,
-                    ),
-                  ],
-                ),
+                PlayersPointsDisplay(stateOfQuestion: stateOfQuestion, game: game),
                 SizedBox(height: standardGap),
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
@@ -247,42 +223,5 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
       return youColor;
     }
     return Colors.transparent;
-  }
-
-  Widget _getPointsDisplay({
-    required StateOfQuestion stateOfQuestion,
-    required String label,
-    required int points,
-    int? deltaPoints,
-    double? time,
-  }) {
-    final textStyle = Theme.of(context).textTheme.titleMedium;
-
-    final showDeltaPoints = stateOfQuestion == StateOfQuestion.showingResult && deltaPoints != null;
-    final showTime = stateOfQuestion == StateOfQuestion.showingResult && time != null;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text('$label: $points', style: textStyle),
-            if (showDeltaPoints)
-              Text(
-                ' (${deltaPoints > 0 ? '+' : ''}$deltaPoints)',
-                style: textStyle?.copyWith(color: deltaPoints > 0 ? Colors.green : Colors.red),
-              ),
-          ],
-        ),
-        SizedBox(height: 4.0),
-        Row(
-          children: [
-            if (showTime) Icon(Icons.timer_outlined, size: 16.0),
-            SizedBox(width: 2.0),
-            Text(showTime ? '${time.toStringAsFixed(1)} sec' : '', style: textStyle),
-          ],
-        )
-      ],
-    );
   }
 }

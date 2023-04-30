@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
+import 'package:pv239_qwiz/game/model/game.dart';
+import 'package:pv239_qwiz/game/widget/question_page.dart';
+
+class PlayersPointsDisplay extends StatelessWidget {
+  final StateOfQuestion stateOfQuestion;
+  final Game game;
+
+  const PlayersPointsDisplay({
+    super.key,
+    required this.stateOfQuestion,
+    required this.game,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = context.read<AuthCubit>().userId;
+    final question = game.currentQuestion;
+    final you = game.you(userId);
+    final opponent = game.opponent(userId);
+    final youDeltaPoints = question.interactions[userId]!.deltaPoints;
+    final opponentDeltaPoints = question.interactions[opponent.id]!.deltaPoints;
+    final youTime = question.interactions[userId]!.secondsToAnswer;
+    final opponentTime = question.interactions[opponent.id]!.secondsToAnswer;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _getPlayerPointsDisplay(
+          context: context,
+          label: 'You',
+          points: you.points,
+          deltaPoints: youDeltaPoints,
+          time: youTime,
+        ),
+        _getPlayerPointsDisplay(
+          context: context,
+          label: 'Opponent',
+          points: opponent.points,
+          deltaPoints: opponentDeltaPoints,
+          time: opponentTime,
+        ),
+      ],
+    );
+  }
+
+  Widget _getPlayerPointsDisplay({
+    required BuildContext context,
+    required String label,
+    required int points,
+    int? deltaPoints,
+    double? time,
+  }) {
+    final textStyle = Theme.of(context).textTheme.titleMedium;
+
+    final showDeltaPoints = stateOfQuestion == StateOfQuestion.showingResult && deltaPoints != null;
+    final showTime = stateOfQuestion == StateOfQuestion.showingResult && time != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('$label: $points', style: textStyle),
+            if (showDeltaPoints)
+              Text(
+                ' (${deltaPoints > 0 ? '+' : ''}$deltaPoints)',
+                style: textStyle?.copyWith(color: deltaPoints > 0 ? Colors.green : Colors.red),
+              ),
+          ],
+        ),
+        SizedBox(height: 4.0),
+        Row(
+          children: [
+            if (showTime) Icon(Icons.timer_outlined, size: 16.0),
+            SizedBox(width: 2.0),
+            Text(showTime ? '${time.toStringAsFixed(1)} sec' : '', style: textStyle),
+          ],
+        )
+      ],
+    );
+  }
+}
