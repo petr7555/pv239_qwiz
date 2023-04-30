@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
+import 'package:tuple/tuple.dart';
 
 class QuestionOptions extends StatelessWidget {
   final StateOfQuestion stateOfQuestion;
@@ -27,7 +28,7 @@ class QuestionOptions extends StatelessWidget {
         final isYourAnswer = question.interactions[userId]?.answerIdx == answerIdx;
         final isOpponentsAnswer = question.interactions[opponentId]?.answerIdx == answerIdx;
 
-        final borderText = _getBorderText(
+        final borderTextAndColor = _getBorderTextAndColor(
           stateOfQuestion: stateOfQuestion,
           isYourAnswer: isYourAnswer,
           isOpponentsAnswer: isOpponentsAnswer,
@@ -38,16 +39,12 @@ class QuestionOptions extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(borderText),
+              Text(borderTextAndColor.item1),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(4)),
                   border: Border.all(
-                    color: _getBorderColor(
-                      stateOfQuestion: stateOfQuestion,
-                      isYourAnswer: isYourAnswer,
-                      isOpponentsAnswer: isOpponentsAnswer,
-                    ),
+                    color: borderTextAndColor.item2,
                     width: 5,
                   ),
                 ),
@@ -56,10 +53,10 @@ class QuestionOptions extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size.fromHeight(buttonHeight),
-                      backgroundColor: _getAnswerColor(
-                        stateOfQuestion: stateOfQuestion,
-                        isCorrect: question.correctAnswerIdx == answerIdx,
-                      ),
+                      backgroundColor:
+                          stateOfQuestion == StateOfQuestion.showingResult && question.correctAnswerIdx == answerIdx
+                              ? correctColor
+                              : null,
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     ),
                     child: Text(answer),
@@ -74,53 +71,22 @@ class QuestionOptions extends StatelessWidget {
     );
   }
 
-  Color? _getAnswerColor({
-    required StateOfQuestion stateOfQuestion,
-    required bool isCorrect,
-  }) {
-    if (stateOfQuestion == StateOfQuestion.showingResult) {
-      if (isCorrect) {
-        return correctColor;
-      }
-    }
-    return null;
-  }
-
-  String _getBorderText({
+  Tuple2<String, Color> _getBorderTextAndColor({
     required StateOfQuestion stateOfQuestion,
     required bool isYourAnswer,
     required bool isOpponentsAnswer,
   }) {
     if (stateOfQuestion == StateOfQuestion.showingResult) {
       if (isYourAnswer && isOpponentsAnswer) {
-        return 'Both answered';
+        return Tuple2('Both answered', bothColor);
       }
       if (isOpponentsAnswer) {
-        return "Opponent's answer";
+        return Tuple2("Opponent's answer", opponentColor);
       }
     }
     if (isYourAnswer) {
-      return 'Your answer';
+      return Tuple2('Your answer', youColor);
     }
-    return '';
-  }
-
-  Color _getBorderColor({
-    required StateOfQuestion stateOfQuestion,
-    required bool isYourAnswer,
-    required bool isOpponentsAnswer,
-  }) {
-    if (stateOfQuestion == StateOfQuestion.showingResult) {
-      if (isYourAnswer && isOpponentsAnswer) {
-        return bothColor;
-      }
-      if (isOpponentsAnswer) {
-        return opponentColor;
-      }
-    }
-    if (isYourAnswer) {
-      return youColor;
-    }
-    return Colors.transparent;
+    return Tuple2('', Colors.transparent);
   }
 }

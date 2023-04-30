@@ -16,41 +16,44 @@ class PodiumPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageTemplate(
       title: 'Podium',
-      child: BlocBuilder<GameCubit, Game?>(builder: (context, game) {
-        if (game == null) {
-          return SizedBox.shrink();
-        }
+      child: BlocBuilder<GameCubit, Game?>(
+        builder: (context, game) {
+          if (game == null) {
+            return SizedBox.shrink();
+          }
 
-        final theme = Theme.of(context);
-        final userId = context.read<AuthCubit>().userId;
-        final isWinner = game.winnerId == userId;
-        final you = game.you(userId);
-        final opponent = game.opponent(userId);
+          final theme = Theme.of(context);
 
-        return Column(
-          children: [
-            SizedBox(height: standardGap),
-            Text(isWinner ? '🏆 You won!' : '😢 You lost...', style: theme.textTheme.headlineLarge),
-            SizedBox(height: largeGap),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildBar(theme: theme, playerName: 'You', points: you.points, isWinner: isWinner),
-                _buildBar(theme: theme, playerName: 'Opponent', points: opponent.points, isWinner: !isWinner),
-              ],
-            ),
-            SizedBox(height: largeGap),
-            Button(
-              label: 'Back to menu',
-              onPressed: () {
-                final userId = context.read<AuthCubit>().userId;
-                context.read<GameCubit>().resetGame(userId);
-              },
-            ),
-          ],
-        );
-      }),
+          final userId = context.read<AuthCubit>().userId;
+          final you = game.you(userId);
+          final opponent = game.opponent(userId);
+          final isWinner = game.winnerId == userId;
+
+          return Column(
+            children: [
+              SizedBox(height: standardGap),
+              Text(isWinner ? '🏆 You won!' : '😢 You lost...', style: theme.textTheme.headlineLarge),
+              SizedBox(height: largeGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _buildBar(theme: theme, playerName: 'You', points: you.points, isWinner: isWinner),
+                  _buildBar(theme: theme, playerName: 'Opponent', points: opponent.points, isWinner: !isWinner),
+                ],
+              ),
+              SizedBox(height: largeGap),
+              Button(
+                label: 'Back to menu',
+                onPressed: () {
+                  final userId = context.read<AuthCubit>().userId;
+                  context.read<GameCubit>().resetGame(userId);
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 

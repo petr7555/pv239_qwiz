@@ -16,14 +16,12 @@ class PlayersPointsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.read<AuthCubit>().userId;
     final question = game.currentQuestion;
+    final userId = context.read<AuthCubit>().userId;
     final you = game.you(userId);
     final opponent = game.opponent(userId);
-    final youDeltaPoints = question.interactions[userId]!.deltaPoints;
-    final opponentDeltaPoints = question.interactions[opponent.id]!.deltaPoints;
-    final youTime = question.interactions[userId]!.secondsToAnswer;
-    final opponentTime = question.interactions[opponent.id]!.secondsToAnswer;
+    final youInteraction = question.interactions[userId];
+    final opponentInteraction = question.interactions[opponent.id];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,15 +30,15 @@ class PlayersPointsDisplay extends StatelessWidget {
           context: context,
           label: 'You',
           points: you.points,
-          deltaPoints: youDeltaPoints,
-          time: youTime,
+          deltaPoints: youInteraction?.deltaPoints,
+          time: youInteraction?.secondsToAnswer,
         ),
         _getPlayerPointsDisplay(
           context: context,
           label: 'Opponent',
           points: opponent.points,
-          deltaPoints: opponentDeltaPoints,
-          time: opponentTime,
+          deltaPoints: opponentInteraction?.deltaPoints,
+          time: opponentInteraction?.secondsToAnswer,
         ),
       ],
     );
