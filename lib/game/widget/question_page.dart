@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:linear_timer/linear_timer.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
@@ -9,6 +8,7 @@ import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
+import 'package:pv239_qwiz/game/widget/quit_game_button.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -50,36 +50,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return PageTemplate(
       title: 'Question',
-      actions: [
-        IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Are you sure you want to quit?'),
-                actions: [
-                  TextButton(
-                    style: TextButton.styleFrom(foregroundColor: Colors.red),
-                    child: Text('No'),
-                    onPressed: () {
-                      context.pop();
-                    },
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(foregroundColor: Colors.green),
-                    onPressed: () {
-                      final userId = context.read<AuthCubit>().userId;
-                      context.read<GameCubit>().abortGame(userId);
-                    },
-                    child: Text('Yes'),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
+      actions: [QuitGameButton()],
       child: BlocConsumer<GameCubit, Game?>(
         listener: (context, game) async {
           final userId = context.read<AuthCubit>().userId;
@@ -124,8 +95,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
           final youTime = question.interactions[userId]!.secondsToAnswer;
           final opponentTime = question.interactions[opponent.id]!.secondsToAnswer;
-
-          final isWinner = youDeltaPoints > opponentDeltaPoints;
 
           return Center(
             child: Column(
@@ -172,10 +141,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                     final isYourAnswer = question.interactions[userId]!.answerIdx == index;
                     final isOpponentsAnswer = question.interactions[opponent.id]!.answerIdx == index;
                     final isCorrect = question.correctAnswerIdx == index;
-
-                    // final isYourAnswer = true;
-                    // final isOpponentsAnswer = true;
-                    // final isCorrect = question.correctAnswerIdx == index;
 
                     final borderText = _getBorderText(
                       stateOfQuestion: stateOfQuestion,
