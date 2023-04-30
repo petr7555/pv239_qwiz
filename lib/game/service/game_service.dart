@@ -8,6 +8,7 @@ import 'package:pv239_qwiz/game/service/question_api_service.dart';
 import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/get_ready_page.dart';
 import 'package:pv239_qwiz/game/widget/menu_page.dart';
+import 'package:pv239_qwiz/game/widget/podium_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 class GameService {
@@ -168,8 +169,28 @@ class GameService {
       game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: false, resultTimerEnded: true);
       var updatedGame = game.copyWith(players: game.players);
       if (updatedGame.resultTimersEnded) {
-        print('SERVICE: Both result timers ended, getting next question');
-        updatedGame = await _addNextQuestion(updatedGame);
+        print('SERVICE: Both result timers ended, checking winner');
+
+        final opponentId = updatedGame.opponentId(userId);
+        final youPoints = updatedGame.players[userId]!.points;
+        final opponentPoints = updatedGame.players[opponentId]!.points;
+
+        String winnerId = '';
+        // TODO handle tie
+        if (youPoints >= updatedGame.pointsToWin) {
+          winnerId = userId;
+        } else if (opponentPoints >= updatedGame.pointsToWin) {
+          winnerId = opponentId;
+        }
+        if (winnerId != '') {
+          updatedGame = updatedGame.copyWith(
+            winnerId: winnerId,
+            players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: PodiumPage.routeName))),
+          );
+        } else {
+          print('SERVICE: Both result timers ended, getting next question');
+          updatedGame = await _addNextQuestion(updatedGame);
+        }
       }
       return updatedGame;
     });

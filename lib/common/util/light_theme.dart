@@ -7,4 +7,9 @@ final lightTheme = ThemeData(
     primarySwatch: primaryColor,
     accentColor: secondaryColor,
   ),
+  textTheme: TextTheme(
+    headlineLarge: TextStyle(
+      color: Colors.black,
+    ),
+  ),
 );

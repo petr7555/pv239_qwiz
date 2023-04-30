@@ -30,7 +30,9 @@ class PodiumPage extends StatelessWidget {
         return Column(
           children: [
             SizedBox(height: standardGap),
-            Text(isWinner ? 'You won!' : 'You lost.', style: theme.textTheme.headlineLarge),
+            Text(isWinner ? '🏆 You won!' : '😢 You lost...',
+                style: theme.textTheme.headlineLarge
+                    ?.copyWith(color: theme.textTheme.headlineLarge?.color?.withOpacity(1))),
             SizedBox(height: largeGap),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
