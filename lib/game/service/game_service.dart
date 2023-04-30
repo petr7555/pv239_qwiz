@@ -101,14 +101,14 @@ class GameService {
     });
   }
 
-  Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx) {
+  Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx, double secondsToAnswer) {
     return _withTransactGame(gameId, (game) async {
       final question = game.currentQuestion;
       final interaction = question.interactions[userId]!;
       if (interaction.answerIdx != null || game.players[userId]!.answerTimerEnded) {
         return null;
       }
-      final updatedInteraction = interaction.copyWith(answerIdx: answerIdx);
+      final updatedInteraction = interaction.copyWith(answerIdx: answerIdx, secondsToAnswer: secondsToAnswer);
       question.interactions[userId] = updatedInteraction;
       game.currentQuestion = question;
       return game;
