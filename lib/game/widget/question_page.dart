@@ -87,6 +87,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
             return SizedBox.shrink();
           }
 
+          final userId = context.read<AuthCubit>().userId;
+          final opponentId = game.opponent(userId).id;
+
           return Center(
             child: Column(
               children: [
@@ -98,7 +101,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                 SizedBox(height: standardGap),
                 QuestionOptions(
                   stateOfQuestion: stateOfQuestion,
-                  game: game,
+                  question: game.currentQuestion,
+                  userId: userId,
+                  opponentId: opponentId,
                   onPressed: (answerIdx) {
                     final userId = context.read<AuthCubit>().userId;
                     final secondsToAnswer = answerTimerController.value * secondsForQuestion;

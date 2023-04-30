@@ -19,7 +19,7 @@ class QuestionTimer extends StatelessWidget {
     final userId = context.read<AuthCubit>().userId;
 
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+      borderRadius: BorderRadius.all(Radius.circular(16)),
       child: LinearTimer(
         controller: timerController,
         duration: Duration(seconds: secondsForQuestion),

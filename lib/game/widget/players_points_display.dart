@@ -71,11 +71,11 @@ class PlayersPointsDisplay extends StatelessWidget {
               ),
           ],
         ),
-        SizedBox(height: 4.0),
+        SizedBox(height: 4),
         Row(
           children: [
-            if (showTime) Icon(Icons.timer_outlined, size: 16.0),
-            SizedBox(width: 2.0),
+            if (showTime) Icon(Icons.timer_outlined, size: 16),
+            SizedBox(width: 2),
             Text(showTime ? '${time.toStringAsFixed(1)} sec' : '', style: textStyle),
           ],
         )

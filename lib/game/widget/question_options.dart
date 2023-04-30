@@ -1,32 +1,31 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
-import 'package:pv239_qwiz/game/model/game.dart';
+import 'package:pv239_qwiz/game/model/question.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
 
 class QuestionOptions extends StatelessWidget {
   final StateOfQuestion stateOfQuestion;
-  final Game game;
+  final Question question;
+  final String userId;
+  final String opponentId;
   final Function(int) onPressed;
 
   const QuestionOptions({
     super.key,
     required this.stateOfQuestion,
-    required this.game,
+    required this.question,
+    required this.userId,
+    required this.opponentId,
     required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.read<AuthCubit>().userId;
-    final question = game.currentQuestion;
-
     return Column(
       children: question.allAnswers.mapIndexed((answerIdx, answer) {
         final isYourAnswer = question.interactions[userId]?.answerIdx == answerIdx;
-        final isOpponentsAnswer = question.interactions[game.opponent(userId).id]?.answerIdx == answerIdx;
+        final isOpponentsAnswer = question.interactions[opponentId]?.answerIdx == answerIdx;
 
         final borderText = _getBorderText(
           stateOfQuestion: stateOfQuestion,
@@ -42,7 +41,7 @@ class QuestionOptions extends StatelessWidget {
               Text(borderText),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
                   border: Border.all(
                     color: _getBorderColor(
                       stateOfQuestion: stateOfQuestion,
@@ -53,7 +52,7 @@ class QuestionOptions extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(4.0),
+                  padding: EdgeInsets.all(4),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size.fromHeight(buttonHeight),
@@ -61,7 +60,7 @@ class QuestionOptions extends StatelessWidget {
                         stateOfQuestion: stateOfQuestion,
                         isCorrect: question.correctAnswerIdx == answerIdx,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     ),
                     child: Text(answer),
                     onPressed: () => onPressed(answerIdx),
