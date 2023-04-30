@@ -27,7 +27,7 @@ The question is taken from a public API and is the same for both players.
 They are both answering at the same time. There is a timeout of 10 seconds for the question
 visualized by a progress bar. If they both answer, the timeout ends immediately.
 If they both answer correctly, the one who answered sooner gets 3 points,
-the other one gets 2 points.
+the other one gets 2 points. If they both answer at the same time, they get both 2 points.
 If only one of them answered correctly, they get 3 points. If no player answered correctly,
 no points are given. There are no negative points. The players might not answer at all.
 After each question, users can see the correct answer, their and opponent's answer, total score,

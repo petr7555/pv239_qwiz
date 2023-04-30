@@ -20,7 +20,7 @@ class Game {
 
   String opponentId(String userId) => players.values.firstWhere((element) => element.id != userId).id;
 
-  Player thisPlayer(String userId) {
+  Player you(String userId) {
     return players[userId]!;
   }
 

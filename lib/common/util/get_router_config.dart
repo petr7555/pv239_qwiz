@@ -35,8 +35,8 @@ RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object
       if (gameActive) {
         final userId = authCubit.state!.uid;
         final game = gameCubit.state!;
-        final thisPlayer = game.thisPlayer(userId);
-        return _redirectIfNotThere(state, thisPlayer.route);
+        final you = game.you(userId);
+        return _redirectIfNotThere(state, you.route);
       }
 
       if (!gameActive &&

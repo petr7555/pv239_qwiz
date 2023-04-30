@@ -114,16 +114,16 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
           final question = game.currentQuestion;
           final userId = context.read<AuthCubit>().userId;
-          final thisPlayer = game.thisPlayer(userId);
+          final you = game.you(userId);
           final opponent = game.opponent(userId);
 
-          final youDeltaScore = 3;
-          final opponentDeltaScore = -1;
+          final youDeltaPoints = question.interactions[userId]!.deltaPoints;
+          final opponentDeltaPoints = question.interactions[opponent.id]!.deltaPoints;
 
           final youTime = question.interactions[userId]!.secondsToAnswer;
           final opponentTime = question.interactions[opponent.id]!.secondsToAnswer;
 
-          final isWinner = youDeltaScore > opponentDeltaScore;
+          final isWinner = youDeltaPoints > opponentDeltaPoints;
 
           return Center(
             child: Column(
@@ -134,9 +134,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('You: ${thisPlayer.points}', style: Theme.of(context).textTheme.titleMedium),
+                        Text('You: ${you.points}', style: Theme.of(context).textTheme.titleMedium),
                         stateOfQuestion == StateOfQuestion.showingResult && youTime != null
-                            ? _getDeltaText(deltaScore: youDeltaScore, time: youTime, isWinner: isWinner)
+                            ? _getDeltaText(deltaPoints: youDeltaPoints, time: youTime, isWinner: isWinner)
                             : SizedBox.shrink(),
                       ],
                     ),
@@ -145,7 +145,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                       children: [
                         Text('Opponent: ${opponent.points}', style: Theme.of(context).textTheme.titleMedium),
                         stateOfQuestion == StateOfQuestion.showingResult && opponentTime != null
-                            ? _getDeltaText(deltaScore: opponentDeltaScore, time: opponentTime, isWinner: !isWinner)
+                            ? _getDeltaText(deltaPoints: opponentDeltaPoints, time: opponentTime, isWinner: !isWinner)
                             : SizedBox.shrink(),
                       ],
                     ),
@@ -286,9 +286,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
     return Colors.transparent;
   }
 
-  Widget _getDeltaText({required int deltaScore, required double time, required bool isWinner}) {
+  Widget _getDeltaText({required int deltaPoints, required double time, required bool isWinner}) {
     final roundedTime = time.toStringAsFixed(1);
-    return Text('${deltaScore > 0 ? '+' : ''}$deltaScore ($roundedTime sec)',
+    return Text('${deltaPoints > 0 ? '+' : ''}$deltaPoints ($roundedTime sec)',
         style: TextStyle(color: isWinner ? Colors.green : Colors.red));
   }
 }

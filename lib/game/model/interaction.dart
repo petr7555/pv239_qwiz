@@ -6,19 +6,23 @@ part 'interaction.g.dart';
 class Interaction {
   final int? answerIdx;
   final double? secondsToAnswer;
+  final int deltaPoints;
 
   const Interaction({
     this.answerIdx,
     this.secondsToAnswer,
+    this.deltaPoints = 0,
   });
 
   Interaction copyWith({
     int? answerIdx,
     double? secondsToAnswer,
+    int? deltaPoints,
   }) {
     return Interaction(
       answerIdx: answerIdx ?? this.answerIdx,
       secondsToAnswer: secondsToAnswer ?? this.secondsToAnswer,
+      deltaPoints: deltaPoints ?? this.deltaPoints,
     );
   }
 

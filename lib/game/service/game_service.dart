@@ -118,7 +118,48 @@ class GameService {
   Future<void> setAnswerTimerEnded(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
       game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: true, resultTimerEnded: false);
-      return game.copyWith(players: game.players);
+      var updatedGame = game.copyWith(players: game.players);
+      if (updatedGame.answerTimersEnded) {
+        print('SERVICE: Both answer timers ended, getting results');
+        final correctAnswer = updatedGame.currentQuestion.correctAnswerIdx;
+        final youCorrect = updatedGame.currentQuestion.interactions[userId]!.answerIdx == correctAnswer;
+        final opponentId = updatedGame.opponentId(userId);
+        final opponentCorrect = updatedGame.currentQuestion.interactions[opponentId]!.answerIdx == correctAnswer;
+
+        var youDeltaPoints = 0;
+        var opponentDeltaPoints = 0;
+
+        if (youCorrect && opponentCorrect) {
+          final yourTime = updatedGame.currentQuestion.interactions[userId]!.secondsToAnswer!;
+          final opponentsTime = updatedGame.currentQuestion.interactions[opponentId]!.secondsToAnswer!;
+          if (yourTime < opponentsTime) {
+            youDeltaPoints = bigPoints;
+            opponentDeltaPoints = mediumPoints;
+          } else if (yourTime > opponentsTime) {
+            opponentDeltaPoints = bigPoints;
+            youDeltaPoints = mediumPoints;
+          } else {
+            youDeltaPoints = mediumPoints;
+            opponentDeltaPoints = mediumPoints;
+          }
+        } else if (youCorrect) {
+          youDeltaPoints = bigPoints;
+        } else if (opponentCorrect) {
+          opponentDeltaPoints = bigPoints;
+        }
+
+        updatedGame.players[userId] = updatedGame.players[userId]!.copyWith(
+          points: updatedGame.players[userId]!.points + youDeltaPoints,
+        );
+        updatedGame.players[opponentId] = updatedGame.players[opponentId]!.copyWith(
+          points: updatedGame.players[opponentId]!.points + opponentDeltaPoints,
+        );
+        updatedGame.currentQuestion.interactions[userId] =
+            updatedGame.currentQuestion.interactions[userId]!.copyWith(deltaPoints: youDeltaPoints);
+        updatedGame.currentQuestion.interactions[opponentId] =
+            updatedGame.currentQuestion.interactions[opponentId]!.copyWith(deltaPoints: opponentDeltaPoints);
+      }
+      return updatedGame;
     });
   }
 
@@ -126,7 +167,7 @@ class GameService {
     return _withTransactGame(gameId, (game) async {
       game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: false, resultTimerEnded: true);
       var updatedGame = game.copyWith(players: game.players);
-      if (game.resultTimersEnded) {
+      if (updatedGame.resultTimersEnded) {
         print('SERVICE: Both result timers ended, getting next question');
         updatedGame = await _addNextQuestion(updatedGame);
       }

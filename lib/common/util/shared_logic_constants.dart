@@ -7,3 +7,7 @@ const secondsToStartGame = 3;
 const secondsForQuestion = 10;
 const secondsForResults = 3;
 const questionsApiEndpoint = 'https://the-trivia-api.com/api/questions?limit=1&region=CZ';
+
+const bigPoints = 3;
+const mediumPoints = 2;
+const smallPoints = 1;
