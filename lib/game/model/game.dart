@@ -21,10 +21,6 @@ class Game with _$Game {
 
   Question get currentQuestion => questions.last;
 
-  // TODO how to do immutable setter? Is it possible?
-  // set currentQuestion(Question question) => questions[questions.length - 1] = question;
-
-  // TODO setter for those two? Is it possible?
   Interaction yourCurrentInteraction(String userId) {
     return currentQuestion.interactions[userId]!;
   }

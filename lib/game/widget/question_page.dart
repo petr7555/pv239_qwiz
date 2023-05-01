@@ -52,7 +52,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
     return BlocConsumer<GameCubit, Game?>(
       listener: (context, game) async {
         if (game != null) {
-          if (game.winnerId != null) return;
+          if (game.winnerId != null) {
+            return;
+          }
 
           final userId = context.read<AuthCubit>().userId;
 
@@ -81,7 +83,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
       },
       builder: (context, game) {
         if (game == null) {
-          // TODO
           return SizedBox.shrink();
         }
 
