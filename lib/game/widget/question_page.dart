@@ -55,8 +55,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
       actions: [QuitGameButton()],
       child: BlocConsumer<GameCubit, Game?>(
         listener: (context, game) async {
-          final userId = context.read<AuthCubit>().userId;
-
           if (game != null) {
             if (game.winnerId != null) return;
 
@@ -79,6 +77,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
               print('LISTENER: Starting result timer');
               Future.delayed(Duration(seconds: secondsForResults), () {
                 print('LISTENER: Result timer ended');
+                final userId = context.read<AuthCubit>().userId;
                 context.read<GameCubit>().setResultTimerEnded(userId);
               });
             }
