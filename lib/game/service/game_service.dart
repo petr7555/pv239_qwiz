@@ -20,14 +20,10 @@ class GameService {
       );
 
   Stream<List<Game>> _getGamesOfUser(String userId, {required bool complete}) {
-    // TODO filter in Firebase
     return _gamesCollection
+        .where('players.$userId.complete', isEqualTo: complete)
         .snapshots()
-        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList())
-        .map((games) => games.where((game) {
-              final player = game.players[userId];
-              return player != null && player.complete == complete;
-            }).toList());
+        .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
   }
 
   Stream<Game?> currentGameStream(String userId) {
