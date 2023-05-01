@@ -11,3 +11,4 @@ const questionsApiEndpoint = 'https://the-trivia-api.com/api/questions?limit=1&r
 const bigPoints = 3;
 const mediumPoints = 2;
 const smallPoints = 1;
+const shootoutPenaltyPoints = -1;

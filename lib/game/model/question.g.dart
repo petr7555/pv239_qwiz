@@ -16,6 +16,7 @@ _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
       interactions: (json['interactions'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, Interaction.fromJson(e as Map<String, dynamic>)),
       ),
+      isShootout: json['isShootout'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
       'allAnswers': instance.allAnswers,
       'interactions':
           instance.interactions.map((k, e) => MapEntry(k, e.toJson())),
+      'isShootout': instance.isShootout,
     };

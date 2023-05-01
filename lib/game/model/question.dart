@@ -12,6 +12,7 @@ class Question with _$Question {
     required int correctAnswerIdx,
     required List<String> allAnswers,
     required Map<String, Interaction> interactions,
+    @Default(false) bool isShootout,
   }) = _Question;
 
   factory Question.fromApiJson(Map<String, dynamic> json) {

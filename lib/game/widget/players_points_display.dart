@@ -55,6 +55,10 @@ class PlayersPointsDisplay extends StatelessWidget {
     final showDeltaPoints = stateOfQuestion == StateOfQuestion.showingResult;
     final showTime = stateOfQuestion == StateOfQuestion.showingResult && time != null;
 
+    final deltaPointsColor = deltaPoints > 0
+        ? Colors.green
+        : (deltaPoints == 0 && game.currentQuestion.isShootout ? Colors.green : Colors.red);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,7 +68,7 @@ class PlayersPointsDisplay extends StatelessWidget {
             if (showDeltaPoints)
               Text(
                 ' (${deltaPoints > 0 ? '+' : ''}$deltaPoints)',
-                style: textStyle?.copyWith(color: deltaPoints > 0 ? Colors.green : Colors.red),
+                style: textStyle?.copyWith(color: deltaPointsColor),
               ),
           ],
         ),

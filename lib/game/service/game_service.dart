@@ -62,7 +62,7 @@ class GameService {
         players: ({...game.players}..[userId] = Player(id: userId, displayName: userName, photoURL: photoURL))
             .map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
       );
-      updatedGame = await _addNextQuestion(updatedGame);
+      updatedGame = await _addNextQuestion(updatedGame, userId);
       return updatedGame;
     });
   }
@@ -149,7 +149,7 @@ class GameService {
         updatedGame = _checkWinner(updatedGame, userId);
 
         if (updatedGame.winnerId == null) {
-          updatedGame = await _addNextQuestion(updatedGame);
+          updatedGame = await _addNextQuestion(updatedGame, userId);
         }
       }
       return updatedGame;
@@ -176,10 +176,11 @@ class GameService {
     });
   }
 
-  Future<Game> _addNextQuestion(Game game) async {
+  Future<Game> _addNextQuestion(Game game, String userId) async {
     final question = await get<QuestionApiService>().getQuestion();
     final questionWithInteractions = question.copyWith(
       interactions: game.players.map((key, value) => MapEntry(key, Interaction())),
+      isShootout: _shouldNextQuestionBeShootoutQuestion(game, userId),
     );
     final updatedGame = game.copyWith(
       questions: [...game.questions, questionWithInteractions],
@@ -197,24 +198,41 @@ class GameService {
     var yourDeltaPoints = 0;
     var opponentsDeltaPoints = 0;
 
-    if (youAreCorrect && opponentIsCorrect) {
-      final yourTime = yourInteraction.secondsToAnswer!;
-      final opponentsTime = opponentsInteraction.secondsToAnswer!;
+    if (!game.currentQuestion.isShootout) {
+      if (youAreCorrect && opponentIsCorrect) {
+        final yourTime = yourInteraction.secondsToAnswer!;
+        final opponentsTime = opponentsInteraction.secondsToAnswer!;
 
-      if (yourTime < opponentsTime) {
+        if (yourTime < opponentsTime) {
+          yourDeltaPoints = bigPoints;
+          opponentsDeltaPoints = mediumPoints;
+        } else if (yourTime > opponentsTime) {
+          opponentsDeltaPoints = bigPoints;
+          yourDeltaPoints = mediumPoints;
+        } else {
+          yourDeltaPoints = mediumPoints;
+          opponentsDeltaPoints = mediumPoints;
+        }
+      } else if (youAreCorrect) {
         yourDeltaPoints = bigPoints;
-        opponentsDeltaPoints = mediumPoints;
-      } else if (yourTime > opponentsTime) {
+      } else if (opponentIsCorrect) {
         opponentsDeltaPoints = bigPoints;
-        yourDeltaPoints = mediumPoints;
-      } else {
-        yourDeltaPoints = mediumPoints;
-        opponentsDeltaPoints = mediumPoints;
       }
-    } else if (youAreCorrect) {
-      yourDeltaPoints = bigPoints;
-    } else if (opponentIsCorrect) {
-      opponentsDeltaPoints = bigPoints;
+    } else {
+      if (youAreCorrect && opponentIsCorrect) {
+        final yourTime = yourInteraction.secondsToAnswer!;
+        final opponentsTime = opponentsInteraction.secondsToAnswer!;
+
+        if (yourTime < opponentsTime) {
+          yourDeltaPoints = shootoutPenaltyPoints;
+        } else if (yourTime > opponentsTime) {
+          opponentsDeltaPoints = shootoutPenaltyPoints;
+        }
+      } else if (youAreCorrect && !opponentIsCorrect) {
+        opponentsDeltaPoints = shootoutPenaltyPoints;
+      } else if (!youAreCorrect && opponentIsCorrect) {
+        yourDeltaPoints = shootoutPenaltyPoints;
+      }
     }
 
     var updatedGame = game.copyWith(
@@ -247,11 +265,11 @@ class GameService {
     final opponent = game.opponent(userId);
     final opponentsPoints = opponent.points;
 
-    // TODO handle tie
     String? winnerId;
-    if (yourPoints >= game.pointsToWin) {
+    if (yourPoints > opponentsPoints && yourPoints >= game.pointsToWin) {
       winnerId = userId;
-    } else if (opponentsPoints >= game.pointsToWin) {
+    }
+    if (opponentsPoints > yourPoints && opponentsPoints >= game.pointsToWin) {
       winnerId = opponent.id;
     }
 
@@ -263,5 +281,12 @@ class GameService {
     }
 
     return game;
+  }
+
+  bool _shouldNextQuestionBeShootoutQuestion(Game game, String userId) {
+    final yourPoints = game.you(userId).points;
+    final opponentsPoints = game.opponent(userId).points;
+
+    return yourPoints == opponentsPoints && yourPoints != 0;
   }
 }

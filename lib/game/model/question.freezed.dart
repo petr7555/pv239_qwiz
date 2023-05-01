@@ -26,6 +26,7 @@ mixin _$Question {
   List<String> get allAnswers => throw _privateConstructorUsedError;
   Map<String, Interaction> get interactions =>
       throw _privateConstructorUsedError;
+  bool get isShootout => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $QuestionCopyWith<$Res> {
       String question,
       int correctAnswerIdx,
       List<String> allAnswers,
-      Map<String, Interaction> interactions});
+      Map<String, Interaction> interactions,
+      bool isShootout});
 }
 
 /// @nodoc
@@ -64,6 +66,7 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
     Object? correctAnswerIdx = null,
     Object? allAnswers = null,
     Object? interactions = null,
+    Object? isShootout = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -86,6 +89,10 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
           ? _value.interactions
           : interactions // ignore: cast_nullable_to_non_nullable
               as Map<String, Interaction>,
+      isShootout: null == isShootout
+          ? _value.isShootout
+          : isShootout // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -102,7 +109,8 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
       String question,
       int correctAnswerIdx,
       List<String> allAnswers,
-      Map<String, Interaction> interactions});
+      Map<String, Interaction> interactions,
+      bool isShootout});
 }
 
 /// @nodoc
@@ -121,6 +129,7 @@ class __$$_QuestionCopyWithImpl<$Res>
     Object? correctAnswerIdx = null,
     Object? allAnswers = null,
     Object? interactions = null,
+    Object? isShootout = null,
   }) {
     return _then(_$_Question(
       id: null == id
@@ -143,6 +152,10 @@ class __$$_QuestionCopyWithImpl<$Res>
           ? _value._interactions
           : interactions // ignore: cast_nullable_to_non_nullable
               as Map<String, Interaction>,
+      isShootout: null == isShootout
+          ? _value.isShootout
+          : isShootout // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -155,7 +168,8 @@ class _$_Question implements _Question {
       required this.question,
       required this.correctAnswerIdx,
       required final List<String> allAnswers,
-      required final Map<String, Interaction> interactions})
+      required final Map<String, Interaction> interactions,
+      this.isShootout = false})
       : _allAnswers = allAnswers,
         _interactions = interactions;
 
@@ -185,8 +199,12 @@ class _$_Question implements _Question {
   }
 
   @override
+  @JsonKey()
+  final bool isShootout;
+
+  @override
   String toString() {
-    return 'Question(id: $id, question: $question, correctAnswerIdx: $correctAnswerIdx, allAnswers: $allAnswers, interactions: $interactions)';
+    return 'Question(id: $id, question: $question, correctAnswerIdx: $correctAnswerIdx, allAnswers: $allAnswers, interactions: $interactions, isShootout: $isShootout)';
   }
 
   @override
@@ -202,7 +220,9 @@ class _$_Question implements _Question {
             const DeepCollectionEquality()
                 .equals(other._allAnswers, _allAnswers) &&
             const DeepCollectionEquality()
-                .equals(other._interactions, _interactions));
+                .equals(other._interactions, _interactions) &&
+            (identical(other.isShootout, isShootout) ||
+                other.isShootout == isShootout));
   }
 
   @JsonKey(ignore: true)
@@ -213,7 +233,8 @@ class _$_Question implements _Question {
       question,
       correctAnswerIdx,
       const DeepCollectionEquality().hash(_allAnswers),
-      const DeepCollectionEquality().hash(_interactions));
+      const DeepCollectionEquality().hash(_interactions),
+      isShootout);
 
   @JsonKey(ignore: true)
   @override
@@ -235,7 +256,8 @@ abstract class _Question implements Question {
       required final String question,
       required final int correctAnswerIdx,
       required final List<String> allAnswers,
-      required final Map<String, Interaction> interactions}) = _$_Question;
+      required final Map<String, Interaction> interactions,
+      final bool isShootout}) = _$_Question;
 
   factory _Question.fromJson(Map<String, dynamic> json) = _$_Question.fromJson;
 
@@ -249,6 +271,8 @@ abstract class _Question implements Question {
   List<String> get allAnswers;
   @override
   Map<String, Interaction> get interactions;
+  @override
+  bool get isShootout;
   @override
   @JsonKey(ignore: true)
   _$$_QuestionCopyWith<_$_Question> get copyWith =>

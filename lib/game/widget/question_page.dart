@@ -49,48 +49,49 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return PageTemplate(
-      title: 'Question',
-      actions: [QuitGameButton()],
-      child: BlocConsumer<GameCubit, Game?>(
-        listener: (context, game) async {
-          if (game != null) {
-            if (game.winnerId != null) return;
-
-            final userId = context.read<AuthCubit>().userId;
-
-            if (game.resultTimersEnded && _stateOfQuestion == StateOfQuestion.showingResult) {
-              context.read<GameCubit>().setResultTimerEnded(userId, ended: false);
-
-              setState(() {
-                _stateOfQuestion = StateOfQuestion.answering;
-                _answerTimerController.start(restart: true);
-              });
-            }
-
-            if (_stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
-              context.read<GameCubit>().setAnswerTimerEnded(userId, ended: false);
-
-              _answerTimerController.stop();
-
-              setState(() {
-                _stateOfQuestion = StateOfQuestion.showingResult;
-              });
-              Future.delayed(Duration(seconds: secondsForResults), () {
-                context.read<GameCubit>().setResultTimerEnded(userId, ended: true);
-              });
-            }
-          }
-        },
-        builder: (context, game) {
-          if (game == null) {
-            return SizedBox.shrink();
-          }
+    return BlocConsumer<GameCubit, Game?>(
+      listener: (context, game) async {
+        if (game != null) {
+          if (game.winnerId != null) return;
 
           final userId = context.read<AuthCubit>().userId;
-          final opponentId = game.opponent(userId).id;
 
-          return Center(
+          if (game.resultTimersEnded && _stateOfQuestion == StateOfQuestion.showingResult) {
+            context.read<GameCubit>().setResultTimerEnded(userId, ended: false);
+
+            setState(() {
+              _stateOfQuestion = StateOfQuestion.answering;
+              _answerTimerController.start(restart: true);
+            });
+          }
+
+          if (_stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
+            context.read<GameCubit>().setAnswerTimerEnded(userId, ended: false);
+
+            _answerTimerController.stop();
+
+            setState(() {
+              _stateOfQuestion = StateOfQuestion.showingResult;
+            });
+            Future.delayed(Duration(seconds: secondsForResults), () {
+              context.read<GameCubit>().setResultTimerEnded(userId, ended: true);
+            });
+          }
+        }
+      },
+      builder: (context, game) {
+        if (game == null) {
+          // TODO
+          return SizedBox.shrink();
+        }
+
+        final userId = context.read<AuthCubit>().userId;
+        final opponentId = game.opponent(userId).id;
+
+        return PageTemplate(
+          title: game.currentQuestion.isShootout ? 'Shootout question' : 'Question',
+          actions: [QuitGameButton()],
+          child: Center(
             child: Column(
               children: [
                 PlayersPointsDisplay(stateOfQuestion: _stateOfQuestion, game: game),
@@ -112,9 +113,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
                 ),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
