@@ -34,7 +34,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateOfQuestion == StateOfQuestion.initial) {
         setState(() {
-          print('INIT: Starting answer timer');
           _stateOfQuestion = StateOfQuestion.answering;
           _answerTimerController.start(restart: true);
         });
@@ -59,9 +58,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
             if (game.winnerId != null) return;
 
             if (game.resultTimersEnded && _stateOfQuestion == StateOfQuestion.showingResult) {
-              print('LISTENER: Result timers ended, StateOfQuestion was showingResult, will be answering');
               setState(() {
-                print('LISTENER: Starting answer timer');
                 _stateOfQuestion = StateOfQuestion.answering;
                 _answerTimerController.start(restart: true);
               });
@@ -70,13 +67,10 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
             if (_stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
               _answerTimerController.stop();
 
-              print('LISTENER: Answer timers ended, StateOfQuestion was answering, will be showingResult');
               setState(() {
                 _stateOfQuestion = StateOfQuestion.showingResult;
               });
-              print('LISTENER: Starting result timer');
               Future.delayed(Duration(seconds: secondsForResults), () {
-                print('LISTENER: Result timer ended');
                 final userId = context.read<AuthCubit>().userId;
                 context.read<GameCubit>().setResultTimerEnded(userId);
               });

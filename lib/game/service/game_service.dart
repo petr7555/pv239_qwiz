@@ -124,7 +124,6 @@ class GameService {
       );
 
       if (updatedGame.allPlayersAnswered) {
-        print('SERVICE: All players answered, adding points');
         updatedGame = _addPoints(updatedGame, userId);
       }
 
@@ -140,7 +139,6 @@ class GameService {
       );
 
       if (updatedGame.answerTimersEnded) {
-        print('SERVICE: All answer timers ended, adding points');
         updatedGame = _addPoints(updatedGame, userId);
       }
 
@@ -149,18 +147,15 @@ class GameService {
   }
 
   Future<void> setResultTimerEnded(String gameId, String userId) {
-    print('setResultTimerEnded $userId');
     return _withTransactGame(gameId, (game) async {
       var updatedGame = game.copyWith(
         players: {...game.players}..[userId] =
             game.you(userId).copyWith(answerTimerEnded: false, resultTimerEnded: true),
       );
       if (updatedGame.resultTimersEnded) {
-        print('SERVICE: Both result timers ended, checking winner');
         updatedGame = _checkWinner(updatedGame, userId);
 
         if (updatedGame.winnerId == null) {
-          print('SERVICE: Both result timers ended, getting next question');
           updatedGame = await _addNextQuestion(updatedGame);
         }
       }

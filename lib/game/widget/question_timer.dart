@@ -27,7 +27,6 @@ class QuestionTimer extends StatelessWidget {
         minHeight: 20,
         color: secondaryColor,
         onTimerEnd: () {
-          print('BUILDER: Answer timer ended');
           context.read<GameCubit>().setAnswerTimerEnded(userId);
         },
       ),
