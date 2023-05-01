@@ -53,19 +53,11 @@ class GameCubit extends Cubit<Game?> {
     return _gameService.answerCurrentQuestion(gameId!, userId, answerIdx, secondsToAnswer);
   }
 
-  Future<void> setAnswerTimerEnded(String userId) {
-    return _gameService.setAnswerTimerEnded(gameId!, userId);
+  Future<void> setAnswerTimerEnded(String userId, {required bool ended}) {
+    return _gameService.setAnswerTimerEnded(gameId!, userId, ended);
   }
 
-  Future<void> setResultTimerEnded(String userId) {
-    return _gameService.setResultTimerEnded(gameId!, userId);
-  }
-
-  Future<void> setResultTimerEndedFalse(String userId) {
-    return _gameService.setResultTimerEndedFalse(gameId!, userId);
-  }
-
-  Future<void> setAnswerTimerEndedFalse(String userId) {
-    return _gameService.setAnswerTimerEndedFalse(gameId!, userId);
+  Future<void> setResultTimerEnded(String userId, {required bool ended}) {
+    return _gameService.setResultTimerEnded(gameId!, userId, ended);
   }
 }

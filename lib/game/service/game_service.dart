@@ -104,24 +104,6 @@ class GameService {
     });
   }
 
-  Future<void> setResultTimerEndedFalse(String gameId, String userId) {
-    return _withTransactGame(gameId, (game) async {
-      final updatedGame = game.copyWith(
-        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: false),
-      );
-      return updatedGame;
-    });
-  }
-
-  Future<void> setAnswerTimerEndedFalse(String gameId, String userId) {
-    return _withTransactGame(gameId, (game) async {
-      final updatedGame = game.copyWith(
-        players: {...game.players}..[userId] = game.you(userId).copyWith(answerTimerEnded: false),
-      );
-      return updatedGame;
-    });
-  }
-
   Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx, double secondsToAnswer) {
     return _withTransactGame(gameId, (game) async {
       final yourInteraction = game.yourCurrentInteraction(userId);
@@ -144,10 +126,10 @@ class GameService {
     });
   }
 
-  Future<void> setAnswerTimerEnded(String gameId, String userId) {
+  Future<void> setAnswerTimerEnded(String gameId, String userId, bool ended) {
     return _withTransactGame(gameId, (game) async {
       var updatedGame = game.copyWith(
-        players: {...game.players}..[userId] = game.you(userId).copyWith(answerTimerEnded: true),
+        players: {...game.players}..[userId] = game.you(userId).copyWith(answerTimerEnded: ended),
       );
 
       if (updatedGame.answerTimersEnded) {
@@ -158,10 +140,10 @@ class GameService {
     });
   }
 
-  Future<void> setResultTimerEnded(String gameId, String userId) {
+  Future<void> setResultTimerEnded(String gameId, String userId, bool ended) {
     return _withTransactGame(gameId, (game) async {
       var updatedGame = game.copyWith(
-        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: true),
+        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: ended),
       );
       if (updatedGame.resultTimersEnded) {
         updatedGame = _checkWinner(updatedGame, userId);
