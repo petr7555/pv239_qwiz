@@ -104,6 +104,24 @@ class GameService {
     });
   }
 
+  Future<void> setResultTimerEndedFalse(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
+      final updatedGame = game.copyWith(
+        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: false),
+      );
+      return updatedGame;
+    });
+  }
+
+  Future<void> setAnswerTimerEndedFalse(String gameId, String userId) {
+    return _withTransactGame(gameId, (game) async {
+      final updatedGame = game.copyWith(
+        players: {...game.players}..[userId] = game.you(userId).copyWith(answerTimerEnded: false),
+      );
+      return updatedGame;
+    });
+  }
+
   Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx, double secondsToAnswer) {
     return _withTransactGame(gameId, (game) async {
       final yourInteraction = game.yourCurrentInteraction(userId);
@@ -112,13 +130,8 @@ class GameService {
       }
 
       var updatedGame = game.copyWith(
-        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: false),
-      );
-
-      updatedGame = updatedGame.copyWith(
-        questions: [...updatedGame.questions]..[updatedGame.questions.length - 1] =
-              updatedGame.currentQuestion.copyWith(
-            interactions: {...updatedGame.currentQuestion.interactions}..[userId] =
+        questions: [...game.questions]..[game.questions.length - 1] = game.currentQuestion.copyWith(
+            interactions: {...game.currentQuestion.interactions}..[userId] =
                 yourInteraction.copyWith(answerIdx: answerIdx, secondsToAnswer: secondsToAnswer),
           ),
       );
@@ -134,8 +147,7 @@ class GameService {
   Future<void> setAnswerTimerEnded(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
       var updatedGame = game.copyWith(
-        players: {...game.players}..[userId] =
-            game.you(userId).copyWith(answerTimerEnded: true, resultTimerEnded: false),
+        players: {...game.players}..[userId] = game.you(userId).copyWith(answerTimerEnded: true),
       );
 
       if (updatedGame.answerTimersEnded) {
@@ -149,8 +161,7 @@ class GameService {
   Future<void> setResultTimerEnded(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
       var updatedGame = game.copyWith(
-        players: {...game.players}..[userId] =
-            game.you(userId).copyWith(answerTimerEnded: false, resultTimerEnded: true),
+        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: true),
       );
       if (updatedGame.resultTimersEnded) {
         updatedGame = _checkWinner(updatedGame, userId);

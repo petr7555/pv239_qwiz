@@ -57,7 +57,11 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           if (game != null) {
             if (game.winnerId != null) return;
 
+            final userId = context.read<AuthCubit>().userId;
+
             if (game.resultTimersEnded && _stateOfQuestion == StateOfQuestion.showingResult) {
+              context.read<GameCubit>().setResultTimerEndedFalse(userId);
+
               setState(() {
                 _stateOfQuestion = StateOfQuestion.answering;
                 _answerTimerController.start(restart: true);
@@ -65,13 +69,14 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
             }
 
             if (_stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
+              context.read<GameCubit>().setAnswerTimerEndedFalse(userId);
+
               _answerTimerController.stop();
 
               setState(() {
                 _stateOfQuestion = StateOfQuestion.showingResult;
               });
               Future.delayed(Duration(seconds: secondsForResults), () {
-                final userId = context.read<AuthCubit>().userId;
                 context.read<GameCubit>().setResultTimerEnded(userId);
               });
             }

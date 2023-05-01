@@ -60,4 +60,12 @@ class GameCubit extends Cubit<Game?> {
   Future<void> setResultTimerEnded(String userId) {
     return _gameService.setResultTimerEnded(gameId!, userId);
   }
+
+  Future<void> setResultTimerEndedFalse(String userId) {
+    return _gameService.setResultTimerEndedFalse(gameId!, userId);
+  }
+
+  Future<void> setAnswerTimerEndedFalse(String userId) {
+    return _gameService.setAnswerTimerEndedFalse(gameId!, userId);
+  }
 }
