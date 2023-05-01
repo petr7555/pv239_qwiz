@@ -103,7 +103,6 @@ class GameService {
   }
 
   Game _addPoints(Game game, String userId) {
-    print('SERVICE: Both answer timers ended, getting results');
     final correctAnswer = game.currentQuestion.correctAnswerIdx;
     final youCorrect = game.currentQuestion.interactions[userId]!.answerIdx == correctAnswer;
     final opponentId = game.opponent(userId).id;
@@ -157,6 +156,7 @@ class GameService {
       game.currentQuestion = question;
 
       if (game.allPlayersAnswered) {
+        print('SERVICE: All players answered, adding points');
         game = _addPoints(game, userId);
       }
       return game;
@@ -168,6 +168,7 @@ class GameService {
       game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: true, resultTimerEnded: false);
       var updatedGame = game.copyWith(players: game.players);
       if (updatedGame.answerTimersEnded) {
+        print('SERVICE: All answer timers ended, adding points');
         updatedGame = _addPoints(updatedGame, userId);
       }
       return updatedGame;

@@ -58,8 +58,10 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           final userId = context.read<AuthCubit>().userId;
 
           if (game != null) {
+            if (game.winnerId != null) return;
+
             if (game.resultTimersEnded && stateOfQuestion == StateOfQuestion.showingResult) {
-              print('LISTENER: Result timers ended, StateOfQuestion.showingResult');
+              print('LISTENER: Result timers ended, StateOfQuestion was showingResult, will be answering');
               setState(() {
                 print('LISTENER: Starting answer timer');
                 stateOfQuestion = StateOfQuestion.answering;
@@ -70,7 +72,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
             if (stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
               answerTimerController.stop();
 
-              print('LISTENER: Answer timers ended, StateOfQuestion.answering');
+              print('LISTENER: Answer timers ended, StateOfQuestion was answering, will be showingResult');
               setState(() {
                 stateOfQuestion = StateOfQuestion.showingResult;
               });
