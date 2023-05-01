@@ -26,22 +26,19 @@ mixin _$Interaction {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $InteractionCopyWith<Interaction> get copyWith =>
-      throw _privateConstructorUsedError;
+  $InteractionCopyWith<Interaction> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $InteractionCopyWith<$Res> {
-  factory $InteractionCopyWith(
-          Interaction value, $Res Function(Interaction) then) =
+  factory $InteractionCopyWith(Interaction value, $Res Function(Interaction) then) =
       _$InteractionCopyWithImpl<$Res, Interaction>;
   @useResult
   $Res call({int? answerIdx, double? secondsToAnswer, int deltaPoints});
 }
 
 /// @nodoc
-class _$InteractionCopyWithImpl<$Res, $Val extends Interaction>
-    implements $InteractionCopyWith<$Res> {
+class _$InteractionCopyWithImpl<$Res, $Val extends Interaction> implements $InteractionCopyWith<$Res> {
   _$InteractionCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -74,10 +71,8 @@ class _$InteractionCopyWithImpl<$Res, $Val extends Interaction>
 }
 
 /// @nodoc
-abstract class _$$_InteractionCopyWith<$Res>
-    implements $InteractionCopyWith<$Res> {
-  factory _$$_InteractionCopyWith(
-          _$_Interaction value, $Res Function(_$_Interaction) then) =
+abstract class _$$_InteractionCopyWith<$Res> implements $InteractionCopyWith<$Res> {
+  factory _$$_InteractionCopyWith(_$_Interaction value, $Res Function(_$_Interaction) then) =
       __$$_InteractionCopyWithImpl<$Res>;
   @override
   @useResult
@@ -85,12 +80,9 @@ abstract class _$$_InteractionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_InteractionCopyWithImpl<$Res>
-    extends _$InteractionCopyWithImpl<$Res, _$_Interaction>
+class __$$_InteractionCopyWithImpl<$Res> extends _$InteractionCopyWithImpl<$Res, _$_Interaction>
     implements _$$_InteractionCopyWith<$Res> {
-  __$$_InteractionCopyWithImpl(
-      _$_Interaction _value, $Res Function(_$_Interaction) _then)
-      : super(_value, _then);
+  __$$_InteractionCopyWithImpl(_$_Interaction _value, $Res Function(_$_Interaction) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -119,11 +111,9 @@ class __$$_InteractionCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Interaction implements _Interaction {
-  const _$_Interaction(
-      {this.answerIdx, this.secondsToAnswer, this.deltaPoints = 0});
+  const _$_Interaction({this.answerIdx, this.secondsToAnswer, this.deltaPoints = 0});
 
-  factory _$_Interaction.fromJson(Map<String, dynamic> json) =>
-      _$$_InteractionFromJson(json);
+  factory _$_Interaction.fromJson(Map<String, dynamic> json) => _$$_InteractionFromJson(json);
 
   @override
   final int? answerIdx;
@@ -143,18 +133,14 @@ class _$_Interaction implements _Interaction {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Interaction &&
-            (identical(other.answerIdx, answerIdx) ||
-                other.answerIdx == answerIdx) &&
-            (identical(other.secondsToAnswer, secondsToAnswer) ||
-                other.secondsToAnswer == secondsToAnswer) &&
-            (identical(other.deltaPoints, deltaPoints) ||
-                other.deltaPoints == deltaPoints));
+            (identical(other.answerIdx, answerIdx) || other.answerIdx == answerIdx) &&
+            (identical(other.secondsToAnswer, secondsToAnswer) || other.secondsToAnswer == secondsToAnswer) &&
+            (identical(other.deltaPoints, deltaPoints) || other.deltaPoints == deltaPoints));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, answerIdx, secondsToAnswer, deltaPoints);
+  int get hashCode => Object.hash(runtimeType, answerIdx, secondsToAnswer, deltaPoints);
 
   @JsonKey(ignore: true)
   @override
@@ -171,13 +157,10 @@ class _$_Interaction implements _Interaction {
 }
 
 abstract class _Interaction implements Interaction {
-  const factory _Interaction(
-      {final int? answerIdx,
-      final double? secondsToAnswer,
-      final int deltaPoints}) = _$_Interaction;
+  const factory _Interaction({final int? answerIdx, final double? secondsToAnswer, final int deltaPoints}) =
+      _$_Interaction;
 
-  factory _Interaction.fromJson(Map<String, dynamic> json) =
-      _$_Interaction.fromJson;
+  factory _Interaction.fromJson(Map<String, dynamic> json) = _$_Interaction.fromJson;
 
   @override
   int? get answerIdx;
@@ -187,6 +170,5 @@ abstract class _Interaction implements Interaction {
   int get deltaPoints;
   @override
   @JsonKey(ignore: true)
-  _$$_InteractionCopyWith<_$_Interaction> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_InteractionCopyWith<_$_Interaction> get copyWith => throw _privateConstructorUsedError;
 }

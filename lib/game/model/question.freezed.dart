@@ -24,20 +24,17 @@ mixin _$Question {
   String get question => throw _privateConstructorUsedError;
   int get correctAnswerIdx => throw _privateConstructorUsedError;
   List<String> get allAnswers => throw _privateConstructorUsedError;
-  Map<String, Interaction> get interactions =>
-      throw _privateConstructorUsedError;
+  Map<String, Interaction> get interactions => throw _privateConstructorUsedError;
   bool get isShootout => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $QuestionCopyWith<Question> get copyWith =>
-      throw _privateConstructorUsedError;
+  $QuestionCopyWith<Question> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $QuestionCopyWith<$Res> {
-  factory $QuestionCopyWith(Question value, $Res Function(Question) then) =
-      _$QuestionCopyWithImpl<$Res, Question>;
+  factory $QuestionCopyWith(Question value, $Res Function(Question) then) = _$QuestionCopyWithImpl<$Res, Question>;
   @useResult
   $Res call(
       {String id,
@@ -49,8 +46,7 @@ abstract class $QuestionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$QuestionCopyWithImpl<$Res, $Val extends Question>
-    implements $QuestionCopyWith<$Res> {
+class _$QuestionCopyWithImpl<$Res, $Val extends Question> implements $QuestionCopyWith<$Res> {
   _$QuestionCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -99,9 +95,7 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
 
 /// @nodoc
 abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
-  factory _$$_QuestionCopyWith(
-          _$_Question value, $Res Function(_$_Question) then) =
-      __$$_QuestionCopyWithImpl<$Res>;
+  factory _$$_QuestionCopyWith(_$_Question value, $Res Function(_$_Question) then) = __$$_QuestionCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -114,12 +108,9 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_QuestionCopyWithImpl<$Res>
-    extends _$QuestionCopyWithImpl<$Res, _$_Question>
+class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res, _$_Question>
     implements _$$_QuestionCopyWith<$Res> {
-  __$$_QuestionCopyWithImpl(
-      _$_Question _value, $Res Function(_$_Question) _then)
-      : super(_value, _then);
+  __$$_QuestionCopyWithImpl(_$_Question _value, $Res Function(_$_Question) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -173,8 +164,7 @@ class _$_Question implements _Question {
       : _allAnswers = allAnswers,
         _interactions = interactions;
 
-  factory _$_Question.fromJson(Map<String, dynamic> json) =>
-      _$$_QuestionFromJson(json);
+  factory _$_Question.fromJson(Map<String, dynamic> json) => _$$_QuestionFromJson(json);
 
   @override
   final String id;
@@ -213,34 +203,22 @@ class _$_Question implements _Question {
         (other.runtimeType == runtimeType &&
             other is _$_Question &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.question, question) ||
-                other.question == question) &&
-            (identical(other.correctAnswerIdx, correctAnswerIdx) ||
-                other.correctAnswerIdx == correctAnswerIdx) &&
-            const DeepCollectionEquality()
-                .equals(other._allAnswers, _allAnswers) &&
-            const DeepCollectionEquality()
-                .equals(other._interactions, _interactions) &&
-            (identical(other.isShootout, isShootout) ||
-                other.isShootout == isShootout));
+            (identical(other.question, question) || other.question == question) &&
+            (identical(other.correctAnswerIdx, correctAnswerIdx) || other.correctAnswerIdx == correctAnswerIdx) &&
+            const DeepCollectionEquality().equals(other._allAnswers, _allAnswers) &&
+            const DeepCollectionEquality().equals(other._interactions, _interactions) &&
+            (identical(other.isShootout, isShootout) || other.isShootout == isShootout));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      question,
-      correctAnswerIdx,
-      const DeepCollectionEquality().hash(_allAnswers),
-      const DeepCollectionEquality().hash(_interactions),
-      isShootout);
+  int get hashCode => Object.hash(runtimeType, id, question, correctAnswerIdx,
+      const DeepCollectionEquality().hash(_allAnswers), const DeepCollectionEquality().hash(_interactions), isShootout);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_QuestionCopyWith<_$_Question> get copyWith =>
-      __$$_QuestionCopyWithImpl<_$_Question>(this, _$identity);
+  _$$_QuestionCopyWith<_$_Question> get copyWith => __$$_QuestionCopyWithImpl<_$_Question>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -275,6 +253,5 @@ abstract class _Question implements Question {
   bool get isShootout;
   @override
   @JsonKey(ignore: true)
-  _$$_QuestionCopyWith<_$_Question> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_QuestionCopyWith<_$_Question> get copyWith => throw _privateConstructorUsedError;
 }

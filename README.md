@@ -17,10 +17,9 @@ See [doc/specification.md](doc/specification.md) for the specification.
 
 ## Useful commands
 
-- generate JSON serialization
-  files: `flutter pub run build_runner build --delete-conflicting-outputs`
+- generate files: `flutter pub run build_runner build --delete-conflicting-outputs`
 - format code: `dart format --line-length=120 .`
-- analyze code: `dart analyze --fatal-infos`
+- analyze code: `flutter analyze --fatal-infos`
 - run tests: `flutter test`
 
 ## Known bugs
