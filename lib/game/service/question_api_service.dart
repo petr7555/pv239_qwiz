@@ -5,7 +5,7 @@ import 'package:pv239_qwiz/common/util/shared_logic_constants.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
 
 // TODO set to false
-const shouldMockQuestion = true;
+const shouldMockQuestion = false;
 final mockQuestion = Question(
   id: '1',
   question: 'What is the capital of the Czech Republic?',

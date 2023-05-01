@@ -6,7 +6,7 @@ part of 'game.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Game _$GameFromJson(Map<String, dynamic> json) => Game(
+_$_Game _$$_GameFromJson(Map<String, dynamic> json) => _$_Game(
       id: json['id'] as String,
       pointsToWin: json['pointsToWin'] as int,
       players: (json['players'] as Map<String, dynamic>).map(
@@ -20,7 +20,7 @@ Game _$GameFromJson(Map<String, dynamic> json) => Game(
           const [],
     );
 
-Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
+Map<String, dynamic> _$$_GameToJson(_$_Game instance) => <String, dynamic>{
       'id': instance.id,
       'pointsToWin': instance.pointsToWin,
       'players': instance.players.map((k, e) => MapEntry(k, e.toJson())),

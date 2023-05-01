@@ -1,38 +1,18 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pv239_qwiz/game/model/interaction.dart';
 
+part 'question.freezed.dart';
 part 'question.g.dart';
 
-@JsonSerializable(explicitToJson: true)
-class Question {
-  final String id;
-  final String question;
-  final int correctAnswerIdx;
-  final List<String> allAnswers;
-  final Map<String, Interaction> interactions;
-  Question({
-    required this.id,
-    required this.question,
-    required this.correctAnswerIdx,
-    required this.allAnswers,
-    required this.interactions,
-  });
-
-  Question copyWith({
-    String? id,
-    String? question,
-    int? correctAnswerIdx,
-    List<String>? allAnswers,
-    Map<String, Interaction>? interactions,
-  }) {
-    return Question(
-      id: id ?? this.id,
-      question: question ?? this.question,
-      correctAnswerIdx: correctAnswerIdx ?? this.correctAnswerIdx,
-      allAnswers: allAnswers ?? this.allAnswers,
-      interactions: interactions ?? this.interactions,
-    );
-  }
+@freezed
+class Question with _$Question {
+  const factory Question({
+    required String id,
+    required String question,
+    required int correctAnswerIdx,
+    required List<String> allAnswers,
+    required Map<String, Interaction> interactions,
+  }) = _Question;
 
   factory Question.fromApiJson(Map<String, dynamic> json) {
     final correctAnswer = json['correctAnswer'] as String;
@@ -51,6 +31,4 @@ class Question {
   }
 
   factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$QuestionToJson(this);
 }

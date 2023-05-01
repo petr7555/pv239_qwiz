@@ -81,11 +81,11 @@ class QuestionOptions extends StatelessWidget {
         return Tuple2('Both answered', bothColor);
       }
       if (isOpponentsAnswer) {
-        return Tuple2("Opponent's answer", opponentColor);
+        return Tuple2("Opponent's answer", opponentsColor);
       }
     }
     if (isYourAnswer) {
-      return Tuple2('Your answer', youColor);
+      return Tuple2('Your answer', yourColor);
     }
     return Tuple2('', Colors.transparent);
   }

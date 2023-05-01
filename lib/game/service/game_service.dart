@@ -58,9 +58,9 @@ class GameService {
 
   Future<void> joinGame(String gameId, String userId, String? userName, String? photoURL) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = Player(id: userId, displayName: userName, photoURL: photoURL);
       var updatedGame = game.copyWith(
-        players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
+        players: ({...game.players}..[userId] = Player(id: userId, displayName: userName, photoURL: photoURL))
+            .map((key, value) => MapEntry(key, value.copyWith(route: GetReadyPage.routeName))),
       );
       updatedGame = await _addNextQuestion(updatedGame);
       return updatedGame;
@@ -82,11 +82,14 @@ class GameService {
 
   Future<void> abortGame(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
-      final opponentId = game.opponent(userId).id;
-      game.players[opponentId] = game.players[opponentId]!.copyWith(route: AbortedGamePage.routeName);
       final updatedGame = game.copyWith(
-        players: game.players,
+        players: game.players.map((key, value) {
+          if (key == userId) {
+            return MapEntry(key, value.copyWith(route: MenuPage.routeName, complete: true));
+          } else {
+            return MapEntry(key, value.copyWith(route: AbortedGamePage.routeName));
+          }
+        }),
       );
       return updatedGame;
     });
@@ -94,111 +97,64 @@ class GameService {
 
   Future<void> resetGame(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = game.players[userId]!.copyWith(route: MenuPage.routeName, complete: true);
       final updatedGame = game.copyWith(
-        players: game.players,
+        players: {...game.players}..[userId] = game.you(userId).copyWith(route: MenuPage.routeName, complete: true),
       );
       return updatedGame;
     });
   }
 
-  Game _addPoints(Game game, String userId) {
-    final correctAnswer = game.currentQuestion.correctAnswerIdx;
-    final youCorrect = game.currentQuestion.interactions[userId]!.answerIdx == correctAnswer;
-    final opponentId = game.opponent(userId).id;
-    final opponentCorrect = game.currentQuestion.interactions[opponentId]!.answerIdx == correctAnswer;
-
-    var youDeltaPoints = 0;
-    var opponentDeltaPoints = 0;
-
-    if (youCorrect && opponentCorrect) {
-      final yourTime = game.currentQuestion.interactions[userId]!.secondsToAnswer!;
-      final opponentsTime = game.currentQuestion.interactions[opponentId]!.secondsToAnswer!;
-      if (yourTime < opponentsTime) {
-        youDeltaPoints = bigPoints;
-        opponentDeltaPoints = mediumPoints;
-      } else if (yourTime > opponentsTime) {
-        opponentDeltaPoints = bigPoints;
-        youDeltaPoints = mediumPoints;
-      } else {
-        youDeltaPoints = mediumPoints;
-        opponentDeltaPoints = mediumPoints;
-      }
-    } else if (youCorrect) {
-      youDeltaPoints = bigPoints;
-    } else if (opponentCorrect) {
-      opponentDeltaPoints = bigPoints;
-    }
-
-    game.players[userId] = game.players[userId]!.copyWith(
-      points: game.players[userId]!.points + youDeltaPoints,
-    );
-    game.players[opponentId] = game.players[opponentId]!.copyWith(
-      points: game.players[opponentId]!.points + opponentDeltaPoints,
-    );
-    game.currentQuestion.interactions[userId] =
-        game.currentQuestion.interactions[userId]!.copyWith(deltaPoints: youDeltaPoints);
-    game.currentQuestion.interactions[opponentId] =
-        game.currentQuestion.interactions[opponentId]!.copyWith(deltaPoints: opponentDeltaPoints);
-
-    return game;
-  }
-
   Future<void> answerCurrentQuestion(String gameId, String userId, int answerIdx, double secondsToAnswer) {
     return _withTransactGame(gameId, (game) async {
-      final question = game.currentQuestion;
-      final interaction = question.interactions[userId]!;
-      if (interaction.answerIdx != null || game.players[userId]!.answerTimerEnded) {
+      final yourInteraction = game.yourCurrentInteraction(userId);
+      if (yourInteraction.answerIdx != null || game.you(userId).answerTimerEnded) {
         return null;
       }
-      final updatedInteraction = interaction.copyWith(answerIdx: answerIdx, secondsToAnswer: secondsToAnswer);
-      question.interactions[userId] = updatedInteraction;
-      game.currentQuestion = question;
 
-      if (game.allPlayersAnswered) {
+      var updatedGame = game.copyWith(
+        questions: [...game.questions]..[game.questions.length - 1] = game.currentQuestion.copyWith(
+            interactions: {...game.currentQuestion.interactions}..[userId] =
+                yourInteraction.copyWith(answerIdx: answerIdx, secondsToAnswer: secondsToAnswer),
+          ),
+      );
+
+      if (updatedGame.allPlayersAnswered) {
         print('SERVICE: All players answered, adding points');
-        game = _addPoints(game, userId);
+        updatedGame = _addPoints(updatedGame, userId);
       }
-      return game;
+
+      return updatedGame;
     });
   }
 
   Future<void> setAnswerTimerEnded(String gameId, String userId) {
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: true, resultTimerEnded: false);
-      var updatedGame = game.copyWith(players: game.players);
+      var updatedGame = game.copyWith(
+        players: {...game.players}..[userId] =
+            game.you(userId).copyWith(answerTimerEnded: true, resultTimerEnded: false),
+      );
+
       if (updatedGame.answerTimersEnded) {
         print('SERVICE: All answer timers ended, adding points');
         updatedGame = _addPoints(updatedGame, userId);
       }
+
       return updatedGame;
     });
   }
 
   Future<void> setResultTimerEnded(String gameId, String userId) {
+    print('setResultTimerEnded $userId');
     return _withTransactGame(gameId, (game) async {
-      game.players[userId] = game.players[userId]!.copyWith(answerTimerEnded: false, resultTimerEnded: true);
-      var updatedGame = game.copyWith(players: game.players);
+      var updatedGame = game.copyWith(
+        players: {...game.players}..[userId] =
+            game.you(userId).copyWith(answerTimerEnded: false, resultTimerEnded: true),
+      );
       if (updatedGame.resultTimersEnded) {
         print('SERVICE: Both result timers ended, checking winner');
+        updatedGame = _checkWinner(updatedGame, userId);
 
-        final opponentId = updatedGame.opponent(userId).id;
-        final youPoints = updatedGame.players[userId]!.points;
-        final opponentPoints = updatedGame.players[opponentId]!.points;
-
-        String winnerId = '';
-        // TODO handle tie
-        if (youPoints >= updatedGame.pointsToWin) {
-          winnerId = userId;
-        } else if (opponentPoints >= updatedGame.pointsToWin) {
-          winnerId = opponentId;
-        }
-        if (winnerId != '') {
-          updatedGame = updatedGame.copyWith(
-            winnerId: winnerId,
-            players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: PodiumPage.routeName))),
-          );
-        } else {
+        if (updatedGame.winnerId == null) {
           print('SERVICE: Both result timers ended, getting next question');
           updatedGame = await _addNextQuestion(updatedGame);
         }
@@ -228,13 +184,91 @@ class GameService {
   }
 
   Future<Game> _addNextQuestion(Game game) async {
-    final newQuestion = await get<QuestionApiService>().getQuestion();
-    for (final key in game.players.keys) {
-      newQuestion.interactions[key] = Interaction();
-    }
+    final question = await get<QuestionApiService>().getQuestion();
+    final questionWithInteractions = question.copyWith(
+      interactions: game.players.map((key, value) => MapEntry(key, Interaction())),
+    );
     final updatedGame = game.copyWith(
-      questions: [...game.questions, newQuestion],
+      questions: [...game.questions, questionWithInteractions],
     );
     return updatedGame;
+  }
+
+  Game _addPoints(Game game, String userId) {
+    final correctAnswer = game.currentQuestion.correctAnswerIdx;
+    final yourInteraction = game.yourCurrentInteraction(userId);
+    final opponentsInteraction = game.opponentsCurrentInteraction(userId);
+    final youAreCorrect = yourInteraction.answerIdx == correctAnswer;
+    final opponentIsCorrect = opponentsInteraction.answerIdx == correctAnswer;
+
+    var yourDeltaPoints = 0;
+    var opponentsDeltaPoints = 0;
+
+    if (youAreCorrect && opponentIsCorrect) {
+      final yourTime = yourInteraction.secondsToAnswer!;
+      final opponentsTime = opponentsInteraction.secondsToAnswer!;
+
+      if (yourTime < opponentsTime) {
+        yourDeltaPoints = bigPoints;
+        opponentsDeltaPoints = mediumPoints;
+      } else if (yourTime > opponentsTime) {
+        opponentsDeltaPoints = bigPoints;
+        yourDeltaPoints = mediumPoints;
+      } else {
+        yourDeltaPoints = mediumPoints;
+        opponentsDeltaPoints = mediumPoints;
+      }
+    } else if (youAreCorrect) {
+      yourDeltaPoints = bigPoints;
+    } else if (opponentIsCorrect) {
+      opponentsDeltaPoints = bigPoints;
+    }
+
+    var updatedGame = game.copyWith(
+      players: game.players.map((key, value) {
+        if (key == userId) {
+          return MapEntry(key, value.copyWith(points: value.points + yourDeltaPoints));
+        } else {
+          return MapEntry(key, value.copyWith(points: value.points + opponentsDeltaPoints));
+        }
+      }),
+    );
+
+    updatedGame = updatedGame.copyWith(
+      questions: [...updatedGame.questions]..[updatedGame.questions.length - 1] = updatedGame.currentQuestion.copyWith(
+          interactions: updatedGame.currentQuestion.interactions.map((key, value) {
+            if (key == userId) {
+              return MapEntry(key, value.copyWith(deltaPoints: yourDeltaPoints));
+            } else {
+              return MapEntry(key, value.copyWith(deltaPoints: opponentsDeltaPoints));
+            }
+          }),
+        ),
+    );
+
+    return updatedGame;
+  }
+
+  Game _checkWinner(Game game, String userId) {
+    final yourPoints = game.you(userId).points;
+    final opponent = game.opponent(userId);
+    final opponentsPoints = opponent.points;
+
+    // TODO handle tie
+    String? winnerId;
+    if (yourPoints >= game.pointsToWin) {
+      winnerId = userId;
+    } else if (opponentsPoints >= game.pointsToWin) {
+      winnerId = opponent.id;
+    }
+
+    if (winnerId != null) {
+      return game.copyWith(
+        winnerId: winnerId,
+        players: game.players.map((key, value) => MapEntry(key, value.copyWith(route: PodiumPage.routeName))),
+      );
+    }
+
+    return game;
   }
 }

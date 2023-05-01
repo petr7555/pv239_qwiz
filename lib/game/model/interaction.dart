@@ -1,32 +1,15 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'interaction.freezed.dart';
 part 'interaction.g.dart';
 
-@JsonSerializable(explicitToJson: true)
-class Interaction {
-  final int? answerIdx;
-  final double? secondsToAnswer;
-  final int deltaPoints;
-
-  const Interaction({
-    this.answerIdx,
-    this.secondsToAnswer,
-    this.deltaPoints = 0,
-  });
-
-  Interaction copyWith({
+@freezed
+class Interaction with _$Interaction {
+  const factory Interaction({
     int? answerIdx,
     double? secondsToAnswer,
-    int? deltaPoints,
-  }) {
-    return Interaction(
-      answerIdx: answerIdx ?? this.answerIdx,
-      secondsToAnswer: secondsToAnswer ?? this.secondsToAnswer,
-      deltaPoints: deltaPoints ?? this.deltaPoints,
-    );
-  }
+    @Default(0) int deltaPoints,
+  }) = _Interaction;
 
   factory Interaction.fromJson(Map<String, dynamic> json) => _$InteractionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$InteractionToJson(this);
 }

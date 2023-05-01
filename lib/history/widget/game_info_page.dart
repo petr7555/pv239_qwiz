@@ -43,7 +43,7 @@ class GameInfoPage extends StatelessWidget {
               final opponent = players.firstWhere((id) => id != userId);
               final gameResult = game['result'];
               final didWin = gameResult['winnerId'] == userId;
-              const opponentName = 'Opponent'; // Replace with actual opponent name
+              const opponentsName = 'Opponent'; // Replace with actual opponent's name
 
               return ListTile(
                 title: Text('Game ${index + 1}'),
@@ -55,7 +55,7 @@ class GameInfoPage extends StatelessWidget {
                       style: theme.textTheme.headlineLarge,
                     ),
                     SizedBox(height: smallGap),
-                    Text('$opponentName: ${gameResult[opponent]} points'),
+                    Text('$opponentsName: ${gameResult[opponent]} points'),
                     SizedBox(height: smallGap),
                     Text('You: ${gameResult[userId]} points'),
                   ],
