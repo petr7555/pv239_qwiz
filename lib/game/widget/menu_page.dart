@@ -25,14 +25,14 @@ class MenuPage extends StatelessWidget {
           children: [
             UserAvatar(),
             SizedBox(height: largeGap),
-            _createMenuButton(context: context, label: 'Create game', route: CreateGamePage.routeName),
+            _buildMenuButton(context: context, label: 'Create game', route: CreateGamePage.routeName),
             SizedBox(height: smallGap),
-            _createMenuButton(context: context, label: 'Join game', route: JoinGamePage.routeName),
+            _buildMenuButton(context: context, label: 'Join game', route: JoinGamePage.routeName),
             SizedBox(height: smallGap),
-            _createMenuButton(context: context, label: 'History', route: HistoryPage.routeName),
+            _buildMenuButton(context: context, label: 'History', route: HistoryPage.routeName),
             SizedBox(height: smallGap),
             // TODO change route
-            _createMenuButton(context: context, label: 'Leaderboard', route: '/leaderboard'),
+            _buildMenuButton(context: context, label: 'Leaderboard', route: '/leaderboard'),
             SizedBox(height: smallGap),
             Button(label: 'Sign out', onPressed: () => context.read<AuthCubit>().signOut()),
           ],
@@ -41,7 +41,7 @@ class MenuPage extends StatelessWidget {
     );
   }
 
-  Widget _createMenuButton({
+  Widget _buildMenuButton({
     required BuildContext context,
     required String label,
     required String route,

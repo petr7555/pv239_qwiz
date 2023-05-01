@@ -24,19 +24,19 @@ class QuestionPage extends StatefulWidget {
 enum StateOfQuestion { initial, answering, showingResult }
 
 class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMixin {
-  late LinearTimerController answerTimerController = LinearTimerController(this);
-  var stateOfQuestion = StateOfQuestion.initial;
+  late final LinearTimerController _answerTimerController = LinearTimerController(this);
+  var _stateOfQuestion = StateOfQuestion.initial;
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (stateOfQuestion == StateOfQuestion.initial) {
+      if (_stateOfQuestion == StateOfQuestion.initial) {
         setState(() {
           print('INIT: Starting answer timer');
-          stateOfQuestion = StateOfQuestion.answering;
-          answerTimerController.start(restart: true);
+          _stateOfQuestion = StateOfQuestion.answering;
+          _answerTimerController.start(restart: true);
         });
       }
     });
@@ -44,7 +44,7 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
   @override
   void dispose() {
-    answerTimerController.dispose();
+    _answerTimerController.dispose();
     super.dispose();
   }
 
@@ -58,21 +58,21 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           if (game != null) {
             if (game.winnerId != null) return;
 
-            if (game.resultTimersEnded && stateOfQuestion == StateOfQuestion.showingResult) {
+            if (game.resultTimersEnded && _stateOfQuestion == StateOfQuestion.showingResult) {
               print('LISTENER: Result timers ended, StateOfQuestion was showingResult, will be answering');
               setState(() {
                 print('LISTENER: Starting answer timer');
-                stateOfQuestion = StateOfQuestion.answering;
-                answerTimerController.start(restart: true);
+                _stateOfQuestion = StateOfQuestion.answering;
+                _answerTimerController.start(restart: true);
               });
             }
 
-            if (stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
-              answerTimerController.stop();
+            if (_stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
+              _answerTimerController.stop();
 
               print('LISTENER: Answer timers ended, StateOfQuestion was answering, will be showingResult');
               setState(() {
-                stateOfQuestion = StateOfQuestion.showingResult;
+                _stateOfQuestion = StateOfQuestion.showingResult;
               });
               print('LISTENER: Starting result timer');
               Future.delayed(Duration(seconds: secondsForResults), () {
@@ -94,20 +94,20 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           return Center(
             child: Column(
               children: [
-                PlayersPointsDisplay(stateOfQuestion: stateOfQuestion, game: game),
+                PlayersPointsDisplay(stateOfQuestion: _stateOfQuestion, game: game),
                 SizedBox(height: standardGap),
-                QuestionTimer(timerController: answerTimerController),
+                QuestionTimer(timerController: _answerTimerController),
                 SizedBox(height: standardGap),
                 Text(game.currentQuestion.question, style: Theme.of(context).textTheme.titleLarge),
                 SizedBox(height: standardGap),
                 QuestionOptions(
-                  stateOfQuestion: stateOfQuestion,
+                  stateOfQuestion: _stateOfQuestion,
                   question: game.currentQuestion,
                   userId: userId,
                   opponentId: opponentId,
                   onPressed: (answerIdx) {
                     final userId = context.read<AuthCubit>().userId;
-                    final secondsToAnswer = answerTimerController.value * secondsForQuestion;
+                    final secondsToAnswer = _answerTimerController.value * secondsForQuestion;
                     context.read<GameCubit>().answerCurrentQuestion(userId, answerIdx, secondsToAnswer);
                   },
                 ),

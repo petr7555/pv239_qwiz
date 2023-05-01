@@ -26,14 +26,14 @@ class PlayersPointsDisplay extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _getPlayerPointsDisplay(
+        _buildPlayerPointsDisplay(
           context: context,
           playerName: 'You',
           points: you.points,
           deltaPoints: youInteraction?.deltaPoints,
           time: youInteraction?.secondsToAnswer,
         ),
-        _getPlayerPointsDisplay(
+        _buildPlayerPointsDisplay(
           context: context,
           playerName: 'Opponent',
           points: opponent.points,
@@ -44,7 +44,7 @@ class PlayersPointsDisplay extends StatelessWidget {
     );
   }
 
-  Widget _getPlayerPointsDisplay({
+  Widget _buildPlayerPointsDisplay({
     required BuildContext context,
     required String playerName,
     required int points,
