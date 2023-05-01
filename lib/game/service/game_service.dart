@@ -112,8 +112,13 @@ class GameService {
       }
 
       var updatedGame = game.copyWith(
-        questions: [...game.questions]..[game.questions.length - 1] = game.currentQuestion.copyWith(
-            interactions: {...game.currentQuestion.interactions}..[userId] =
+        players: {...game.players}..[userId] = game.you(userId).copyWith(resultTimerEnded: false),
+      );
+
+      updatedGame = updatedGame.copyWith(
+        questions: [...updatedGame.questions]..[updatedGame.questions.length - 1] =
+              updatedGame.currentQuestion.copyWith(
+            interactions: {...updatedGame.currentQuestion.interactions}..[userId] =
                 yourInteraction.copyWith(answerIdx: answerIdx, secondsToAnswer: secondsToAnswer),
           ),
       );
