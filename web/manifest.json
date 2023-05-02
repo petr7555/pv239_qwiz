@@ -1,11 +1,11 @@
 {
-    "name": "pv239_qwiz",
-    "short_name": "pv239_qwiz",
+    "name": "Qwiz",
+    "short_name": "Qwiz",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#CDDC39",
+    "theme_color": "#CDDC39",
+    "description": "Get your brain in the game with Qwiz – the ultimate trivia experience!",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
