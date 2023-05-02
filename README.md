@@ -1,9 +1,11 @@
 # Qwiz
 [![Lint and test](https://github.com/petr7555/pv239_qwiz/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/lint_and_test.yml)
-[![Build iOS and web](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_ios_and_web.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_ios_and_web.yml)
+[![Build iOS](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_ios.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_ios.yml)
 [![Build Android](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_android.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_android.yml)
+[![Deploy to Firebase Hosting on merge](https://github.com/petr7555/pv239_qwiz/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/firebase-hosting-merge.yml)
 
-A Flutter app created as a school project.
+A quiz game for 2 players created as a school project.
+You can try it at [https://pv239-qwiz.web.app/](https://pv239-qwiz.web.app/). 
 
 See [doc/specification.md](doc/specification.md) for the specification.
 
