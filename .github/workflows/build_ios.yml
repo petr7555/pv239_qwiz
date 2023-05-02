@@ -1,4 +1,4 @@
-name: Build iOS and web
+name: Build iOS
 
 on:
   push:
@@ -23,6 +23,3 @@ jobs:
 
       - name: Build for iOS
         run: flutter build ios --release --no-codesign
-
-      - name: Build for web
-        run: flutter build web
