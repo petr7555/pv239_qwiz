@@ -27,3 +27,7 @@ See [doc/specification.md](doc/specification.md) for the specification.
 ## Known bugs
 
 - On web, the cursor of `TextFieldBlocBuilder` is not visible until the user starts typing.
+
+## Notes
+
+- Icons have been generated using https://icon.kitchen/ from [assets/images/icon-512x512.png](assets/images/icon-512x512.png).
