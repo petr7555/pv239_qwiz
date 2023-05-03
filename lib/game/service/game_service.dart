@@ -220,9 +220,9 @@ class GameService {
         final opponentsTime = opponentsInteraction.secondsToAnswer!;
 
         if (yourTime < opponentsTime) {
-          yourDeltaPoints = shootoutPenaltyPoints;
-        } else if (yourTime > opponentsTime) {
           opponentsDeltaPoints = shootoutPenaltyPoints;
+        } else if (yourTime > opponentsTime) {
+          yourDeltaPoints = shootoutPenaltyPoints;
         }
       } else if (youAreCorrect && !opponentIsCorrect) {
         opponentsDeltaPoints = shootoutPenaltyPoints;
