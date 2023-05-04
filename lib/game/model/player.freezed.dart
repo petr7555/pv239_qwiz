@@ -36,7 +36,8 @@ mixin _$Player {
 
 /// @nodoc
 abstract class $PlayerCopyWith<$Res> {
-  factory $PlayerCopyWith(Player value, $Res Function(Player) then) = _$PlayerCopyWithImpl<$Res, Player>;
+  factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
+      _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
   $Res call(
       {String id,
@@ -50,7 +51,8 @@ abstract class $PlayerCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PlayerCopyWithImpl<$Res, $Val extends Player> implements $PlayerCopyWith<$Res> {
+class _$PlayerCopyWithImpl<$Res, $Val extends Player>
+    implements $PlayerCopyWith<$Res> {
   _$PlayerCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -109,7 +111,8 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player> implements $PlayerCopyWith
 
 /// @nodoc
 abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
-  factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) = __$$_PlayerCopyWithImpl<$Res>;
+  factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) =
+      __$$_PlayerCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -124,8 +127,11 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res, _$_Player> implements _$$_PlayerCopyWith<$Res> {
-  __$$_PlayerCopyWithImpl(_$_Player _value, $Res Function(_$_Player) _then) : super(_value, _then);
+class __$$_PlayerCopyWithImpl<$Res>
+    extends _$PlayerCopyWithImpl<$Res, _$_Player>
+    implements _$$_PlayerCopyWith<$Res> {
+  __$$_PlayerCopyWithImpl(_$_Player _value, $Res Function(_$_Player) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -189,7 +195,8 @@ class _$_Player implements _Player {
       this.answerTimerEnded = false,
       this.resultTimerEnded = false});
 
-  factory _$_Player.fromJson(Map<String, dynamic> json) => _$$_PlayerFromJson(json);
+  factory _$_Player.fromJson(Map<String, dynamic> json) =>
+      _$$_PlayerFromJson(json);
 
   @override
   final String id;
@@ -224,24 +231,30 @@ class _$_Player implements _Player {
         (other.runtimeType == runtimeType &&
             other is _$_Player &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.displayName, displayName) || other.displayName == displayName) &&
-            (identical(other.photoURL, photoURL) || other.photoURL == photoURL) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.photoURL, photoURL) ||
+                other.photoURL == photoURL) &&
             (identical(other.route, route) || other.route == route) &&
             (identical(other.points, points) || other.points == points) &&
-            (identical(other.complete, complete) || other.complete == complete) &&
-            (identical(other.answerTimerEnded, answerTimerEnded) || other.answerTimerEnded == answerTimerEnded) &&
-            (identical(other.resultTimerEnded, resultTimerEnded) || other.resultTimerEnded == resultTimerEnded));
+            (identical(other.complete, complete) ||
+                other.complete == complete) &&
+            (identical(other.answerTimerEnded, answerTimerEnded) ||
+                other.answerTimerEnded == answerTimerEnded) &&
+            (identical(other.resultTimerEnded, resultTimerEnded) ||
+                other.resultTimerEnded == resultTimerEnded));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, displayName, photoURL, route, points, complete, answerTimerEnded, resultTimerEnded);
+  int get hashCode => Object.hash(runtimeType, id, displayName, photoURL, route,
+      points, complete, answerTimerEnded, resultTimerEnded);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerCopyWith<_$_Player> get copyWith => __$$_PlayerCopyWithImpl<_$_Player>(this, _$identity);
+  _$$_PlayerCopyWith<_$_Player> get copyWith =>
+      __$$_PlayerCopyWithImpl<_$_Player>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -282,5 +295,6 @@ abstract class _Player implements Player {
   bool get resultTimerEnded;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerCopyWith<_$_Player> get copyWith => throw _privateConstructorUsedError;
+  _$$_PlayerCopyWith<_$_Player> get copyWith =>
+      throw _privateConstructorUsedError;
 }

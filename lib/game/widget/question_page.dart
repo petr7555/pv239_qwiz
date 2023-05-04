@@ -35,8 +35,8 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
       if (_stateOfQuestion == StateOfQuestion.initial) {
         setState(() {
           _stateOfQuestion = StateOfQuestion.answering;
-          _answerTimerController.start(restart: true);
         });
+        _answerTimerController.start(restart: true);
       }
     });
   }
@@ -63,6 +63,9 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
             setState(() {
               _stateOfQuestion = StateOfQuestion.answering;
+            });
+
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               _answerTimerController.start(restart: true);
             });
           }
@@ -88,22 +91,28 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
 
         final userId = context.read<AuthCubit>().userId;
         final opponentId = game.opponent(userId).id;
+        final question = game.currentQuestion;
+        final secondsForQuestion = question.secondsForQuestion;
 
         return PageTemplate(
-          title: game.currentQuestion.isShootout ? 'Shootout question' : 'Question',
+          title: question.isShootout ? 'Shootout question' : 'Question',
           actions: [QuitGameButton()],
           child: Center(
             child: Column(
               children: [
                 PlayersPointsDisplay(stateOfQuestion: _stateOfQuestion, game: game),
                 SizedBox(height: standardGap),
-                QuestionTimer(timerController: _answerTimerController),
+                QuestionTimer(
+                  timerController: _answerTimerController,
+                  secondsForQuestion: secondsForQuestion,
+                  questionId: question.id,
+                ),
                 SizedBox(height: standardGap),
-                Text(game.currentQuestion.question, style: Theme.of(context).textTheme.titleLarge),
+                Text(question.question, style: Theme.of(context).textTheme.titleLarge),
                 SizedBox(height: standardGap),
                 QuestionOptions(
                   stateOfQuestion: _stateOfQuestion,
-                  question: game.currentQuestion,
+                  question: question,
                   userId: userId,
                   opponentId: opponentId,
                   onPressed: (answerIdx) {

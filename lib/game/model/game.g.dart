@@ -14,9 +14,10 @@ _$_Game _$$_GameFromJson(Map<String, dynamic> json) => _$_Game(
       ),
       createdAt: DateTime.parse(json['createdAt'] as String),
       winnerId: json['winnerId'] as String?,
-      questions:
-          (json['questions'] as List<dynamic>?)?.map((e) => Question.fromJson(e as Map<String, dynamic>)).toList() ??
-              const [],
+      questions: (json['questions'] as List<dynamic>?)
+              ?.map((e) => Question.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$_GameToJson(_$_Game instance) => <String, dynamic>{

@@ -34,7 +34,8 @@ mixin _$Game {
 
 /// @nodoc
 abstract class $GameCopyWith<$Res> {
-  factory $GameCopyWith(Game value, $Res Function(Game) then) = _$GameCopyWithImpl<$Res, Game>;
+  factory $GameCopyWith(Game value, $Res Function(Game) then) =
+      _$GameCopyWithImpl<$Res, Game>;
   @useResult
   $Res call(
       {String id,
@@ -46,7 +47,8 @@ abstract class $GameCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GameCopyWithImpl<$Res, $Val extends Game> implements $GameCopyWith<$Res> {
+class _$GameCopyWithImpl<$Res, $Val extends Game>
+    implements $GameCopyWith<$Res> {
   _$GameCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -95,7 +97,8 @@ class _$GameCopyWithImpl<$Res, $Val extends Game> implements $GameCopyWith<$Res>
 
 /// @nodoc
 abstract class _$$_GameCopyWith<$Res> implements $GameCopyWith<$Res> {
-  factory _$$_GameCopyWith(_$_Game value, $Res Function(_$_Game) then) = __$$_GameCopyWithImpl<$Res>;
+  factory _$$_GameCopyWith(_$_Game value, $Res Function(_$_Game) then) =
+      __$$_GameCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -108,8 +111,10 @@ abstract class _$$_GameCopyWith<$Res> implements $GameCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res, _$_Game> implements _$$_GameCopyWith<$Res> {
-  __$$_GameCopyWithImpl(_$_Game _value, $Res Function(_$_Game) _then) : super(_value, _then);
+class __$$_GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res, _$_Game>
+    implements _$$_GameCopyWith<$Res> {
+  __$$_GameCopyWithImpl(_$_Game _value, $Res Function(_$_Game) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -202,22 +207,33 @@ class _$_Game extends _Game {
         (other.runtimeType == runtimeType &&
             other is _$_Game &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.pointsToWin, pointsToWin) || other.pointsToWin == pointsToWin) &&
+            (identical(other.pointsToWin, pointsToWin) ||
+                other.pointsToWin == pointsToWin) &&
             const DeepCollectionEquality().equals(other._players, _players) &&
-            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
-            (identical(other.winnerId, winnerId) || other.winnerId == winnerId) &&
-            const DeepCollectionEquality().equals(other._questions, _questions));
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.winnerId, winnerId) ||
+                other.winnerId == winnerId) &&
+            const DeepCollectionEquality()
+                .equals(other._questions, _questions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, pointsToWin, const DeepCollectionEquality().hash(_players),
-      createdAt, winnerId, const DeepCollectionEquality().hash(_questions));
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      pointsToWin,
+      const DeepCollectionEquality().hash(_players),
+      createdAt,
+      winnerId,
+      const DeepCollectionEquality().hash(_questions));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_GameCopyWith<_$_Game> get copyWith => __$$_GameCopyWithImpl<_$_Game>(this, _$identity);
+  _$$_GameCopyWith<_$_Game> get copyWith =>
+      __$$_GameCopyWithImpl<_$_Game>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
