@@ -71,8 +71,6 @@ class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMix
           }
 
           if (_stateOfQuestion == StateOfQuestion.answering && (game.allPlayersAnswered || game.answerTimersEnded)) {
-            context.read<GameCubit>().setAnswerTimerEnded(userId, ended: false);
-
             _answerTimerController.stop();
 
             setState(() {

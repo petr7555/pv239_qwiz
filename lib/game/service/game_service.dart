@@ -146,6 +146,9 @@ class GameService {
 
         if (updatedGame.winnerId == null) {
           updatedGame = await _addNextQuestion(updatedGame, userId);
+          updatedGame = updatedGame.copyWith(
+            players: updatedGame.players.map((key, value) => MapEntry(key, value.copyWith(answerTimerEnded: false))),
+          );
         }
       }
       return updatedGame;
