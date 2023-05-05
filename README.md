@@ -7,7 +7,7 @@
 A quiz game for 2 players created as a school project.
 You can try it at [https://pv239-qwiz.web.app/](https://pv239-qwiz.web.app/). 
 
-See [doc/specification.md](doc/specification.md) for the specification.
+See [doc/specification.md](doc/specification/specification.md) for the specification.
 
 ## Supported platforms
 
@@ -27,6 +27,7 @@ See [doc/specification.md](doc/specification.md) for the specification.
 ## Known bugs
 
 - On web, the cursor of `TextFieldBlocBuilder` is not visible until the user starts typing.
+- On web, the profile image sometimes does not load: `Failed to load network image.`.
 
 ## Notes
 

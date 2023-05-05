@@ -43,7 +43,7 @@ The history is sorted by date; the most recent game is at the top.
 For each game in the history (**game info** screen), they see their score, the score of their
 opponent and the winner.
 They can also see the questions with the options, the correct answer, their answer and the
-opponent's answer. 
+opponent's answer.
 
 There will be a leaderboard of all players (**leaderboard** screen) sorted by the total number of
 points obtained in all games. The player can see their position in the leaderboard and the number of
@@ -58,6 +58,7 @@ account they've signed in with.
 <div style="page-break-after: always;"></div>
 
 ## Screen mockups:
+
 [Figma](https://www.figma.com/file/iLdJoL8HLbfUiAXcNTFrjl/PV239-Qwiz?node-id=12%3A1422&t=XYDPNrb7i7xGGlsS-1)
 
 <p>
