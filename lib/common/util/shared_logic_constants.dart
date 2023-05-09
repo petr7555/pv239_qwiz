@@ -5,7 +5,7 @@ const pointsToWinMax = 100;
 const pointsToWinDefault = 50;
 const secondsToStartGame = 3;
 const secondsForResults = 5;
-const charactersPerSecond = 16;
+const charactersPerSecond = 10;
 const minSecondsForQuestion = 5;
 const maxSecondsForQuestion = 30;
 const questionsApiEndpoint = 'https://the-trivia-api.com/api/questions?limit=1&region=CZ';
