@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,18 +36,19 @@ class HistoryPage extends StatelessWidget {
               child: Text('No games played on this account yet'),
             );
           }
-
+          games.sort((a, b) => b.createdAt.compareTo(a.createdAt));
           return ListView.builder(
             itemCount: games.length,
             itemBuilder: (context, index) {
               final game = games[index];
               final opponent = game.players.values.where((element) => element.id != userId).first;
 
+
               return ListTile(
                 title: Text('Game with ${opponent.displayName}', style: theme.textTheme.titleLarge),
                 subtitle: Text(game.createdAt.toString(), style: theme.textTheme.bodyMedium),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () => context.push(GameInfoPage.routeName),
+                onTap: () => context.push(GameInfoPage.routeName, extra: game),
               );
             },
           );
