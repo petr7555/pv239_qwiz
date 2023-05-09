@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pv239_qwiz/game/model/question.dart';
 
 class QuestionInfo extends StatelessWidget {
-  final question;
+  final Question question;
   const QuestionInfo({Key? key, required this.question}) : super(key: key);
 
   @override

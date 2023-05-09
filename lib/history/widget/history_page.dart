@@ -5,6 +5,7 @@ import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_service.dart';
+import 'package:pv239_qwiz/history/service/history_service.dart';
 import 'package:pv239_qwiz/history/widget/game_info_page.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -21,7 +22,7 @@ class HistoryPage extends StatelessWidget {
     return PageTemplate(
       title: 'History',
       child: StreamBuilder<List<Game>>(
-        stream: gameService.finishedGamesStream(userId),
+        stream: HistoryService.getGamesByPlayer(userId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
