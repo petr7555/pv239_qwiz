@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
-import 'package:pv239_qwiz/game/service/game_service.dart';
 import 'package:pv239_qwiz/history/service/history_service.dart';
 import 'package:pv239_qwiz/history/widget/game_info_page.dart';
 
