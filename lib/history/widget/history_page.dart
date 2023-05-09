@@ -17,7 +17,6 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final userId = context.read<AuthCubit>().userId;
-    final gameService = GameService();
 
     return PageTemplate(
       title: 'History',
