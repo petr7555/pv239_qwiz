@@ -19,7 +19,7 @@ class QuestionInfo extends StatelessWidget {
               return ListTile(
                 title: Text(
                   answer,
-                  style: theme.textTheme.bodyText2,
+                  style: theme.textTheme.bodyMedium,
                 ),
               );
             }).toList(),
