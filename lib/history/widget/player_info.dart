@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlayerInfo extends StatelessWidget {
   final player;
   final defaultValue;
-  PlayerInfo({required this.player, this.defaultValue});
+  PlayerInfo({super.key, required this.player, this.defaultValue});
 
   @override
   Widget build(BuildContext context) {

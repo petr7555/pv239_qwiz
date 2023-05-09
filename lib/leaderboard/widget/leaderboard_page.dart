@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import '../../common/widget/page_template.dart';
-import '../../game/model/game.dart';
-import '../../game/model/player.dart';
-import '../service/leaderboard_service.dart';
+import 'package:pv239_qwiz/common/widget/page_template.dart';
+import 'package:pv239_qwiz/game/model/game.dart';
+import 'package:pv239_qwiz/game/model/player.dart';
+import 'package:pv239_qwiz/leaderboard/service/leaderboard_service.dart';
 
 class LeaderboardPage extends StatelessWidget {
   static const routeName = '/leaderboard';
@@ -13,7 +13,7 @@ class LeaderboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageTemplate(
-      title: "Leaderboard",
+      title: 'Leaderboard',
       child: StreamBuilder<List<Game>>(
         stream: LeaderboardService.getLeaderboardStream(),
         builder: (BuildContext context, AsyncSnapshot<List<Game>> snapshot) {
@@ -54,7 +54,7 @@ class LeaderboardPage extends StatelessWidget {
                   '${index + 1}. ${playerRankList[index].displayName}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                subtitle: Text("${playerRankList[index].points} points", style: Theme.of(context).textTheme.bodyMedium),
+                subtitle: Text('${playerRankList[index].points} points', style: Theme.of(context).textTheme.bodyMedium),
               );
             },
           );

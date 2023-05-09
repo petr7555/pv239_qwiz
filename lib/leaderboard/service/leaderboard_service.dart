@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../game/model/game.dart';
+import 'package:pv239_qwiz/game/model/game.dart';
 
 class LeaderboardService {
   static Stream<List<Game>> getLeaderboardStream() {
