@@ -43,7 +43,6 @@ class HistoryPage extends StatelessWidget {
               final game = games[index];
               final opponent = game.players.values.where((element) => element.id != userId).first;
 
-
               return ListTile(
                 title: Text('Game with ${opponent.displayName}', style: theme.textTheme.titleLarge),
                 subtitle: Text(game.createdAt.toString(), style: theme.textTheme.bodyMedium),

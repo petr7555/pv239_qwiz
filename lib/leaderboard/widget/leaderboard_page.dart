@@ -31,22 +31,22 @@ class LeaderboardPage extends StatelessWidget {
           Map<String, Player> playerTotalScores = {};
 
           for (final player in players) {
-            playerTotalScores[player.id] = playerTotalScores[player.id] == null ? player : playerTotalScores[player.id]!.copyWith(
-                points : playerTotalScores[player.id]!.points + player.points);
+            playerTotalScores[player.id] = playerTotalScores[player.id] == null
+                ? player
+                : playerTotalScores[player.id]!.copyWith(points: playerTotalScores[player.id]!.points + player.points);
           }
-          final playerRankList = playerTotalScores.values.sorted(((a,b) => b.points.compareTo(a.points))).toList();
-
-
+          final playerRankList = playerTotalScores.values.sorted(((a, b) => b.points.compareTo(a.points))).toList();
 
           return ListView.builder(
             itemCount: playerTotalScores.length,
             itemBuilder: (context, index) {
-
               return ListTile(
                 leading: CircleAvatar(
                   radius: 50,
-                  backgroundImage: playerRankList[index].photoURL != null ? NetworkImage(playerRankList[index].photoURL!) : null,
-                  child: playerRankList[index].photoURL == null ? Icon(Icons.person, size: 40, color: Colors.white) : null,
+                  backgroundImage:
+                      playerRankList[index].photoURL != null ? NetworkImage(playerRankList[index].photoURL!) : null,
+                  child:
+                      playerRankList[index].photoURL == null ? Icon(Icons.person, size: 40, color: Colors.white) : null,
                 ),
                 title: Text(
                   '${index + 1}. ${playerRankList[index].displayName}',

@@ -100,7 +100,7 @@ RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object
         builder: (context, state) {
           final game = state.extra as Game;
           return GameInfoPage(game: game);
-  },
+        },
       ),
       GoRoute(
         path: LeaderboardPage.routeName,
