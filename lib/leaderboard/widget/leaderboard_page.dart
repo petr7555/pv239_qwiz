@@ -8,6 +8,8 @@ import '../service/leaderboard_service.dart';
 class LeaderboardPage extends StatelessWidget {
   static const routeName = '/leaderboard';
 
+  const LeaderboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return PageTemplate(
