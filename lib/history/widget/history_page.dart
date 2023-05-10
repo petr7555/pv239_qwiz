@@ -39,7 +39,7 @@ class HistoryPage extends StatelessWidget {
             itemCount: games.length,
             itemBuilder: (context, index) {
               final game = games[index];
-              final opponent = game.players.values.where((element) => element.id != userId).first;
+              final opponent = game.opponent(userId);
 
               return ListTile(
                 title: Text('Game with ${opponent.displayName}', style: theme.textTheme.titleLarge),

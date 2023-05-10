@@ -4,7 +4,12 @@ import 'package:pv239_qwiz/game/model/player.dart';
 class PlayerInfo extends StatelessWidget {
   final Player player;
   final String defaultValue;
-  const PlayerInfo({super.key, required this.player, this.defaultValue = 'Unknown player'});
+
+  const PlayerInfo({
+    super.key,
+    required this.player,
+    this.defaultValue = 'Unknown player',
+  });
 
   @override
   Widget build(BuildContext context) {
