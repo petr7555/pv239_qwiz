@@ -5,6 +5,7 @@ import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
 import 'package:pv239_qwiz/common/util/combine_any_latest_stream.dart';
 import 'package:pv239_qwiz/common/util/go_router_refresh_stream.dart';
+import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
@@ -16,6 +17,7 @@ import 'package:pv239_qwiz/game/widget/podium_page.dart';
 import 'package:pv239_qwiz/game/widget/question_page.dart';
 import 'package:pv239_qwiz/history/widget/game_info_page.dart';
 import 'package:pv239_qwiz/history/widget/history_page.dart';
+import 'package:pv239_qwiz/leaderboard/widget/leaderboard_page.dart';
 
 RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object?>> combinedStream) {
   return GoRouter(
@@ -94,8 +96,15 @@ RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object
       ),
       GoRoute(
         path: GameInfoPage.routeName,
-        builder: (context, state) => GameInfoPage(),
+        builder: (context, state) {
+          final game = state.extra as Game;
+          return GameInfoPage(game: game);
+        },
       ),
+      GoRoute(
+        path: LeaderboardPage.routeName,
+        builder: (context, state) => LeaderboardPage(),
+      )
     ],
   );
 }
