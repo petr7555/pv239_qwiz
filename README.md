@@ -34,3 +34,6 @@ See [doc/specification.md](doc/specification/specification.md) for the specifica
 
 - Icons have been generated using https://icon.kitchen/
   from [assets/images/icon-512x512.png](assets/images/icon-512x512.png).
+- _Deploy to Firebase Hosting on PR_ action deploys a PR preview. To make authentication work on the
+  preview URL, you need to manually add the preview URL to the list of **Authorized JavaScript
+  origins** in Google Console → APIs & Services → Credentials.
