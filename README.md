@@ -1,5 +1,5 @@
 # Qwiz
-
+Test PR
 [![Lint and test](https://github.com/petr7555/pv239_qwiz/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/lint_and_test.yml)
 [![Build iOS](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_ios.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_ios.yml)
 [![Build Android](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_android.yml/badge.svg)](https://github.com/petr7555/pv239_qwiz/actions/workflows/build_android.yml)
