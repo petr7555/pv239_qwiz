@@ -35,6 +35,8 @@ h1 {
 
 # Demo
 
+![width:500px](assets/qr-code.svg)
+
 ---
 
 # Screenshots
