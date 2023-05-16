@@ -12,6 +12,7 @@ class LeaderboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageTemplate(
       title: 'Leaderboard',
+      scrollable: false,
       child: StreamBuilder<List<Player>>(
         stream: LeaderboardService.getLeaderboardStream().asyncMap((games) async {
           final players = games

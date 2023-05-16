@@ -25,6 +25,7 @@ class GameInfoPage extends StatelessWidget {
 
     return PageTemplate(
       title: opponent.displayName != null ? 'Your game vs ${opponent.displayName!}' : 'Your game vs unknown opponent',
+      scrollable: false,
       child: Row(
         children: [
           PlayerInfo(player: user, defaultValue: 'You'),
