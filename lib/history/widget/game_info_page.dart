@@ -26,20 +26,24 @@ class GameInfoPage extends StatelessWidget {
     return PageTemplate(
       title: opponent.displayName != null ? 'Your game vs ${opponent.displayName!}' : 'Your game vs unknown opponent',
       scrollable: false,
-      child: Row(
+      child: Column(
         children: [
-          PlayerInfo(player: user, defaultValue: 'You'),
-          PlayerInfo(player: opponent, defaultValue: 'Unknown opponent'),
+          Row(
+            children: [
+              PlayerInfo(player: user, defaultValue: 'You'),
+              PlayerInfo(player: opponent, defaultValue: 'Unknown opponent'),
+            ],
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: game.questions.length,
               itemBuilder: (context, index) {
-                return QuestionInfo(question: game.questions[index]);
+                return QuestionInfo(question: game.questions[index], userId :  user.id, opponentId: opponent.id);
               },
             ),
           ),
         ],
-      ),
+      )
     );
   }
 }
