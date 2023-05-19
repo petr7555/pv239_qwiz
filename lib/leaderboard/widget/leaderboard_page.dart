@@ -6,7 +6,7 @@ import 'package:pv239_qwiz/leaderboard/service/leaderboard_service.dart';
 class LeaderboardPage extends StatelessWidget {
   static const routeName = '/leaderboard';
 
-  const LeaderboardPage({Key? key});
+  const LeaderboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
