@@ -44,11 +44,11 @@ class LeaderboardPage extends StatelessWidget {
           ),
           title: Text(
             '${index + 1}. ${player.displayName}',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           subtitle: Text(
             '${player.points} points',
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         );
       },

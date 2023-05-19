@@ -20,20 +20,18 @@ class LeaderboardService {
     // Accumulate points per player using fold()
     final playerTotalScores = players.fold<Map<String, Player>>(
       {},
-          (Map<String, Player> accumulator, Player player) {
+      (Map<String, Player> accumulator, Player player) {
         final existingPlayer = accumulator[player.id];
         if (existingPlayer == null) {
           accumulator[player.id] = player;
         } else {
-          accumulator[player.id] =
-              existingPlayer.copyWith(points: existingPlayer.points + player.points);
+          accumulator[player.id] = existingPlayer.copyWith(points: existingPlayer.points + player.points);
         }
         return accumulator;
       },
     );
 
-    final playerRankList =
-    playerTotalScores.values.toList()..sort((a, b) => b.points.compareTo(a.points));
+    final playerRankList = playerTotalScores.values.toList()..sort((a, b) => b.points.compareTo(a.points));
 
     return playerRankList;
   }
