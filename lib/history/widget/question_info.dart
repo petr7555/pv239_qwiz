@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/game/model/question.dart';
 
 class QuestionInfo extends StatelessWidget {
@@ -51,13 +52,13 @@ class QuestionInfo extends StatelessWidget {
         opponentAnswer != null &&
         userAnswer == opponentAnswer &&
         question.allAnswers[userAnswer] == answer) {
-      return Colors.orange;
+      return bothColor;
     }
     if (userAnswer != null && question.allAnswers[userAnswer] == answer) {
-      return Colors.blue;
+      return yourColor;
     }
     if (opponentAnswer != null && question.allAnswers[opponentAnswer] == answer) {
-      return Colors.red;
+      return opponentsColor;
     }
     return null;
   }
