@@ -35,7 +35,6 @@ class HistoryPage extends StatelessWidget {
               child: Text('No games played on this account yet'),
             );
           }
-          games.sort((a, b) => b.createdAt.compareTo(a.createdAt));
           return ListView.builder(
             itemCount: games.length,
             itemBuilder: (context, index) {
