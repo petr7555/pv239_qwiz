@@ -1,6 +1,6 @@
 const gameCodeLength = 4;
 const maxPlayers = 2;
-const pointsToWinMin = 10;
+const pointsToWinMin = 5;
 const pointsToWinMax = 100;
 const pointsToWinDefault = 50;
 const secondsToStartGame = 3;
