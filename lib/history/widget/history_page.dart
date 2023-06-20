@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
+import 'package:pv239_qwiz/common/service/ioc_container.dart';
+import 'package:pv239_qwiz/common/widget/handling_stream_builder.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/history/service/history_service.dart';
-import 'package:pv239_qwiz/history/widget/game_info_page.dart';
+import 'package:pv239_qwiz/history/widget/games_list.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -14,41 +15,25 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final historyService = get<HistoryService>();
     final userId = context.read<AuthCubit>().userId;
 
     return PageTemplate(
       title: 'History',
       scrollable: false,
-      child: StreamBuilder<List<Game>>(
-        stream: HistoryService.getGamesByPlayer(userId),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          final games = snapshot.data!;
+      child: HandlingStreamBuilder<List<Game>>(
+        stream: historyService.getFinishedGamesOfUser(userId),
+        builder: (context, games) {
           if (games.isEmpty) {
+            // TODO try
             return Center(
-              child: Text('No games played on this account yet'),
+              child: Text(
+                'You have not played any games yet.',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             );
           }
-          return ListView.builder(
-            itemCount: games.length,
-            itemBuilder: (context, index) {
-              final game = games[index];
-              final opponent = game.opponent(userId);
-
-              return ListTile(
-                title: Text('Game with ${opponent.displayName}', style: theme.textTheme.titleLarge),
-                subtitle: Text(game.createdAt.toString(), style: theme.textTheme.bodyMedium),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () => context.push(GameInfoPage.routeName, extra: game),
-              );
-            },
-          );
+          return GamesList(games: games);
         },
       ),
     );

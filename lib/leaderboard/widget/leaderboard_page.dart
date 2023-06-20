@@ -23,7 +23,12 @@ class LeaderboardPage extends StatelessWidget {
         builder: (context, players) {
           if (players.isEmpty) {
             // TODO Can be empty?
-            return const Center(child: Text('No players yet.'));
+            return Center(
+              child: Text(
+                'No players yet.',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            );
           }
           return PlayersList(players: players);
         },

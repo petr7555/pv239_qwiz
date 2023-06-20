@@ -42,6 +42,7 @@ dependencies:
   go_router: ^6.5.1
   google_sign_in: ^6.1.0
   http: ^0.13.5
+  intl: ^0.17.0
   json_annotation: ^4.8.0
   jumping_dot: ^0.0.4
   linear_timer: ^2.0.0

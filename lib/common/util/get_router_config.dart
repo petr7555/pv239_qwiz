@@ -5,7 +5,6 @@ import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/auth/widget/sign_in_page.dart';
 import 'package:pv239_qwiz/common/util/combine_any_latest_stream.dart';
 import 'package:pv239_qwiz/common/util/go_router_refresh_stream.dart';
-import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/service/game_cubit.dart';
 import 'package:pv239_qwiz/game/widget/aborted_game_page.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
@@ -95,10 +94,10 @@ RouterConfig<Object> getRouterConfig(CombineAnyLatestStream<Object?, List<Object
         builder: (context, state) => HistoryPage(),
       ),
       GoRoute(
-        path: GameInfoPage.routeName,
+        path: '${GameInfoPage.routeName}/:gameId',
         builder: (context, state) {
-          final game = state.extra as Game;
-          return GameInfoPage(game: game);
+          final gameId = state.params['gameId'] as String;
+          return GameInfoPage(gameId: gameId);
         },
       ),
       GoRoute(

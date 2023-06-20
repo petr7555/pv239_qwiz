@@ -5,8 +5,8 @@ import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/user_avatar.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 
-const paddingHorizontal = 16.0;
-const paddingVertical = 5.0;
+const _paddingHorizontal = 16.0;
+const _paddingVertical = 5.0;
 
 class LeaderboardTile extends StatelessWidget {
   final int rank;
@@ -30,14 +30,13 @@ class LeaderboardTile extends StatelessWidget {
     final isCurrentUser = player.id == userId;
 
     return ListTile(
-      contentPadding: const EdgeInsets.only(
-        left: paddingHorizontal,
-        right: paddingHorizontal,
-        top: paddingVertical,
-        bottom: paddingVertical,
+      contentPadding: EdgeInsets.only(
+        left: _paddingHorizontal,
+        right: _paddingHorizontal,
+        top: _paddingVertical,
+        bottom: _paddingVertical,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(smallGap)),
-      key: ValueKey(player.id),
       tileColor: isCurrentUser ? theme.colorScheme.secondary : null,
       leading: Row(
         mainAxisSize: MainAxisSize.min,

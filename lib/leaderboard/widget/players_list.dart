@@ -5,7 +5,7 @@ import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/leaderboard/widget/leaderboard_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-const scrollDurationMilliseconds = 300;
+const _scrollDurationMilliseconds = 300;
 
 class PlayersList extends StatefulWidget {
   final List<Player> players;
@@ -35,7 +35,7 @@ class _PlayersListState extends State<PlayersList> {
       }
       itemScrollController.scrollTo(
         index: index,
-        duration: const Duration(milliseconds: scrollDurationMilliseconds),
+        duration: const Duration(milliseconds: _scrollDurationMilliseconds),
         curve: Curves.easeInOutCubic,
       );
     });

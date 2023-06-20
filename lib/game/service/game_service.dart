@@ -19,15 +19,15 @@ class GameService {
         toFirestore: (model, _) => model.toJson(),
       );
 
-  Stream<List<Game>> _getGamesOfUser(String userId, {required bool complete}) {
+  Stream<List<Game>> _getIncompleteGamesOfUser(String userId) {
     return _gamesCollection
-        .where('players.$userId.complete', isEqualTo: complete)
+        .where('players.$userId.complete', isEqualTo: false)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
   }
 
   Stream<Game?> currentGameStream(String userId) {
-    final incompleteGamesOfUser = _getGamesOfUser(userId, complete: false);
+    final incompleteGamesOfUser = _getIncompleteGamesOfUser(userId);
 
     return incompleteGamesOfUser.map((games) {
       if (games.isEmpty) {
@@ -36,8 +36,6 @@ class GameService {
       return games.first;
     });
   }
-
-  Stream<List<Game>> finishedGamesStream(String userId) => _getGamesOfUser(userId, complete: true);
 
   Future<bool> gameExists(String gameId) {
     return _gameDocRef(gameId).get().then((value) => value.exists);

@@ -28,7 +28,7 @@ class Logo extends StatelessWidget {
 
   Widget _buildSmallStar() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: smallGap),
+      padding: EdgeInsets.only(bottom: smallGap),
       child: _buildStar(size: 50),
     );
   }

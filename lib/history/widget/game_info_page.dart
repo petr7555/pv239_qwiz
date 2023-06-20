@@ -1,48 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
+import 'package:pv239_qwiz/common/service/ioc_container.dart';
+import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
+import 'package:pv239_qwiz/common/widget/handling_stream_builder.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/model/game.dart';
-import 'package:pv239_qwiz/history/widget/player_info.dart';
-import 'package:pv239_qwiz/history/widget/question_info.dart';
+import 'package:pv239_qwiz/history/service/history_service.dart';
+import 'package:pv239_qwiz/history/widget/game_info_header.dart';
+import 'package:pv239_qwiz/history/widget/questions_list.dart';
 
 class GameInfoPage extends StatelessWidget {
-  final Game game;
+  final String gameId;
 
   const GameInfoPage({
     super.key,
-    required this.game,
+    required this.gameId,
   });
 
   static const routeName = '/gameInfo';
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.read<AuthCubit>().userId;
-
-    final user = game.you(userId);
-    final opponent = game.opponent(userId);
+    final historyService = get<HistoryService>();
 
     return PageTemplate(
-        title: opponent.displayName != null ? 'Your game vs ${opponent.displayName!}' : 'Your game vs unknown opponent',
-        scrollable: false,
-        child: Column(
-          children: [
-            Row(
+      title: 'Game info',
+      scrollable: false,
+      child: Center(
+        child: HandlingStreamBuilder<Game>(
+          stream: historyService.getGameById(gameId),
+          builder: (context, game) {
+            return Column(
               children: [
-                PlayerInfo(player: user, defaultValue: 'You'),
-                PlayerInfo(player: opponent, defaultValue: 'Unknown opponent'),
+                GameInfoHeader(game: game),
+                SizedBox(height: standardGap),
+                Text('Questions', style: Theme.of(context).textTheme.titleMedium),
+                SizedBox(height: standardGap),
+                Expanded(child: QuestionsList(questions: game.questions))
               ],
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: game.questions.length,
-                itemBuilder: (context, index) {
-                  return QuestionInfo(question: game.questions[index], userId: user.id, opponentId: opponent.id);
-                },
-              ),
-            ),
-          ],
-        ));
+            );
+          },
+        ),
+      ),
+    );
   }
 }
