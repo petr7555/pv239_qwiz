@@ -71,7 +71,7 @@ account they've signed in with.
 <p>
   <img src="./screen_mockups/Podium.png" alt="Podium" width="190"/>
   &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="./screen_mockups/Game info.png" alt="Game info" width="190"/>
+  <img src="./screen_mockups/Game info expanded.png" alt="Game info" width="190"/>
   &nbsp; &nbsp; &nbsp; &nbsp;
   <img src="./screen_mockups/Leaderboard.png" alt="Leaderboard" width="190"/>
 </p>
