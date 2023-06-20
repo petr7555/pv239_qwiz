@@ -10,7 +10,7 @@ class QuestionOptions extends StatelessWidget {
   final Question question;
   final String userId;
   final String opponentId;
-  final Function(int) onPressed;
+  final Function(int)? onPressed;
 
   const QuestionOptions({
     super.key,
@@ -18,7 +18,7 @@ class QuestionOptions extends StatelessWidget {
     required this.question,
     required this.userId,
     required this.opponentId,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override
@@ -33,6 +33,11 @@ class QuestionOptions extends StatelessWidget {
           isYourAnswer: isYourAnswer,
           isOpponentsAnswer: isOpponentsAnswer,
         );
+
+        final backgroundColor =
+            stateOfQuestion == StateOfQuestion.showingResult && question.correctAnswerIdx == answerIdx
+                ? correctColor
+                : Theme.of(context).colorScheme.primary;
 
         return Padding(
           padding: EdgeInsets.only(bottom: smallGap),
@@ -52,15 +57,14 @@ class QuestionOptions extends StatelessWidget {
                   padding: EdgeInsets.all(4),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: backgroundColor,
+                      disabledBackgroundColor: backgroundColor,
+                      disabledForegroundColor: Theme.of(context).colorScheme.onPrimary,
                       minimumSize: Size.fromHeight(buttonHeight),
-                      backgroundColor:
-                          stateOfQuestion == StateOfQuestion.showingResult && question.correctAnswerIdx == answerIdx
-                              ? correctColor
-                              : null,
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     ),
+                    onPressed: onPressed != null ? () => onPressed!(answerIdx) : null,
                     child: Text(answer),
-                    onPressed: () => onPressed(answerIdx),
                   ),
                 ),
               ),

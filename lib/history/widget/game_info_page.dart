@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pv239_qwiz/auth/service/auth_cubit.dart';
 import 'package:pv239_qwiz/common/service/ioc_container.dart';
 import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/handling_stream_builder.dart';
@@ -29,13 +31,21 @@ class GameInfoPage extends StatelessWidget {
         child: HandlingStreamBuilder<Game>(
           stream: historyService.getGameById(gameId),
           builder: (context, game) {
+            final userId = context.read<AuthCubit>().userId;
+            final opponentId = game.opponent(userId).id;
+
             return Column(
               children: [
                 GameInfoHeader(game: game),
                 SizedBox(height: standardGap),
                 Text('Questions', style: Theme.of(context).textTheme.titleMedium),
                 SizedBox(height: standardGap),
-                Expanded(child: QuestionsList(questions: game.questions))
+                Expanded(
+                  child: QuestionsList(
+                    questions: game.questions,
+                    opponentId: opponentId,
+                  ),
+                )
               ],
             );
           },
