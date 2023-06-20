@@ -6,8 +6,8 @@ import 'package:pv239_qwiz/common/util/shared_ui_constants.dart';
 import 'package:pv239_qwiz/common/widget/button.dart';
 import 'package:pv239_qwiz/common/widget/page_template.dart';
 import 'package:pv239_qwiz/game/widget/create_game_page.dart';
+import 'package:pv239_qwiz/game/widget/current_user_preview.dart';
 import 'package:pv239_qwiz/game/widget/join_game_page.dart';
-import 'package:pv239_qwiz/game/widget/user_avatar.dart';
 import 'package:pv239_qwiz/history/widget/history_page.dart';
 import 'package:pv239_qwiz/leaderboard/widget/leaderboard_page.dart';
 
@@ -24,7 +24,7 @@ class MenuPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            UserAvatar(),
+            CurrentUserPreview(),
             SizedBox(height: largeGap),
             _buildMenuButton(context: context, label: 'Create game', route: CreateGamePage.routeName),
             SizedBox(height: smallGap),

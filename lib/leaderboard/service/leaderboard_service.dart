@@ -3,12 +3,10 @@ import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 
 class LeaderboardService {
-  static Stream<List<Player>> getLeaderboardStream() {
-    return FirebaseFirestore.instance
-        .collection('games')
-        .snapshots()
-        .map((snapshot) => _calculatePlayerRankList(snapshot.docs.map((doc) => Game.fromJson(doc.data())).toList()));
-  }
+  Stream<List<Player>> get leaderboardStream => FirebaseFirestore.instance
+      .collection('games')
+      .snapshots()
+      .map((snapshot) => _calculatePlayerRankList(snapshot.docs.map((doc) => Game.fromJson(doc.data())).toList()));
 
   static List<Player> _calculatePlayerRankList(List<Game> games) {
     final players = games

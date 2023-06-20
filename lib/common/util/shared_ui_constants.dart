@@ -4,6 +4,7 @@ const primaryColor = Colors.lime;
 const secondaryColor = Colors.green;
 const goldColor = Color(0xFFFFD700);
 const silverColor = Color(0xFFC0C0C0);
+const bronzeColor = Color(0xFFCD7F32);
 const correctColor = Colors.green;
 const yourColor = Colors.blue;
 const opponentsColor = Colors.red;
