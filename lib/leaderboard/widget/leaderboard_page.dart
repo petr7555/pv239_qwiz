@@ -19,7 +19,7 @@ class LeaderboardPage extends StatelessWidget {
       title: 'Leaderboard',
       scrollable: false,
       child: HandlingStreamBuilder<List<Player>>(
-        stream: leaderboardService.leaderboardStream,
+        stream: leaderboardService.rankedPlayers,
         builder: (context, players) {
           if (players.isEmpty) {
             // TODO Can be empty?

@@ -3,34 +3,36 @@ import 'package:pv239_qwiz/game/model/game.dart';
 import 'package:pv239_qwiz/game/model/player.dart';
 
 class LeaderboardService {
-  Stream<List<Player>> get leaderboardStream => FirebaseFirestore.instance
-      .collection('games')
-      .snapshots()
-      .map((snapshot) => _calculatePlayerRankList(snapshot.docs.map((doc) => Game.fromJson(doc.data())).toList()));
+  final _gamesCollection = FirebaseFirestore.instance.collection('games').withConverter(
+        fromFirestore: (snapshot, _) => Game.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      );
 
-  static List<Player> _calculatePlayerRankList(List<Game> games) {
-    final players = games
-        .map((game) => game.players.values) // Get list of player maps
-        .expand((playerMap) => playerMap) // Flatten the list of player maps
-        .where((player) => player.complete) // Filter completed players
+  Stream<List<Player>> get rankedPlayers => _gamesCollection
+      .snapshots()
+      .map((allGamesSnapshot) => rankPlayers(allGamesSnapshot.docs.map((game) => game.data()).toList()));
+
+  static List<Player> rankPlayers(List<Game> games) {
+    final allCompletedPlayers = games.expand((game) => game.players.values).where((player) => player.complete);
+
+    final playersMap = allCompletedPlayers
+        .fold<Map<String, Player>>(
+          {},
+          (players, player) {
+            final existingPlayer = players[player.id];
+            if (existingPlayer == null) {
+              players[player.id] = player;
+            } else {
+              players[player.id] = existingPlayer.copyWith(points: existingPlayer.points + player.points);
+            }
+            return players;
+          },
+        )
+        .values
         .toList();
 
-    // Accumulate points per player using fold()
-    final playerTotalScores = players.fold<Map<String, Player>>(
-      {},
-      (Map<String, Player> accumulator, Player player) {
-        final existingPlayer = accumulator[player.id];
-        if (existingPlayer == null) {
-          accumulator[player.id] = player;
-        } else {
-          accumulator[player.id] = existingPlayer.copyWith(points: existingPlayer.points + player.points);
-        }
-        return accumulator;
-      },
-    );
+    final sortedPlayers = playersMap..sort((a, b) => b.points.compareTo(a.points));
 
-    final playerRankList = playerTotalScores.values.toList()..sort((a, b) => b.points.compareTo(a.points));
-
-    return playerRankList;
+    return sortedPlayers;
   }
 }
