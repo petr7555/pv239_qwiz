@@ -20,8 +20,7 @@ class PlayersList extends StatefulWidget {
 }
 
 class _PlayersListState extends State<PlayersList> {
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+  final ItemScrollController _itemScrollController = ItemScrollController();
 
   @override
   void initState() {
@@ -32,7 +31,7 @@ class _PlayersListState extends State<PlayersList> {
       if (index == -1) {
         return;
       }
-      itemScrollController.scrollTo(
+      _itemScrollController.scrollTo(
         index: index,
         duration: const Duration(milliseconds: _scrollDurationMilliseconds),
         curve: Curves.easeInOutCubic,
@@ -44,7 +43,7 @@ class _PlayersListState extends State<PlayersList> {
   Widget build(BuildContext context) {
     return ScrollablePositionedList.separated(
       itemCount: widget.players.length,
-      itemScrollController: itemScrollController,
+      itemScrollController: _itemScrollController,
       itemBuilder: (context, index) {
         final player = widget.players[index];
         final rank = index + 1;
