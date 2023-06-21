@@ -21,15 +21,15 @@ class GameInfoHeader extends StatelessWidget {
 
     return Column(
       children: [
-        _buildPlayerScore(context: context, text: '${isWinner ? '🏆 ' : ''}You: ${you.points}'),
+        _buildPlayerPoints(context: context, text: '${isWinner ? '🏆 ' : ''}You: ${you.points}'),
         SizedBox(height: smallGap),
-        _buildPlayerScore(context: context, text: '${isWinner ? '' : '🏆 '}Opponent: ${opponent.points}'),
+        _buildPlayerPoints(context: context, text: '${isWinner ? '' : '🏆 '}Opponent: ${opponent.points}'),
       ],
     );
   }
 }
 
-Widget _buildPlayerScore({
+Widget _buildPlayerPoints({
   required BuildContext context,
   required String text,
 }) {

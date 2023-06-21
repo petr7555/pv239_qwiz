@@ -25,7 +25,6 @@ class HistoryPage extends StatelessWidget {
         stream: historyService.getFinishedGamesOfUser(userId),
         builder: (context, games) {
           if (games.isEmpty) {
-            // TODO try
             return Center(
               child: Text(
                 'You have not played any games yet.',

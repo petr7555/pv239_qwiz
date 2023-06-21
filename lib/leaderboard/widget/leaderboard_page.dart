@@ -22,10 +22,9 @@ class LeaderboardPage extends StatelessWidget {
         stream: leaderboardService.rankedPlayers,
         builder: (context, players) {
           if (players.isEmpty) {
-            // TODO Can be empty?
             return Center(
               child: Text(
-                'No players yet.',
+                'No games have been played yet.',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             );

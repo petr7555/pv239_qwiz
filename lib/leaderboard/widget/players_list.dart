@@ -30,7 +30,6 @@ class _PlayersListState extends State<PlayersList> {
       final userId = context.read<AuthCubit>().userId;
       final index = widget.players.indexWhere((player) => player.id == userId);
       if (index == -1) {
-        //TODO test
         return;
       }
       itemScrollController.scrollTo(
