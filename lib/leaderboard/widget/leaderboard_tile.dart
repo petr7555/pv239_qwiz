@@ -41,7 +41,7 @@ class LeaderboardTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text('$rank.', style: theme.textTheme.titleLarge),
-          trophy ?? SizedBox.shrink(),
+          if (trophy != null) trophy,
           SizedBox(width: smallGap),
           UserAvatar(size: 30, photoUrl: player.photoURL),
         ],
