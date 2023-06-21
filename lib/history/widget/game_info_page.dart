@@ -39,7 +39,7 @@ class GameInfoPage extends StatelessWidget {
                 GameInfoHeader(game: game),
                 SizedBox(height: standardGap),
                 Text('Questions', style: Theme.of(context).textTheme.titleMedium),
-                SizedBox(height: standardGap),
+                SizedBox(height: smallGap),
                 Expanded(
                   child: QuestionsList(
                     questions: game.questions,

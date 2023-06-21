@@ -11,6 +11,7 @@ class QuestionOptions extends StatelessWidget {
   final String userId;
   final String opponentId;
   final Function(int)? onPressed;
+  final bool compactLayout;
 
   const QuestionOptions({
     super.key,
@@ -19,10 +20,15 @@ class QuestionOptions extends StatelessWidget {
     required this.userId,
     required this.opponentId,
     this.onPressed,
+    this.compactLayout = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final questionAnswered = question.interactions[userId]?.answerIdx != null;
+    final buttonsAreClickable =
+        (onPressed != null && stateOfQuestion == StateOfQuestion.answering && !questionAnswered);
+
     return Column(
       children: question.allAnswers.mapIndexed((answerIdx, answer) {
         final isYourAnswer = question.interactions[userId]?.answerIdx == answerIdx;
@@ -39,20 +45,20 @@ class QuestionOptions extends StatelessWidget {
                 ? correctColor
                 : Theme.of(context).colorScheme.primary;
 
+        final reducedHighlight = (compactLayout && borderTextAndColor.item1 == '');
+
         return Padding(
           padding: EdgeInsets.only(bottom: smallGap),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(borderTextAndColor.item1),
+              if (!reducedHighlight) Text(borderTextAndColor.item1),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(
-                    color: borderTextAndColor.item2,
-                    width: 5,
-                  ),
-                ),
+                    borderRadius: reducedHighlight ? null : BorderRadius.all(Radius.circular(4)),
+                    border: reducedHighlight
+                        ? Border.symmetric(vertical: BorderSide(color: borderTextAndColor.item2, width: 5))
+                        : Border.all(color: borderTextAndColor.item2, width: 5)),
                 child: Padding(
                   padding: EdgeInsets.all(4),
                   child: ElevatedButton(
@@ -63,7 +69,7 @@ class QuestionOptions extends StatelessWidget {
                       minimumSize: Size.fromHeight(buttonHeight),
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     ),
-                    onPressed: onPressed != null ? () => onPressed!(answerIdx) : null,
+                    onPressed: buttonsAreClickable ? () => onPressed!(answerIdx) : null,
                     child: Text(answer),
                   ),
                 ),

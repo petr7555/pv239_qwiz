@@ -24,8 +24,6 @@ class QuestionsList extends StatelessWidget {
         final userId = context.read<AuthCubit>().userId;
 
         return ExpansionTile(
-          // TODO remove
-          initiallyExpanded: index == 0,
           title: Text(question.question, style: Theme.of(context).textTheme.titleMedium),
           children: [
             QuestionOptions(
@@ -33,6 +31,7 @@ class QuestionsList extends StatelessWidget {
               question: question,
               userId: userId,
               opponentId: opponentId,
+              compactLayout: true,
             ),
           ],
         );
