@@ -7,7 +7,6 @@ import 'package:pv239_qwiz/game/model/player.dart';
 import 'package:pv239_qwiz/history/widget/game_info_page.dart';
 
 const _paddingHorizontal = 16.0;
-const _paddingVertical = 5.0;
 
 class GameTile extends StatelessWidget {
   final String gameId;
@@ -31,8 +30,8 @@ class GameTile extends StatelessWidget {
       contentPadding: EdgeInsets.only(
         left: _paddingHorizontal,
         right: _paddingHorizontal,
-        top: _paddingVertical,
-        bottom: _paddingVertical,
+        top: smallGap,
+        bottom: smallGap,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(smallGap)),
       title: Padding(
