@@ -30,10 +30,20 @@ class PodiumPage extends StatelessWidget {
           final isWinner = game.winnerId == userId;
           final winnerPoints = isWinner ? you.points : opponent.points;
 
+          final iconSource = isWinner ? 'assets/icons/trophy.png' : 'assets/icons/crying_face.png';
+          final text = isWinner ? 'You won!' : 'You lost...';
+
           return Column(
             children: [
               SizedBox(height: standardGap),
-              Text(isWinner ? '🏆 You won!' : '😢 You lost...', style: theme.textTheme.headlineLarge),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(iconSource, width: 40, height: 40),
+                  SizedBox(width: smallGap),
+                  Text(text, style: theme.textTheme.headlineLarge),
+                ],
+              ),
               SizedBox(height: largeGap),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

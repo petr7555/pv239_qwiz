@@ -21,9 +21,9 @@ class GameInfoHeader extends StatelessWidget {
 
     return Column(
       children: [
-        _buildPlayerPoints(context: context, text: '${isWinner ? '🏆 ' : ''}You: ${you.points}'),
+        _buildPlayerPoints(context: context, text: 'You: ${you.points}', isWinner: isWinner),
         SizedBox(height: smallGap),
-        _buildPlayerPoints(context: context, text: '${isWinner ? '' : '🏆 '}Opponent: ${opponent.points}'),
+        _buildPlayerPoints(context: context, text: 'Opponent: ${opponent.points}', isWinner: !isWinner),
       ],
     );
   }
@@ -32,6 +32,19 @@ class GameInfoHeader extends StatelessWidget {
 Widget _buildPlayerPoints({
   required BuildContext context,
   required String text,
+  required bool isWinner,
 }) {
-  return Text(text, style: Theme.of(context).textTheme.titleLarge);
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      if (isWinner)
+        Row(
+          children: [
+            Icon(Icons.emoji_events, color: goldColor),
+            SizedBox(width: smallGap),
+          ],
+        ),
+      Text(text, style: Theme.of(context).textTheme.titleLarge),
+    ],
+  );
 }
