@@ -9,13 +9,14 @@ class LeaderboardService {
       );
 
   Stream<List<Player>> get rankedPlayers => _gamesCollection
+      .where('winnerId', isNull: false)
       .snapshots()
       .map((allGamesSnapshot) => rankPlayers(allGamesSnapshot.docs.map((game) => game.data()).toList()));
 
   static List<Player> rankPlayers(List<Game> games) {
-    final allCompletedPlayers = games.expand((game) => game.players.values).where((player) => player.complete);
+    final allPlayers = games.expand((game) => game.players.values);
 
-    final playersMap = allCompletedPlayers
+    final playersMap = allPlayers
         .fold<Map<String, Player>>(
           {},
           (players, player) {

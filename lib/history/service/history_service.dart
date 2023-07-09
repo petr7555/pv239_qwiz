@@ -8,15 +8,15 @@ class HistoryService {
       );
 
   Stream<List<Game>> getFinishedGamesOfUser(String userId) {
-    final finishedGames = _gamesCollection
+    final finishedGamesOfUser = _gamesCollection
         .where('winnerId', isNull: false)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()))
         .map((games) => games.where((game) => game.players.containsKey(userId)).toList());
 
-    final sortedCompletedGames =
-        finishedGames.map((games) => games..sort((a, b) => b.createdAt.compareTo(a.createdAt)));
-    return sortedCompletedGames;
+    final sortedFinishedGamesOfUser =
+        finishedGamesOfUser.map((games) => games..sort((a, b) => b.createdAt.compareTo(a.createdAt)));
+    return sortedFinishedGamesOfUser;
   }
 
   Stream<Game> getGameById(String gameId) {
